@@ -1,0 +1,7 @@
+{
+  "name": "itinisere",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
