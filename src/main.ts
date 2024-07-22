@@ -1,6 +1,7 @@
-import { createApp } from "vue"
+import { createApp, reactive } from "vue"
 import App from "./App.vue"
 import router from "./router"
+import { useLocalStorage, toReactive } from "@vueuse/core"
 
 import { IonicVue } from "@ionic/vue"
 
@@ -29,7 +30,7 @@ import "@ionic/vue/css/display.css"
 
 /* @import '@ionic/vue/css/palettes/dark.always.css'; */
 /* @import '@ionic/vue/css/palettes/dark.class.css'; */
-import "@ionic/vue/css/palettes/dark.system.css"
+// import "@ionic/vue/css/palettes/dark.system.css"
 
 /* Theme variables */
 import "./theme/variables.css"
@@ -39,3 +40,23 @@ const app = createApp(App).use(IonicVue).use(router)
 router.isReady().then(() => {
   app.mount("#app")
 })
+
+const $state = toReactive(
+  useLocalStorage("$state", {
+    mode: "user",
+    trips: [],
+  })
+)
+app.config.globalProperties.$state = $state
+window.$state = $state
+
+declare module "@vue/runtime-core" {
+  interface ComponentCustomProperties {
+    $state: any
+  }
+}
+declare global {
+  interface Window {
+    $state: any
+  }
+}
