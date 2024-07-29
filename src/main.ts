@@ -1,4 +1,4 @@
-import { createApp, reactive } from "vue"
+import { createApp } from "vue"
 import App from "./App.vue"
 import router from "./router"
 import { useLocalStorage, toReactive } from "@vueuse/core"
@@ -48,7 +48,7 @@ const $state = toReactive(
   })
 )
 app.config.globalProperties.$state = $state
-window.$state = $state
+window.$state = app.config.globalProperties.$state
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -58,5 +58,7 @@ declare module "@vue/runtime-core" {
 declare global {
   interface Window {
     $state: any
+    $router: any
+    $route: any
   }
 }
