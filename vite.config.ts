@@ -17,4 +17,13 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
   },
+  server: {
+    proxy: {
+      "/itinisere": {
+        target: "https://www.itinisere.fr",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/itinisere/, ''),
+      },
+    },
+  },
 })

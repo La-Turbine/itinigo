@@ -1,7 +1,6 @@
 import { createApp } from "vue"
 import App from "./App.vue"
 import router from "./router"
-import { useLocalStorage, toReactive } from "@vueuse/core"
 
 import { IonicVue } from "@ionic/vue"
 
@@ -32,14 +31,14 @@ import "@ionic/vue/css/display.css"
 /* @import '@ionic/vue/css/palettes/dark.class.css'; */
 // import "@ionic/vue/css/palettes/dark.system.css"
 
-/* Theme variables */
-import "./theme/variables.css"
-
 const app = createApp(App).use(IonicVue).use(router)
 
 router.isReady().then(() => {
   app.mount("#app")
 })
+
+// Custom code from here
+import { useLocalStorage, toReactive } from "@vueuse/core"
 
 const $state = toReactive(
   useLocalStorage("$state", {
@@ -49,6 +48,8 @@ const $state = toReactive(
 )
 app.config.globalProperties.$state = $state
 window.$state = app.config.globalProperties.$state
+window.$ = (selector: string, context = document as any) => context.querySelector(selector)
+window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -57,6 +58,8 @@ declare module "@vue/runtime-core" {
 }
 declare global {
   interface Window {
+    $: (selector: string, context?: HTMLElement) => HTMLElement | null
+    $$: (selector: string, context?: HTMLElement) => HTMLElement[]
     $state: any
     $router: any
     $route: any

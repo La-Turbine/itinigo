@@ -12,10 +12,10 @@
     </ion-header>
     <ion-content>
       <ion-list>
-        <ion-item v-for="trip in $state.trips" :key="trip.id" @click="$router.push('/trajet/' + trip.id)">
+        <ion-item v-for="trip in $state.trips" :key="trip.id" @click="$router.push('/trip/' + trip.id)">
           {{ trip.name }}
         </ion-item>
-        <ion-item @click="$router.push('/trajet/' + ($state.trips.length + 1))" v-if="$state.mode === 'helper'">
+        <ion-item @click="$router.push('/trip/' + ($state.trips.length + 1))" v-if="$state.mode === 'helper'">
           <ion-icon :icon="add"></ion-icon>
           <ion-label>Ajouter un trajet</ion-label>
         </ion-item>
