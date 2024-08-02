@@ -48,7 +48,9 @@
                 <ion-item>
                   <div style="display: flex; gap: 8px; padding: 4px">
                     <img :src="`/svg/${photo.type}.svg`" style="max-height: 40px; aspect-ratio: 1" />
-                    <img :src="photo.image || '/svg/camera.svg'" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo)" />
+                    <img :src="photo.image" style="max-height: 40px; aspect-ratio: 1" v-if="photo.image" />
+                    <img src="/svg/camera.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refCamera)" />
+                    <img src="/svg/gallery.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refGallery)" />
                     <ion-input v-model="photo.text" placeholder="Description"></ion-input>
                   </div>
                   <ion-reorder slot="end"></ion-reorder>
@@ -58,7 +60,8 @@
                 </ion-item-options>
               </ion-item-sliding>
             </ion-reorder-group>
-            <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refPhoto = ref)" />
+            <input type="file" accept="image/*" capture="environment" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
+            <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
           </ion-list>
         </ion-list>
 
@@ -100,12 +103,15 @@ async function onSearch(event) {
   const query = event.target.value
   state[focused.value].text = query
   if (!query) return (items.value = [])
-  const response = await fetch(`https://api.ppp38v2.cityway.fr/search/address?keywords=${query}&maxitems=10&pointtypes=&categories=&LocalityIds=&OperatorIds=`)
-  const data = await response.json()
-  items.value = data.Data.map((item) => {
-    item.text = `${item.Number ?? ""} ${item.Name} - ${item.PostalCode} ${item.Locality?.Name} ${item.Categories?.[0]?.Name ?? ""}`
-    return item
-  })
+  try {
+    const response = await fetch(`https://api.ppp38v2.cityway.fr/search/address?keywords=${query}&maxitems=10&pointtypes=&categories=&LocalityIds=&OperatorIds=`)
+    const data = await response.json()
+    items.value = data.Data.map((item) => {
+      // item.text = `${item.Number ?? ""} ${item.Name} - ${item.PostalCode} ${item.Locality?.Name} ${item.Categories?.[0]?.Name ?? ""}`
+      item.text = `${item.Number ?? ""} ${item.Name}`.trim()
+      return item
+    })
+  } catch (error) {}
 }
 function onSelect(item) {
   state[focused.value] = item
@@ -127,9 +133,9 @@ function reorderPhoto(event) {
 function deletePhoto(index) {
   currentSequence.value.photos.splice(index, 1)
 }
-function clickPhoto(photo) {
+function clickPhoto(photo, input) {
   state.currentPhoto = photo
-  state.refPhoto.click()
+  input.click()
 }
 function inputPhoto(event) {
   const file = event.target.files[0]
