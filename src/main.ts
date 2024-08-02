@@ -38,6 +38,15 @@ router.isReady().then(() => {
 })
 
 // Custom code from here
+import * as Ion from "@ionic/vue"
+Object.entries(Ion).forEach(([key, value]) => {
+  if (!key.startsWith("Ion")) return
+  app.component(key, value)
+})
+app.config.errorHandler = (err, vm, info) => {
+  console.error(err, info)
+  router.push("/")
+}
 import { useLocalStorage, toReactive } from "@vueuse/core"
 
 const $state = toReactive(

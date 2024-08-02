@@ -68,7 +68,7 @@ const r1 = {
 const r2 = {
   PointDep: "152084_3_40",
   PointArr: "2002289_4",
-  Date: new Date().toLocaleDateString('en-GB'),
+  Date: new Date().toLocaleDateString("en-GB"),
   TypeDate: 68,
   Hour: new Date().getHours(),
   Minute: new Date().getMinutes(),
@@ -85,8 +85,8 @@ const q2 = await fetch("/itinisere/fr/itineraires/4/JourneyPlanner/PartialResult
 })
 const d1 = await q1.text()
 const d2 = await q2.text()
-const h1 = new DOMParser().parseFromString(d1, 'text/html')
-const h2 = new DOMParser().parseFromString(d2, 'text/html')
+const h1 = new DOMParser().parseFromString(d1, "text/html")
+const h2 = new DOMParser().parseFromString(d2, "text/html")
 ```
 
 ```js
@@ -99,7 +99,9 @@ $$(".panel-trip").map((el) => {
     from: $(".hours b", el).textContent.trim(),
     to: $(".hours b:nth-of-type(2)", el).textContent.trim(),
     duration: $(".duration", el).textContent.trim(),
-    modes: $$(".modes li [title]", el).map(el => el.title).join(' + '),
+    modes: $$(".modes li [title]", el)
+      .map((el) => el.title)
+      .join(" + "),
     // type: $(".type-trip", el).textContent.trim(),
     // ecology: "CO₂ " + $$(".ecology .green", el).length,
   }

@@ -12,10 +12,8 @@
     </ion-header>
     <ion-content>
       <ion-list>
-        <ion-item v-for="trip in $state.trips" :key="trip.id" @click="$router.push('/trip/' + trip.id)">
-          {{ trip.name }}
-        </ion-item>
-        <ion-item @click="$router.push('/trip/' + ($state.trips.length + 1))" v-if="$state.mode === 'helper'">
+        <ion-item v-for="(trip, i) in $state.trips" @click="$router.push($state.mode === 'helper' ? `/trip/${i + 1}?step=3` : `/travel/${i + 1}`)">{{ trip.from }} - {{ trip.to }}</ion-item>
+        <ion-item @click="$router.push(`/trip/${$state.trips.length + 1}`)" v-if="$state.mode === 'helper'">
           <ion-icon :icon="add"></ion-icon>
           <ion-label>Ajouter un trajet</ion-label>
         </ion-item>
@@ -25,6 +23,5 @@
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonIcon } from "@ionic/vue"
 import { accessibility, walk, add } from "ionicons/icons"
 </script>

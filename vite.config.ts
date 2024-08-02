@@ -22,7 +22,7 @@ export default defineConfig({
       "/itinisere": {
         target: "https://www.itinisere.fr",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/itinisere/, ''),
+        rewrite: (path) => path.replace(/^\/itinisere/, ""),
       },
     },
   },
