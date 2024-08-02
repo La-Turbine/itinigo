@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    {
+      "source": "/itinisere/:path*",
+      "destination": "https://www.itinisere.fr/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
