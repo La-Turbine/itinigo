@@ -1,3 +1,47 @@
+01 ^ - Marchez tout droit jusqu’à la rue Ampère
+02 < - Tournez à gauche aprés la borne rouge
+03 ^ - Avancez tout droit rue Ampère
+04 ^ - Continuez tout droit le long des potelets
+05 ^ - Continuez tout droit jusqu’au passage piéton
+06 = - Traversez quand le feu est vert
+07 ^ - Continuez tout droit cours Berriat
+08 < - Continuez jusqu’au passage piéton sans feu
+09 ≠ - Passage piéton sans feu - Attention avant de traverser
+10 ≠ - Traversez jusqu’au quai et tournez à droite
+11 ^ - Continuez tout droit jusqu’à l’arrêt Berriat - Le Magasin
+
+12 - Vous êtes à l’arrêt, vérifiez le nom de l’arrêt
+13 - Vérifiez la direction de l’arrêt
+14 - Repèrez la borne et validez votre titre de transport
+15 - Attendez jusqu’à ce que le tram A arrive
+16 - Le tram arrive, vérifiez la direction du tram
+
+17 - Montez dans le tram
+.. - Suivez l’avancée du tram
+.. - Préparez-vous à descendre au prochain arrêt (+ Notification)
+18 - Descendez du tram A et restez sur le même quai
+
+19 - Restez sur le même quai et vérifiez le nom de l’arrêt
+20 - Vérifiez la direction de l’arrêt
+21 - Validez votre titre de transport
+22 - Attendez le tram B
+23 - Vérifiez la direction du tram B quand il arrive
+
+24 - Montez dans le tram B
+.. - Suivez l’avancée du tram
+.. - Préparez-vous à descendre au prochain arrêt (+ Notification)
+25 - Descendez du tram B et restez sur le même quai
+
+26 ^ - Vérifier le nom de l’arrêt où vous êtes descendu
+27 ^ - Avancez jusqu’au bout du quai en direction du musée
+28 ^ - Avancez tout droit le long du quai en direction du musée
+29 = - Traversez quand le feu est vert
+30 = - Traversez quand le feu est vert
+31 = - Traversez quand le feu est vert
+32 ^ - Avancez en direction de la sculpture
+33 > - Avancez vers les escaliers et l’entrée du musée
+34 ^ - Vous êtes arrivé au musée, félicitations !
+
 ```js
 const r1 = {
   IsJsEnabled: 0,

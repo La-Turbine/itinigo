@@ -47,16 +47,9 @@ app.config.errorHandler = (err, vm, info) => {
   console.error(err, info)
   router.push("/")
 }
-import { useLocalStorage, toReactive } from "@vueuse/core"
-
-const $state = toReactive(
-  useLocalStorage("$state", {
-    mode: "user",
-    trips: [],
-  })
-)
-app.config.globalProperties.$state = $state
-window.$state = app.config.globalProperties.$state
+import { useStorageAsync, toReactive } from "@vueuse/core"
+import { idbStorage } from "./idb"
+window.$state = app.config.globalProperties.$state = toReactive(useStorageAsync("$state", { mode: "user", trips: [] }, idbStorage))
 window.$ = (selector: string, context = document as any) => context.querySelector(selector)
 window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
 

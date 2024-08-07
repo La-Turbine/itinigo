@@ -107,8 +107,8 @@ async function onSearch(event) {
     const response = await fetch(`https://api.ppp38v2.cityway.fr/search/address?keywords=${query}&maxitems=10&pointtypes=&categories=&LocalityIds=&OperatorIds=`)
     const data = await response.json()
     items.value = data.Data.map((item) => {
-      // item.text = `${item.Number ?? ""} ${item.Name} - ${item.PostalCode} ${item.Locality?.Name} ${item.Categories?.[0]?.Name ?? ""}`
-      item.text = `${item.Number ?? ""} ${item.Name}`.trim()
+      item.text = `${item.Number ?? ""} ${item.Name} - ${item.PostalCode} ${item.Locality?.Name} ${item.Categories?.[0]?.Name ?? ""}`.trim()
+      // item.text = `${item.Number ?? ""} ${item.Name}`.trim()
       return item
     })
   } catch (error) {}
@@ -193,7 +193,7 @@ const nexts = {
       $router.push("/")
       return
     }
-    $state.trips[$route.params.id - 1] = { from: state.from.text, to: state.to.text, sequences: currentChoice }
+    $state.trips[$route.params.id - 1] = { from: state.from.text.split(' - ')[0], to: state.to.text.split(' - ')[0], sequences: currentChoice.value }
     $router.push("/")
   },
   async 4(num) {
