@@ -193,7 +193,7 @@ const nexts = {
       $router.push("/")
       return
     }
-    $state.trips[$route.params.id - 1] = { from: state.from.text.split(' - ')[0], to: state.to.text.split(' - ')[0], sequences: currentChoice.value }
+    $state.trips[$route.params.id - 1] = { from: state.from.text.split(" - ")[0], to: state.to.text.split(" - ")[0], sequences: currentChoice.value }
     $router.push("/")
   },
   async 4(num) {

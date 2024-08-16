@@ -49,14 +49,17 @@ export const idb = {
 }
 export const idbStorage = {
   async getItem(key) {
-    return await idb.get(key)
+    idbStorage.cache[key] = await idb.get(key)
+    return idbStorage.cache[key]
   },
   async setItem(key, value) {
-    await idb.set(key, value)
+    idbStorage.cache[key] = await idb.set(key, value)
   },
   async removeItem(key) {
     await idb.del(key)
+    delete idbStorage.cache[key]
   },
+  cache: {}, // HACK
 }
 window.idb = idb
 window.idbStorage = idbStorage

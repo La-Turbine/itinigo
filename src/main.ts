@@ -34,7 +34,11 @@ import "@ionic/vue/css/display.css"
 const app = createApp(App).use(IonicVue).use(router)
 
 router.isReady().then(() => {
-  app.mount("#app")
+  const i = setInterval(() => {
+    if (!idbStorage.cache["$state"]) return
+    clearInterval(i)
+    app.mount("#app")
+  }, 100)
 })
 
 // Custom code from here
