@@ -56,12 +56,12 @@ function initApp() {
   window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
 }
 function initPWA() {
-  window.addEventListener("beforeinstallprompt", (e) => {
-    console.log("beforeinstallprompt", e)
-  })
+  if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) return // already installed and used
+  if (location.protocol === 'http:') return // not secure
+  alert("Merci d'installer l'application pour une meilleure expérience")
 }
-if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) initApp()
-else initPWA()
+initPWA()
+initApp()
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
