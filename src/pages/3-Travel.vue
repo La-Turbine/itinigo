@@ -14,7 +14,7 @@
           <div style="display: flex; flex-direction: column; gap: 4px; padding: 20px" v-if="currentChoice.stops">
             <h2 v-for="stop in currentChoice.stops">{{ stop }}</h2>
           </div>
-          <img style="max-width: 100%; height: auto; margin: auto" :src="currentChoice.image" v-else />
+          <img style="max-width: 100%; max-height: 100%; height: auto; margin: auto" :src="currentChoice.image" v-else />
         </div>
         <div style="display: flex; flex: 1">
           <h2 style="padding: 4px; margin: auto">{{ currentChoice.text }}</h2>
