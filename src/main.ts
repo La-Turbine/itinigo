@@ -31,31 +31,37 @@ import "@ionic/vue/css/display.css"
 /* @import '@ionic/vue/css/palettes/dark.class.css'; */
 // import "@ionic/vue/css/palettes/dark.system.css"
 
-const app = createApp(App).use(IonicVue).use(router)
-
-router.isReady().then(() => {
-  const i = setInterval(() => {
-    if (!idbStorage.cache["$state"]) return
-    clearInterval(i)
-    app.mount("#app")
-  }, 100)
-})
-
-// Custom code from here
 import * as Ion from "@ionic/vue"
-Object.entries(Ion).forEach(([key, value]) => {
-  if (!key.startsWith("Ion")) return
-  app.component(key, value)
-})
-app.config.errorHandler = (err, vm, info) => {
-  console.error(err, info)
-  router.push("/")
-}
 import { useStorageAsync, toReactive } from "@vueuse/core"
 import { idbStorage } from "./idb"
-window.$state = app.config.globalProperties.$state = toReactive(useStorageAsync("$state", { mode: "user", trips: [] }, idbStorage))
-window.$ = (selector: string, context = document as any) => context.querySelector(selector)
-window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
+function initApp() {
+  const app = createApp(App).use(IonicVue).use(router)
+  router.isReady().then(() => {
+    const i = setInterval(() => {
+      if (!idbStorage.cache["$state"]) return
+      clearInterval(i)
+      app.mount("#app")
+    }, 100)
+  })
+  Object.entries(Ion).forEach(([key, value]) => {
+    if (!key.startsWith("Ion")) return
+    app.component(key, value)
+  })
+  app.config.errorHandler = (err, vm, info) => {
+    console.error(err, info)
+    router.push("/")
+  }
+  window.$state = app.config.globalProperties.$state = toReactive(useStorageAsync("$state", { mode: "user", trips: [] }, idbStorage))
+  window.$ = (selector: string, context = document as any) => context.querySelector(selector)
+  window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
+}
+function initPWA() {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    console.log("beforeinstallprompt", e)
+  })
+}
+if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) initApp()
+else initPWA()
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
