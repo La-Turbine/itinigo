@@ -19,6 +19,9 @@
         </ion-item>
       </ion-list>
     </ion-content>
+    <div style="height: 500px;width: 500px;">
+      <wc-tldraw></wc-tldraw>
+    </div>
   </ion-page>
 </template>
 

@@ -34,6 +34,7 @@ import "@ionic/vue/css/display.css"
 import * as Ion from "@ionic/vue"
 import { useStorageAsync, toReactive } from "@vueuse/core"
 import { idbStorage } from "./idb"
+import "./tldraw"
 function initApp() {
   const app = createApp(App).use(IonicVue).use(router)
   router.isReady().then(() => {
