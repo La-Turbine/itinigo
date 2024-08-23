@@ -19,12 +19,15 @@
         </ion-item>
       </ion-list>
     </ion-content>
-    <div style="height: 500px;width: 500px;">
-      <wc-tldraw></wc-tldraw>
-    </div>
+    <!-- <div style="height: 500px; width: 500px">
+      <wc-tldraw v-bind="attr"></wc-tldraw>
+    </div> -->
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { accessibility, walk, add } from "ionicons/icons"
+// const image = { src: "", width: 100, height: 100, type: "image/png" }
+// const attr = { image, xxx: "onDoneFN" }
+// window.onDoneFN = (data) => console.log(data)
 </script>
