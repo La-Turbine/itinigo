@@ -113,7 +113,6 @@ const r2 = {
   PointDep: "152084_3_40",
   PointArr: "2002289_4",
   Date: new Date().toLocaleDateString("en-GB"),
-  TypeDate: 68,
   Hour: new Date().getHours(),
   Minute: new Date().getMinutes(),
 }

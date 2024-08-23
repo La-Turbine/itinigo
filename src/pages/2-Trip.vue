@@ -152,6 +152,17 @@ const nexts = {
       Date: new Date().toLocaleDateString("en-GB"),
       Hour: new Date().getHours(),
       Minute: new Date().getMinutes(),
+      Algorithm: "Fastest",
+      TypeTrip: "PlanTrip",
+      Modes: ["Bus", "Coach", "Metro", "Tram", "Tod", "Tgv", "Ter", "Train", "Plane"],
+      ListModes: "Bus|Coach|Metro|Tram|Tod|Tgv|Ter|Train|Plane",
+      IgnoreDisruptions: true, // default to false
+      WalkDistance: 2000,
+      WalkSpeed: 4,
+      CarDistance: 100,
+      BikeDistance: 10,
+      BikeSpeed: 15,
+      BikeSecure: 2,
     }
     const response = await fetch("/itinisere/fr/itineraires/4/JourneyPlanner/PartialResult", {
       method: "POST",
