@@ -29,7 +29,7 @@
 
         <ion-list v-if="currentStep === 3">
           <ion-item button detail="false" @click="next((state.sequence = i))" v-for="(sequence, i) in currentChoice">
-            {{ sequence.transport }}{{ sequence.stops ? ` (${sequence.stops.length} arrêts)` : "" }}
+            {{ sequence.transport }}{{ sequence.stops ? ` (${sequence.stops.length} arrêts) [${sequence.stops[0]} > ${sequence.stops.at(-1)}]` : "" }}
           </ion-item>
         </ion-list>
 
@@ -148,14 +148,14 @@ const nexts = {
   async 1() {
     const request = {
       PointDep: ["Id", "PointType", "Number"].map((k) => state.from[k]).filter((v) => v).join("_"), // prettier-ignore
+      LatDep: state.from.Latitude,
+      LngDep: state.from.Longitude,
       PointArr: ["Id", "PointType", "Number"].map((k) => state.to[k]).filter((v) => v).join("_"), // prettier-ignore
+      LatArr: state.to.Latitude,
+      LngArr: state.to.Longitude,
       Date: new Date().toLocaleDateString("en-GB"),
       Hour: new Date().getHours(),
       Minute: new Date().getMinutes(),
-      Algorithm: "Fastest",
-      TypeTrip: "PlanTrip",
-      Modes: ["Bus", "Coach", "Metro", "Tram", "Tod", "Tgv", "Ter", "Train", "Plane"],
-      ListModes: "Bus|Coach|Metro|Tram|Tod|Tgv|Ter|Train|Plane",
       IgnoreDisruptions: true, // default to false
       WalkDistance: 2000,
       WalkSpeed: 4,
@@ -169,8 +169,8 @@ const nexts = {
       headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
       body: new URLSearchParams({ request: JSON.stringify(request) }),
     })
-    const data = await response.text()
-    const html = new DOMParser().parseFromString(data, "text/html")
+    const text = await response.text()
+    const html = new DOMParser().parseFromString(text, "text/html")
     const css = `<link href="https://static.PPP38v2.cityway.fr/Content/css/site-638562226680000000.css" rel="stylesheet" crossorigin="anonymous">
 <style>
 .JourneyPlanner { padding: 10px;height: 140px;overflow:hidden; }
@@ -180,7 +180,10 @@ const nexts = {
     state.sequences = $$(".detail-trip", html).map((el) => {
       const sequence = []
       $$("td:nth-child(1) > .item-line", el).forEach((el, i) => {
-        const stops = $$("ul li", el.parentElement.parentElement).map((el) => el.firstChild.textContent.trim())
+        const before = $(".details span", el.parentElement.parentElement.previousElementSibling).firstChild.textContent.trim()
+        const intermediary = $$("ul li", el.parentElement.parentElement).map((el) => el.firstChild.textContent.trim())
+        const after = $(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim()
+        const stops = [before, ...intermediary, after].filter((v) => v)
         sequence.push({ transport: `Je marche vers l'arrêt n°${i + 1} ${stops[0]}`, photos: [] })
         sequence.push({ transport: `J'attend à l'arrêt n°${i + 1} ${stops[0]}`, photos: [] })
         sequence.push({ transport: `Je monte dans le ${el.innerText}`, stops, photos: [] })
@@ -215,8 +218,4 @@ async function next(...args) {
   const fn = nexts[currentStep.value]
   await fn(...args)
 }
-
-// A multi-step form starting with "from" and "to" address/location
-// Then a number of steps
-// For each step: a "type" switch and a "photo" upload
 </script>
