@@ -32,18 +32,16 @@ import "@ionic/vue/css/display.css"
 // import "@ionic/vue/css/palettes/dark.system.css"
 
 import * as Ion from "@ionic/vue"
-import { useStorageAsync, toReactive } from "@vueuse/core"
-import { idbStorage } from "./idb"
+import { reactive, watch } from "vue"
+import { idb } from "./idb"
 import "./tldraw"
-function initApp() {
+function initPWA() {
+  if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) return // already installed and used
+  if (location.protocol === "http:") return // not secure
+  alert("Merci d'installer l'application pour une meilleure expérience")
+}
+async function initApp() {
   const app = createApp(App).use(IonicVue).use(router)
-  router.isReady().then(() => {
-    const i = setInterval(() => {
-      if (!idbStorage.cache["$state"]) return
-      clearInterval(i)
-      app.mount("#app")
-    }, 100)
-  })
   Object.entries(Ion).forEach(([key, value]) => {
     if (!key.startsWith("Ion")) return
     app.component(key, value)
@@ -52,19 +50,28 @@ function initApp() {
     console.error(err, info)
     router.push("/")
   }
-  window.$state = app.config.globalProperties.$state = toReactive(useStorageAsync("$state", { mode: "user", trips: [] }, idbStorage))
+  const keys = await idb.keys()
+  const values = await Promise.all(keys.map((key) => idb.get(key)))
+  const db = values.reduce(
+    (acc, val, i) => {
+      if (i === 0) return JSON.parse(val)
+      acc.photos[keys[i]] = val
+      return acc
+    },
+    { mode: "user", trips: [], photos: {} }
+  )
+  const $state = reactive(db)
+  watch($state, (next) => idb.set("$state", JSON.stringify({ ...next, photos: {} })), { flush: "pre", deep: true })
+  await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
-}
-function initPWA() {
-  if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) return // already installed and used
-  if (location.protocol === 'http:') return // not secure
-  alert("Merci d'installer l'application pour une meilleure expérience")
+  window.$state = app.config.globalProperties.$state = $state
+  app.mount("#app")
 }
 initPWA()
 initApp()
 
-declare module "@vue/runtime-core" {
+declare module "vue" {
   interface ComponentCustomProperties {
     $state: any
   }

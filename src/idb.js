@@ -28,6 +28,7 @@ export const idb = {
     return this.transaction("readwrite", (store) => store.put(value, key))
   },
   del(key) {
+    if (!key) return this
     return this.transaction("readwrite", (store) => store.delete(key))
   },
   clear() {
@@ -47,19 +48,3 @@ export const idb = {
     ).then(() => keys)
   },
 }
-export const idbStorage = {
-  async getItem(key) {
-    idbStorage.cache[key] = await idb.get(key)
-    return idbStorage.cache[key]
-  },
-  async setItem(key, value) {
-    idbStorage.cache[key] = await idb.set(key, value)
-  },
-  async removeItem(key) {
-    await idb.del(key)
-    delete idbStorage.cache[key]
-  },
-  cache: {}, // HACK
-}
-window.idb = idb
-window.idbStorage = idbStorage

@@ -48,7 +48,7 @@
                 <ion-item>
                   <div style="display: flex; gap: 8px; padding: 4px">
                     <img :src="`/svg/${photo.type}.svg`" style="max-height: 40px; aspect-ratio: 1" />
-                    <img :src="photo.image" style="max-height: 40px; aspect-ratio: 1" v-if="photo.image" />
+                    <img :src="$state.photos[photo.id]" style="max-height: 40px; aspect-ratio: 1" v-if="photo.id" />
                     <img src="/svg/camera.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refCamera)" />
                     <img src="/svg/gallery.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refGallery)" />
                     <ion-input v-model="photo.text" placeholder="Description"></ion-input>
@@ -140,7 +140,19 @@ function clickPhoto(photo, input) {
 function inputPhoto(event) {
   const file = event.target.files[0]
   const reader = new FileReader()
-  reader.onload = () => (state.currentPhoto.image = reader.result)
+  reader.onload = async () => {
+    function generateULID() {
+      const alphabet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+      const time = Math.floor(Date.now() / 1000).toString(32).toUpperCase().padStart(10, "0") // prettier-ignore
+      const randomPart = Array.from({ length: 16 }, () => alphabet[Math.floor(Math.random() * alphabet.length)]).join("")
+      return `${time}${randomPart}`
+    }
+    const id = generateULID()
+    await idb.del(state.currentPhoto.id)
+    await idb.set(id, reader.result)
+    state.currentPhoto.id = id
+    $state.photos[id] = reader.result
+  }
   reader.readAsDataURL(file)
 }
 // Utils
