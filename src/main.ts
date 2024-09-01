@@ -65,6 +65,7 @@ async function initApp() {
   await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
+  window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
   app.mount("#app")
 }
@@ -73,6 +74,7 @@ initApp()
 
 declare module "vue" {
   interface ComponentCustomProperties {
+    idb: any
     $state: any
   }
 }
@@ -80,6 +82,7 @@ declare global {
   interface Window {
     $: (selector: string, context?: HTMLElement) => HTMLElement | null
     $$: (selector: string, context?: HTMLElement) => HTMLElement[]
+    idb: any
     $state: any
     $router: any
     $route: any

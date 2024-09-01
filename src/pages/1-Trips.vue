@@ -17,6 +17,9 @@
           <ion-icon :icon="add"></ion-icon>
           <ion-label>Ajouter un trajet</ion-label>
         </ion-item>
+        <ion-item color="danger" @click="reset" v-if="$state.mode === 'helper'">
+          <ion-label>RESET</ion-label>
+        </ion-item>
       </ion-list>
     </ion-content>
     <!-- <div style="height: 500px; width: 500px">
@@ -30,4 +33,9 @@ import { accessibility, walk, add } from "ionicons/icons"
 // const image = { src: "", width: 100, height: 100, type: "image/png" }
 // const attr = { image, xxx: "onDoneFN" }
 // window.onDoneFN = (data) => console.log(data)
+async function reset() {
+  if (!confirm("Are you sure you want to reset?")) return
+  await idb.clear()
+  location.reload()
+}
 </script>
