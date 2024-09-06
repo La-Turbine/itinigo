@@ -1,17 +1,17 @@
 .DoneButton {
-	font: inherit;
-	background: var(--color-primary);
-	border: none;
-	color: var(--color-selected-contrast);
-	font-size: 1rem;
-	padding: 0.5rem 1rem;
-	border-radius: 6px;
-	margin: 6px;
-	pointer-events: all;
-	z-index: var(--layer-panels);
-	border: 2px solid var(--color-background);
-	cursor: pointer;
+  font: inherit;
+  background: var(--color-primary);
+  border: none;
+  color: var(--color-selected-contrast);
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin: 6px;
+  pointer-events: all;
+  z-index: var(--layer-panels);
+  border: 2px solid var(--color-background);
+  cursor: pointer;
 }
 .DoneButton:hover {
-	filter: brightness(1.1);
+  filter: brightness(1.1);
 }

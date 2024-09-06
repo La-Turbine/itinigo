@@ -1,15 +1,45 @@
 // https://examples.tldraw.com/image-annotator/full
+// https://tldraw.dev/examples/ui/image-component
+// https://tldraw.dev/examples/ui/custom-menus
 import "./annotator.css"
 import React from "react"
 import { useCallback, useEffect, useState } from "react"
-import { AssetRecordType, Editor, SVGContainer, TLImageShape, TLShapeId, Tldraw, createShapeId, exportToBlob, track, useEditor } from "tldraw"
-import { AnnotatorImage } from "./types"
+import {
+  Tldraw,
+  AssetRecordType,
+  createShapeId,
+  Editor,
+  exportToBlob,
+  SVGContainer,
+  track,
+  useEditor,
+  TLComponents,
+  TLImageShape,
+  TLShapeId,
+  createTLStore,
+  getSnapshot,
+  loadSnapshot,
+  DefaultColorThemePalette,
+  DefaultColorStyle,
+  DefaultSizeStyle,
+  DefaultToolbar,
+  SelectToolbarItem,
+  ArrowToolbarItem,
+  OvalToolbarItem,
+} from "tldraw"
+type AnnotatorImage = {
+  src: string
+  width: number
+  height: number
+  type: string
+}
 
 // TODO:
 // - prevent changing pages (create page, change page, move shapes to new page)
 // - prevent locked shape context menu
 // - inertial scrolling for constrained camera
 export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage; onDone(result: Blob): void }) {
+  const [store] = useState(() => createTLStore())
   const [imageShapeId, setImageShapeId] = useState<TLShapeId | null>(null)
   const [editor, setEditor] = useState(null as Editor | null)
 
@@ -127,25 +157,51 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     editor.setCamera(editor.getCamera(), { reset: true })
   }, [editor, imageShapeId, image])
 
-  return (
-    <Tldraw
-      onMount={onMount}
-      components={{
-        // we don't need pages for this use-case
-        PageMenu: null,
-        // grey-out the area outside of the image
-        InFrontOfTheCanvas: useCallback(() => {
-          if (!imageShapeId) return null
-          return <ImageBoundsOverlay imageShapeId={imageShapeId} />
-        }, [imageShapeId]),
-        // add a "done" button in the top right for when the user is ready to export
-        SharePanel: useCallback(() => {
-          if (!imageShapeId) return null
-          return <DoneButton imageShapeId={imageShapeId} onClick={onDone} />
-        }, [imageShapeId, onDone]),
-      }}
-    />
-  )
+  function onDone2(blob: Blob) {
+    // TODO: export the snapshot instead of the blob, to be able to reuse the annotations
+    // const snapshot = getSnapshot(store)
+    // console.log(snapshot)
+    onDone(blob)
+  }
+
+  DefaultColorThemePalette.lightMode.green.solid = "#6BDB09"
+  DefaultColorStyle.setDefaultValue("green")
+  DefaultSizeStyle.setDefaultValue("xl")
+  function Toolbar() {
+    return (
+      <DefaultToolbar>
+        <SelectToolbarItem />
+        <ArrowToolbarItem />
+        <OvalToolbarItem />
+      </DefaultToolbar>
+    )
+  }
+  const components: TLComponents = {
+    ActionsMenu: null,
+    ContextMenu: null,
+    DebugMenu: null,
+    HelpMenu: null,
+    KeyboardShortcutsDialog: null,
+    MainMenu: null,
+    NavigationPanel: null,
+    PageMenu: null,
+    // QuickActions: null,
+    StylePanel: null,
+    Toolbar: Toolbar,
+    ZoomMenu: null,
+    // grey-out the area outside of the image
+    InFrontOfTheCanvas: useCallback(() => {
+      if (!imageShapeId) return null
+      return <ImageBoundsOverlay imageShapeId={imageShapeId} />
+    }, [imageShapeId]),
+    // add a "done" button in the top right for when the user is ready to export
+    SharePanel: useCallback(() => {
+      if (!imageShapeId) return null
+      return <DoneButton imageShapeId={imageShapeId} onClick={onDone2} />
+    }, [imageShapeId, onDone]),
+  }
+
+  return <Tldraw onMount={onMount} store={store} components={components} />
 }
 
 /**

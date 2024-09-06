@@ -90,3 +90,8 @@ Il y aura une démo à la fin de chaque lot et en cours de dev si besoin.
   - Feature 3: Attendre + Notification?
   - Feature 4: Liste des arrêts + Notification + Geolocalisation?
 - User: Aide / Appel + SMS
+
+## NOTES
+
+TLDraw - Implem n°1, sauvegarde de la photo annotée, on ne peut pas revenir en arrière
+TLDraw - Implem n°2, sauvegarde du "store", et affichage de TLDraw en mode "lecture" et "focus" en mode guidage, sinon restore en mode aidant.

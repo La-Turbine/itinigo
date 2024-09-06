@@ -65,7 +65,7 @@
           </ion-list>
         </ion-list>
 
-        <ion-item>
+        <ion-item v-if="currentStep !== 2">
           <ion-back-button text="Précédent" icon="" default-href="/" fill="outline" v-if="currentStep > 1"></ion-back-button>
           <ion-button type="submit" style="margin-left: auto" v-if="currentStep !== 3">Suivant</ion-button>
           <div style="margin-left: auto; display: flex; gap: 4px" v-else>
