@@ -1,5 +1,6 @@
+// https://examples.tldraw.com/image-annotator/full
+import "./annotator.css"
 import React from "react"
-import "./image-annotator.css"
 import { useCallback, useEffect, useState } from "react"
 import { AssetRecordType, Editor, SVGContainer, TLImageShape, TLShapeId, Tldraw, createShapeId, exportToBlob, track, useEditor } from "tldraw"
 import { AnnotatorImage } from "./types"
@@ -9,7 +10,6 @@ import { AnnotatorImage } from "./types"
 // - prevent locked shape context menu
 // - inertial scrolling for constrained camera
 export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage; onDone(result: Blob): void }) {
-  console.log("ImageAnnotationEditor", "onDone", onDone)
   const [imageShapeId, setImageShapeId] = useState<TLShapeId | null>(null)
   const [editor, setEditor] = useState(null as Editor | null)
 

@@ -155,7 +155,7 @@ async function fetchItinisere(payload) {
 test("itinisere", async () => {
   const [html, html2] = await Promise.all(payloads.map(fetchItinisere))
   // expect(html.innerHTML).toEqual(html2.innerHTML) // session ID is different
-  // const extract = (html: Element) => Array.from(html.querySelectorAll(".panel-trip, .detail-trip")).map((el) => el.outerHTML).join("\n") // prettier-ignore
+  // const extract = (html: Element) => [...html.querySelectorAll(".panel-trip, .detail-trip")].map((el) => el.outerHTML).join("\n") // prettier-ignore
   // expect(extract(html)).toEqual(extract(html2))
   expect(html.querySelector("script")!.innerHTML).toEqual(html2.querySelector("script")!.innerHTML)
 })

@@ -74,7 +74,7 @@ async function initApp() {
   watch($state, (next) => idb.set("$state", JSON.stringify({ ...next, photos: {} })), { flush: "pre", deep: true })
   await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
-  window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
+  window.$$ = (selector: string, context = document as any) => [...context.querySelectorAll(selector)]
   window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
   app.mount("#app")

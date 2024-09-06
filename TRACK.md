@@ -46,7 +46,7 @@
 const url = `https://www.itinisere.fr/fr/itineraires/4/JourneyPlanner/result?Date=28%2F07%2F2024&TypeDate=68&Hour=13&Minute=45&Algorithm=Fastest&TypeTrip=PlanTrip&ListModes=Bus%7CCoach%7CMetro%7CTram%7CTod%7CTgv%7CTer%7CTrain%7CPlane&ListPartners=14%7C28%7C24%7C30%7C15%7C5%7C2%7C22%7C18%7C29%7C6%7C8%7C31%7C3%7C13%7C12%7C26%7C27%7C7%7C17&CarDistance=100&CarLeave=0&BikeDistance=10&BikeLeave=0&BikeSpeed=15&BikeSecure=2&WalkDistance=2000&WalkSpeed=4&DurationVia=30&PointDep=152084_3_40&NumDep=40&LatDep=45.1867420708696&LngDep=5.71237108565983&PointArr=2002289_4&LatArr=45.187492048825&LngArr=5.73744659885#form`
 if (window.location.href !== url) window.location.href = url
 window.$ = (selector, context = document) => context.querySelector(selector)
-window.$$ = (selector, context = document) => Array.from(context.querySelectorAll(selector))
+window.$$ = (selector, context = document) => [...context.querySelectorAll(selector)]
 $$(".panel-trip").map((el) => {
   return {
     from: $(".hours b", el).textContent.trim(),
