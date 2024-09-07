@@ -21,8 +21,11 @@ import {
   loadSnapshot,
   DefaultColorThemePalette,
   DefaultColorStyle,
+  DefaultFillStyle,
   DefaultSizeStyle,
   DefaultToolbar,
+  ArrowShapeArrowheadStartStyle,
+  ArrowShapeArrowheadEndStyle,
   SelectToolbarItem,
   ArrowToolbarItem,
   OvalToolbarItem,
@@ -164,6 +167,19 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     onDone(blob)
   }
 
+  function onUiEvent(event: string, options: any) {
+    if (event === "select-tool" && options.id === "arrow") {
+      editor.setStyleForNextShapes(DefaultColorStyle, "blue")
+      editor.setStyleForNextShapes(DefaultFillStyle, "solid")
+      editor.setStyleForNextShapes(ArrowShapeArrowheadStartStyle, "dot")
+      editor.setStyleForNextShapes(ArrowShapeArrowheadEndStyle, "triangle")
+    }
+    if (event === "select-tool" && options.id === "geo-oval") {
+      editor.setStyleForNextShapes(DefaultColorStyle, "green")
+      editor.setStyleForNextShapes(DefaultFillStyle, "none")
+    }
+  }
+
   DefaultColorThemePalette.lightMode.green.solid = "#6BDB09"
   DefaultColorStyle.setDefaultValue("green")
   DefaultSizeStyle.setDefaultValue("xl")
@@ -201,7 +217,7 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     }, [imageShapeId, onDone]),
   }
 
-  return <Tldraw onMount={onMount} store={store} components={components} />
+  return <Tldraw onMount={onMount} onUiEvent={onUiEvent} store={store} components={components} />
 }
 
 /**
