@@ -35,6 +35,7 @@ import * as Ion from "@ionic/vue"
 import { reactive, watch } from "vue"
 import { idb } from "./idb"
 import "./tldraw"
+import TldrawAnnotator from "./tldraw/annotator.vue"
 function initPWA() {
   if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) return // already installed and used
   if (location.protocol === "http:") return // not secure
@@ -52,6 +53,7 @@ function initPWA() {
 }
 async function initApp() {
   const app = createApp(App).use(IonicVue).use(router)
+  app.component("TldrawAnnotator", TldrawAnnotator)
   Object.entries(Ion).forEach(([key, value]) => {
     if (!key.startsWith("Ion")) return
     app.component(key, value)
