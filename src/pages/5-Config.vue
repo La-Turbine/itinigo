@@ -12,8 +12,8 @@
       <ion-item button @click="requestInstall" :disabled="isInstalled">
         <ion-label>INSTALL PWA</ion-label>
       </ion-item>
-      <ion-item button @click="requestNotification" :disabled="isNotifiable">
-        <ion-label>NOTIFICATION PERMISSIONS</ion-label>
+      <ion-item button @click="requestNotification">
+        <ion-label>NOTIFICATION {{ isNotifiable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
@@ -30,6 +30,7 @@ async function requestInstall() {
   alert("Please install this app by using the `Add to Home Screen` button")
 }
 async function requestNotification() {
+  if (isNotifiable.value) return new Notification("Notifications active !")
   const permission = await Notification.requestPermission()
   isNotifiable.value = permission === "granted"
 }
