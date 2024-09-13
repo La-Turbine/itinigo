@@ -30,7 +30,14 @@ async function requestInstall() {
   alert("Please install this app by using the `Add to Home Screen` button")
 }
 async function requestNotification() {
-  if (isNotifiable.value) return new Notification("Notifications active !")
+  if (isNotifiable.value) {
+    const registration = await navigator.serviceWorker.getRegistration()
+    registration.showNotification("Notification", {
+      body: "Préparez-vous à déscendre au prochain arrêt.",
+      icon: "/favicon.png",
+      badge: "/favicon.png",
+    })
+  }
   const permission = await Notification.requestPermission()
   isNotifiable.value = permission === "granted"
 }
