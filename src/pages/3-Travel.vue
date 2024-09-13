@@ -35,9 +35,8 @@ watch(
   currentChoice,
   () => {
     if (!currentChoice.value.stops) return
-    setTimeout(() => {
-      new Notification("Préparez-vous à déscendre au prochain arrêt.", { vibrate: [200, 100, 200] })
-    }, 5000)
+    setTimeout(() => new Notification("Préparez-vous à déscendre au prochain arrêt.", { icon: "./favicon.ico" }), 2000)
+    setTimeout(() => new Notification("Préparez-vous à déscendre au prochain arrêt.", { vibrate: [200, 100, 200] }), 5000)
   },
   { immediate: true }
 )
