@@ -10,7 +10,8 @@
     "test:e2e": "cypress run",
     "test:unit": "vitest",
     "fmt": "prettier . --write",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "icons": "npx @vite-pwa/assets-generator  --preset minimal-2023 public/favicon.svg"
   },
   "dependencies": {
     "@capacitor/app": "6.0.0",
