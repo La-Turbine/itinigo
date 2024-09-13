@@ -36,22 +36,42 @@ import { reactive, watch } from "vue"
 import { idb } from "./idb"
 import "./tldraw"
 import TldrawAnnotator from "./tldraw/annotator.vue"
-function initPWA() {
+async function initPWA() {
+  Notification.requestPermission()
   if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) return // already installed and used
-  if (location.protocol === "http:") return // not secure
-  // Prompt the user to use chrome on android or safari on ios
-  // The prompt message is in french, once it is displayed it should not be displayed again
-  const isAndroid = /android/i.test(navigator.userAgent)
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent)
-  const isChrome = /chrome/i.test(navigator.userAgent)
-  const isSafari = /safari/i.test(navigator.userAgent)
-  if (isAndroid && !isChrome) return alert("Merci d'utiliser Chrome sur Android et d'installer cette application")
-  if (isIOS && !isSafari) return alert("Merci d'utiliser Safari sur iOS et d'installer cette application")
-  if (localStorage.prompted) return
-  alert("Merci d'installer cette application en utilisant le bouton `Ajouter à l'écran d'accueil`")
-  localStorage.prompted = true
+  if (location.protocol === "http:") return // not secure, not installable
+  // Prompt the user to install the app
+  return new Promise((resolve, reject) => {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault()
+      const deferredPrompt = e
+      const button = document.createElement("button")
+      button.textContent = "Install PWA"
+      document.body.appendChild(button)
+      button.addEventListener("click", () => {
+        deferredPrompt.prompt()
+        deferredPrompt.userChoice.then((choiceResult) => {
+          document.body.removeChild(button)
+          if (choiceResult.outcome === "accepted") return resolve()
+          return reject(new Error("User dismissed the install prompt"))
+        })
+      })
+    })
+  })
+  // // Prompt the user to use chrome on android or safari on ios
+  // // The prompt message is in french, once it is displayed it should not be displayed again
+  // const isAndroid = /android/i.test(navigator.userAgent)
+  // const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent)
+  // const isChrome = /chrome/i.test(navigator.userAgent)
+  // const isSafari = /safari/i.test(navigator.userAgent)
+  // if (isAndroid && !isChrome) return alert("Merci d'utiliser Chrome sur Android et d'installer cette application")
+  // if (isIOS && !isSafari) return alert("Merci d'utiliser Safari sur iOS et d'installer cette application")
+  // if (localStorage.prompted) return
+  // alert("Merci d'installer cette application en utilisant le bouton `Ajouter à l'écran d'accueil`")
+  // localStorage.prompted = true
 }
 async function initApp() {
+  await initPWA()
   const app = createApp(App).use(IonicVue).use(router)
   app.component("TldrawAnnotator", TldrawAnnotator)
   Object.entries(Ion).forEach(([key, value]) => {
@@ -81,7 +101,6 @@ async function initApp() {
   window.$state = app.config.globalProperties.$state = $state
   app.mount("#app")
 }
-initPWA()
 initApp()
 
 declare module "vue" {
