@@ -17,8 +17,8 @@
           <ion-icon :icon="add"></ion-icon>
           <ion-label>Ajouter un trajet</ion-label>
         </ion-item>
-        <ion-item color="danger" @click="reset" v-if="$state.mode === 'helper'">
-          <ion-label>RESET</ion-label>
+        <ion-item color="secondary" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">
+          <ion-label>CONFIG</ion-label>
         </ion-item>
       </ion-list>
     </ion-content>
@@ -27,9 +27,4 @@
 
 <script setup lang="ts">
 import { accessibility, walk, add } from "ionicons/icons"
-async function reset() {
-  if (!confirm("Are you sure you want to reset?")) return
-  await idb.clear()
-  location.reload()
-}
 </script>

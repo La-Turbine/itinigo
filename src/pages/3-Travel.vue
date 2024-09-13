@@ -31,13 +31,4 @@ const currentTrip = $state.trips[$route.params.id - 1] || {}
 const currentStep = computed(() => +($route.query.step || 1))
 const steps = computed(() => currentTrip.sequences.flatMap((v) => (v.stops ? [v.photos[0], v, v.photos[1]].filter((v) => v) : v.photos)).filter((v) => v.stops || v.id))
 const currentChoice = computed(() => steps.value[currentStep.value - 1])
-watch(
-  currentChoice,
-  () => {
-    if (!currentChoice.value.stops) return
-    setTimeout(() => new Notification("Préparez-vous à déscendre au prochain arrêt.", { icon: "./favicon.ico" }), 2000)
-    setTimeout(() => new Notification("Préparez-vous à déscendre au prochain arrêt.", { vibrate: [200, 100, 200] }), 5000)
-  },
-  { immediate: true }
-)
 </script>
