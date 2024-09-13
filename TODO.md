@@ -95,3 +95,5 @@ Il y aura une démo à la fin de chaque lot et en cours de dev si besoin.
 
 TLDraw - Implem n°1, sauvegarde de la photo annotée, on ne peut pas revenir en arrière
 TLDraw - Implem n°2, sauvegarde du "store", et affichage de TLDraw en mode "lecture" et "focus" en mode guidage, sinon restore en mode aidant.
+
+Pour le debug sur ANDROID, activé le "Developer Mode", activé le "USB Debugging" et autorisé lors de la connection USB. Puis aller dans "chrome://inspect/#devices".

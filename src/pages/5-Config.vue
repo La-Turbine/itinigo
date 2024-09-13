@@ -34,8 +34,8 @@ async function requestNotification() {
     const registration = await navigator.serviceWorker.getRegistration()
     registration.showNotification("Notification", {
       body: "Préparez-vous à déscendre au prochain arrêt.",
-      icon: "/favicon.png",
-      badge: "/favicon.png",
+      icon: "/favicon.svg",
+      badge: "/favicon.svg",
     })
   }
   const permission = await Notification.requestPermission()

@@ -159,11 +159,15 @@ function inputPhoto(event) {
   reader.readAsDataURL(file)
 }
 async function annotatePhoto(blob) {
-  const id = currentPhoto.value
-  const url = URL.createObjectURL(blob)
-  await idb.set(id, url)
-  $state.photos[id] = url
-  currentPhoto.value = null
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = async () => {
+    const id = currentPhoto.value
+    const url = reader.result
+    await idb.set(id, url)
+    $state.photos[id] = url
+    currentPhoto.value = null
+  }
 }
 // Utils
 const nexts = {
