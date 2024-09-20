@@ -29,7 +29,7 @@
 
         <ion-list v-if="currentStep === 3">
           <ion-item button detail="false" @click="next((state.sequence = i))" v-for="(sequence, i) in currentChoice">
-            {{ sequence.transport }}{{ sequence.stops ? ` (${sequence.stops.length} arrêts) [${sequence.stops[0]} > ${sequence.stops.at(-1)}]` : "" }}
+            {{ sequence.transport }}{{ sequence.stops ? ` (${sequence.stops.length} arrêts) [${sequence.stops[0].name} > ${sequence.stops.at(-1).name}]` : "" }}
           </ion-item>
         </ion-list>
 
@@ -206,12 +206,15 @@ const nexts = {
     state.sequences = $$(".detail-trip", html).map((el) => {
       const sequence = []
       $$("td:nth-child(1) > .item-line", el).forEach((el, i) => {
-        const before = $(".details span", el.parentElement.parentElement.previousElementSibling).firstChild.textContent.trim()
-        const intermediary = $$("ul li", el.parentElement.parentElement).map((el) => el.firstChild.textContent.trim())
-        const after = $(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim()
+        const before = { name: $(".details span", el.parentElement.parentElement.previousElementSibling).firstChild.textContent.trim(), lat: state.from.Latitude, lng: state.from.Longitude }
+        const intermediary = $$("ul li", el.parentElement.parentElement).map((el) => {
+          const { lat, lng } = $("[data-lat]", el).dataset
+          return { name: el.firstChild.textContent.trim(), lat: +lat, lng: +lng }
+        })
+        const after = { name: $(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim(), lat: state.to.Latitude, lng: state.to.Longitude }
         const stops = [before, ...intermediary, after].filter((v) => v)
-        sequence.push({ transport: `Je marche vers l'arrêt n°${i + 1} ${stops[0]}`, photos: [] })
-        sequence.push({ transport: `J'attend à l'arrêt n°${i + 1} ${stops[0]}`, photos: [] })
+        sequence.push({ transport: `Je marche vers l'arrêt n°${i + 1} ${stops[0].name}`, photos: [] })
+        sequence.push({ transport: `J'attend à l'arrêt n°${i + 1} ${stops[0].name}`, photos: [] })
         sequence.push({ transport: `Je monte dans le ${el.innerText}`, stops, photos: [] })
       })
       sequence.push({ transport: `Je marche vers ma destination`, photos: [] })
