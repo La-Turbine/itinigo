@@ -36,9 +36,11 @@ import { reactive, watch } from "vue"
 import { idb } from "./idb"
 import "./tldraw"
 import TldrawAnnotator from "./tldraw/annotator.vue"
+import Card from "./components/card.vue"
 async function initApp() {
   const app = createApp(App).use(IonicVue).use(router)
   app.component("TldrawAnnotator", TldrawAnnotator)
+  app.component("Card", Card)
   Object.entries(Ion).forEach(([key, value]) => {
     if (!key.startsWith("Ion")) return
     app.component(key, value)
