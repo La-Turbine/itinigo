@@ -15,6 +15,9 @@
       <ion-item button @click="requestNotification">
         <ion-label>NOTIFICATION {{ isNotifiable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
+      <ion-item button @click="requestLocalisation">
+        <ion-label>LOCALISATION {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
+      </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
       </ion-item>
@@ -23,23 +26,36 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 const isInstalled = ref(window.matchMedia("(display-mode: standalone)").matches || !!window.navigator.standalone)
-const isNotifiable = ref(Notification.permission === "granted")
+const isNotifiable = ref(false)
+const isLocalisable = ref(false)
+onMounted(async () => {
+  isNotifiable.value = (await navigator.permissions.query({ name: "notifications" })).state === "granted"
+  isLocalisable.value = (await navigator.permissions.query({ name: "geolocation" })).state === "granted"
+  if (!isNotifiable.value) requestNotification()
+  if (!isLocalisable.value) requestLocalisation()
+})
 async function requestInstall() {
   alert("Please install this app by using the `Add to Home Screen` button")
 }
 async function requestNotification() {
-  if (isNotifiable.value) {
-    const registration = await navigator.serviceWorker.getRegistration()
-    registration.showNotification("Notification", {
-      body: "Préparez-vous à déscendre au prochain arrêt.",
-      icon: "/favicon.svg",
-      badge: "/favicon.svg",
-    })
+  if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
+  const notification = {
+    body: "Préparez-vous à déscendre au prochain arrêt",
+    icon: "/favicon.svg",
+    badge: "/favicon.svg",
   }
-  const permission = await Notification.requestPermission()
-  isNotifiable.value = permission === "granted"
+  const registration = await navigator.serviceWorker.getRegistration()
+  if (registration?.showNotification) return registration.showNotification("Notification", notification)
+  return new Notification("Notification", notification)
+}
+async function requestLocalisation() {
+  if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))
+  navigator.geolocation.getCurrentPosition(
+    (position) => console.log(position),
+    (err) => console.log(err)
+  )
 }
 async function reset() {
   if (!confirm("Are you sure you want to reset?")) return
