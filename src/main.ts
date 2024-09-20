@@ -62,6 +62,12 @@ async function initApp() {
   await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => [...context.querySelectorAll(selector)]
+  window.notify = async (message, title = "Notification") => {
+    const notification = { body: message, icon: "/favicon.svg", badge: "/favicon.svg" }
+    const registration = await navigator.serviceWorker.getRegistration()
+    if (registration?.showNotification) return registration.showNotification(title, notification)
+    return new Notification(title, notification)
+  }
   window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
   app.mount("#app")
@@ -78,6 +84,7 @@ declare global {
   interface Window {
     $: (selector: string, context?: HTMLElement) => HTMLElement | null
     $$: (selector: string, context?: HTMLElement) => HTMLElement[]
+    notify: (message: string, title?: string) => Promise<void>
     idb: any
     $state: any
     $router: any

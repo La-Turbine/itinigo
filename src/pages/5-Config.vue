@@ -41,14 +41,7 @@ async function requestInstall() {
 }
 async function requestNotification() {
   if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
-  const notification = {
-    body: "Préparez-vous à déscendre au prochain arrêt",
-    icon: "/favicon.svg",
-    badge: "/favicon.svg",
-  }
-  const registration = await navigator.serviceWorker.getRegistration()
-  if (registration?.showNotification) return registration.showNotification("Notification", notification)
-  return new Notification("Notification", notification)
+  return notify("Préparez-vous à recevoir des notifications")
 }
 async function requestLocalisation() {
   if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))

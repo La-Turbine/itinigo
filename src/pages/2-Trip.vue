@@ -37,9 +37,9 @@
           <ion-list-header>{{ currentSequence.transport }}</ion-list-header>
           <ion-item>
             <div style="display: flex; gap: 8px; margin: auto; max-width: fit-content">
-              <img :src="`/svg/${i}.svg`" @click="currentSequence.photos.push({ type: i })" v-for="i in 5" v-if="currentSequence.transport.includes(`Je marche`)" />
-              <img :src="`/svg/${i + 5}.svg`" @click="currentSequence.photos.push({ type: i + 5 })" v-for="i in 5" v-if="currentSequence.transport.includes(`J'attend`)" />
-              <img :src="`/svg/${i + 10}.svg`" @click="currentSequence.photos.push({ type: i + 10 })" v-for="i in 2" v-if="currentSequence.transport.includes(`Je monte`)" />
+              <img :src="`/svg/${i}.svg`" @click="currentSequence.photos.push({ type: i, text: texts[i - 1] })" v-for="i in 5" v-if="currentSequence.transport.includes(`Je marche`)" />
+              <img :src="`/svg/${i + 5}.svg`" @click="currentSequence.photos.push({ type: i + 5, text: texts[i + 4] })" v-for="i in 5" v-if="currentSequence.transport.includes(`J'attend`)" />
+              <img :src="`/svg/${i + 10}.svg`" @click="currentSequence.photos.push({ type: i + 10, text: texts[i + 9] })" v-for="i in 2" v-if="currentSequence.transport.includes(`Je monte`)" />
             </div>
           </ion-item>
           <ion-list>
@@ -101,6 +101,20 @@ const state = reactive({
 // Step 1: Search for "from" and "to" address/location
 const focused = ref("")
 const items = ref([])
+const texts = [
+  "Tourner à gauche",
+  "Aller tout droit",
+  "Tourner à droite",
+  "Passage Piéton",
+  "Passage Piéton avec feu",
+  "Vérifiez le nom de l'arrêt",
+  "Vérifiez la direction",
+  "Validez votre ticket",
+  "Attendez à l'arrêt",
+  "Montez dans le tram/bus",
+  "Montez dans le tram/bus",
+  "Descendez du tram/bus",
+]
 async function onSearch(event) {
   const query = event.target.value
   state[focused.value].text = query
