@@ -37,9 +37,9 @@
           <ion-list-header>{{ currentSequence.transport }}</ion-list-header>
           <ion-item>
             <div style="display: flex; gap: 8px; margin: auto; max-width: fit-content">
-              <img :src="`/svg/${i}.svg`" @click="currentSequence.photos.push({ type: i, text: texts[i - 1] })" v-for="i in 5" v-if="currentSequence.transport.includes(`Je marche`)" />
-              <img :src="`/svg/${i + 5}.svg`" @click="currentSequence.photos.push({ type: i + 5, text: texts[i + 4] })" v-for="i in 5" v-if="currentSequence.transport.includes(`J'attend`)" />
-              <img :src="`/svg/${i + 10}.svg`" @click="currentSequence.photos.push({ type: i + 10, text: texts[i + 9] })" v-for="i in 2" v-if="currentSequence.transport.includes(`Je monte`)" />
+              <img :src="`/img/${i}.svg`" @click="currentSequence.photos.push({ type: i, text: texts[i - 1] })" v-for="i in 5" v-if="currentSequence.transport.includes(`Je marche`)" />
+              <img :src="`/img/${i + 5}.svg`" @click="currentSequence.photos.push({ type: i + 5, text: texts[i + 4] })" v-for="i in 5" v-if="currentSequence.transport.includes(`J'attend`)" />
+              <img :src="`/img/${i + 10}.svg`" @click="currentSequence.photos.push({ type: i + 10, text: texts[i + 9] })" v-for="i in 2" v-if="currentSequence.transport.includes(`Je monte`)" />
             </div>
           </ion-item>
           <ion-list>
@@ -47,10 +47,10 @@
               <ion-item-sliding v-for="(photo, i) in currentSequence.photos" :key="photo">
                 <ion-item>
                   <div style="display: flex; gap: 8px; padding: 4px">
-                    <img :src="`/svg/${photo.type}.svg`" style="max-height: 40px; aspect-ratio: 1" />
+                    <img :src="`/img/${photo.type}.svg`" style="max-height: 40px; aspect-ratio: 1" />
                     <img :src="$state.photos[photo.id]" style="max-height: 40px; aspect-ratio: 1" v-if="photo.id" />
-                    <img src="/svg/camera.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refCamera)" />
-                    <img src="/svg/gallery.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refGallery)" />
+                    <img src="/img/camera.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refCamera)" />
+                    <img src="/img/gallery.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refGallery)" />
                     <ion-input v-model="photo.text" placeholder="Description"></ion-input>
                   </div>
                   <ion-reorder slot="end"></ion-reorder>

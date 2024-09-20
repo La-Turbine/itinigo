@@ -2,45 +2,64 @@
 
 Figma Aidant: https://www.figma.com/design/Xj4Ir5jPl7wvXCbNAu6cAA/Mon-Itinigo---Maquette-V2?node-id=2627-1099
 
-- KO - Login / Sign Up > Dans la page de configuration, pas de compte car tout est local
-- OK - Liste des trajets
-- OK - Formulaire 1 - De > À
-- OK - Formulaire 2 - Itinisère Selection API
-- OK - Formulaire 3 - Séquences
-- OK - Formulaire 4 - Séquence (Marche + Attente + Transport)
-- OK - Ecran de configuration
+- [x] - Liste des trajets
+- [x] - Formulaire 1 - De > À
+- [x] - Formulaire 2 - Itinisère Selection API
+- [x] - Formulaire 3 - Séquences
+- [x] - Formulaire 4 - Séquence (Marche + Attente + Transport)
+- [x] - Ecran de configuration
 
 Figma Utilisateur: https://www.figma.com/design/Xj4Ir5jPl7wvXCbNAu6cAA/Mon-Itinigo---Maquette-V2?node-id=2576-1125
 
-- OK - Liste des trajets
-- OK - Choix du trajet, Vérification, C'est Parti
-- OK - Suivi du trajet (Photo + Texte + Bouton Suivant)
-- OK - Carte d'aide
-- OK - Google Maps
-- OK - Appel / SMS
+- [x] - Liste des trajets
+- [ ] - Choix du trajet, Vérification, C'est Parti
+- [ ] - Suivi du trajet (Photo + Texte + Bouton Suivant)
+- [ ] - Carte d'aide
+- [ ] - Google Maps
+- [ ] - Appel / SMS
 
 ---
 
 Lot 1: Août
-1j+ > setup / tech / contrat / planning
-1j > formulaire trajet / photos
-1j+ > itinisere API + carte choix
-1j > suivi trajet
+
+> 1j+ > setup / tech / contrat / planning
+> 1j > formulaire trajet / photos
+> 1j+ > itinisere API + carte choix
+> 1j > suivi trajet
 
 Lot 2: Septembre
-1j+ > annotations photos
-1j+ > séquences (marche, attente, transport) avec notifications avant l'arrivée
-1j > aide / maps / appel / sms
-1j > configuration
-1j > design
+
+> 1j+ > annotations photos
+> 1j+ > séquences (marche, attente, transport) avec notifications avant l'arrivée
+> 1j > aide / maps / appel / sms
+> 1j > configuration
+> 1j > design
+
+- [x] Text Auto
+- [x] avant dernier arrêt (pulsation)
+- [x] à 10% (notification)
+- [x] à 90% (écran suivant)
+- [ ] Page "C'est parti"
+- [ ] Page "Vous êtes arrivé", confetti et bouton de retour
+- [ ] Timer 1h30 appli en background pour reset
+- [ ] Géoloc
+- [ ] Carte d'aide
+- [ ] Passe Design ensemble
+- [ ] Annotation conditionnelle + ajouter un picto
+- [ ] BugFix Android Olivier (Notification)
+- [x] BugFix Iphone (il faut installer l'appli, depuis Safari) / RAS
 
 Lot 3: Octobre
-3j > design + feedback
-1j > geolocalisation (l'utilisateur s'éloigne)
-1j+ > export PDF / Print
-1j > export / import
-1j > tech avancés (mode PWA, mode offline, vercel toolbar, rapport d'accessibilité)
-...
+
+> 3j > design + feedback
+> 1j > geolocalisation (l'utilisateur s'éloigne)
+> 1j+ > export PDF / Print
+> 1j > export / import
+> 1j > tech avancés (mode PWA, mode offline, vercel toolbar, rapport d'accessibilité)
+> ...
+
+- [ ] Ré-annoter
+- [ ] Comportement spécifique pour le BUS (valider à l'intérieur, appuyer sur le bouton d'arrêt)
 
 = 15j
 = 10000€, répartit sur Août / Septembre / Octobre
@@ -53,29 +72,6 @@ Il y aura une démo à la fin de chaque lot et en cours de dev si besoin.
 
 ---
 
-- Helper: Liste des trajets
-- Helper: Formulaire 1 - De > À
-- Helper: Formulaire 2 - API Itinisere + Selection
-- Helper: Formulaire 3 - Séquences
-- Helper: Formulaire 4 - Séquence (Marche + Attente + Transport)
-  - Feature 1: Upload Photo
-  - Feature 2: Annotations Photo (direction + angle + obstacles + repères)
-- Helper: Phase de Marche
-  - Tout droit
-  - Tourner
-  - Passage piéton
-  - Passage piéton + Feu tri-colore
-- Helper: Phase d'attente
-  - Arrêt
-  - Direction
-  - Valider le ticket (Valider à l'extérieur TRAM)
-  - Attendre
-  - Vérification
-- Helper: Phase de Bus/Tram
-  - Monter
-  - Valider le ticket (Valider à l'extérieur BUS)
-  - Liste des arrêts
-  - Descendre
 - Helper: Configuration
 
   - Photos Aidant + Utilisateur
@@ -92,8 +88,5 @@ Il y aura une démo à la fin de chaque lot et en cours de dev si besoin.
 - User: Aide / Appel + SMS
 
 ## NOTES
-
-TLDraw - Implem n°1, sauvegarde de la photo annotée, on ne peut pas revenir en arrière
-TLDraw - Implem n°2, sauvegarde du "store", et affichage de TLDraw en mode "lecture" et "focus" en mode guidage, sinon restore en mode aidant.
 
 Pour le debug sur ANDROID, activé le "Developer Mode", activé le "USB Debugging" et autorisé lors de la connection USB. Puis aller dans "chrome://inspect/#devices".
