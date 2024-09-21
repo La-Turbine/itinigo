@@ -11,7 +11,7 @@ import { execSync } from "child_process"
 // NOTE: The hash is lagging one version behind
 const count = +execSync("git rev-list --count HEAD").toString().trim() + 1
 const hash = execSync("git rev-parse --short HEAD").toString().trim()
-const VERSION = `${count}.0.0-${hash}`
+const VERSION = process.env.VERCEL_GIT_COMMIT_SHA ? `${version.split("-")[0]}-${process.env.VERCEL_GIT_COMMIT_SHA}` : `${count}.0.0-${hash}`
 if (VERSION !== version) execSync(`npm version ${VERSION} --no-git-tag-version`)
 
 // https://vitejs.dev/config/
