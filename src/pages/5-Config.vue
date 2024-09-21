@@ -25,7 +25,7 @@
         <ion-input v-model="$state.work" label="🏢 Travail"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>VERSION: {{ window.VERSION }} // {{ os }} // {{ browser }}</ion-label>
+        <ion-label>VERSION: {{ window.COMMIT_COUNT }} // {{ window.COMMIT_HASH }} // {{ os }} // {{ browser }}</ion-label>
       </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
@@ -39,7 +39,6 @@ import { ref, onMounted } from "vue"
 const isInstalled = ref(window.matchMedia("(display-mode: standalone)").matches || !!window.navigator.standalone)
 const isNotifiable = ref(false)
 const isLocalisable = ref(false)
-const installPrompt = ref<BeforeInstallPromptEvent | null>(null)
 const os = /android|iphone/i.exec(navigator.userAgent)?.[0] ?? "?"
 const browser = /chrome|safari/i.exec(navigator.userAgent)?.[0] ?? "?"
 if (browser === "chrome" && os === "iphone") alert("Merci d'utiliser Safari sur iPhone")
@@ -50,9 +49,15 @@ onMounted(async () => {
   if (!isNotifiable.value) requestNotification()
   if (!isLocalisable.value) requestLocalisation()
 })
+let installPrompt
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault()
+  installPrompt = e
+})
 async function requestInstall() {
   if (isInstalled.value) return
-  alert("Merci d'installer cette application en utilisant le bouton `Ajouter à l'écran d'accueil`")
+  if (!installPrompt) return alert("Impossible d'installer l'application")
+  installPrompt.prompt()
 }
 async function requestNotification() {
   if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
@@ -70,40 +75,4 @@ async function reset() {
   await idb.clear()
   location.href = "/"
 }
-window.addEventListener("beforeinstallprompt", (e) => {
-  debugger
-  e.preventDefault()
-  installPrompt.value = e
-})
-// async function initPWA() {
-// Prompt the user to install the app
-// return new Promise((resolve, reject) => {
-//   window.addEventListener("beforeinstallprompt", (e) => {
-//     e.preventDefault()
-//     const deferredPrompt = e
-//     const button = document.createElement("button")
-//     button.textContent = "Install PWA"
-//     document.body.appendChild(button)
-//     button.addEventListener("click", () => {
-//       deferredPrompt.prompt()
-//       deferredPrompt.userChoice.then((choiceResult) => {
-//         document.body.removeChild(button)
-//         if (choiceResult.outcome === "accepted") return resolve()
-//         return reject(new Error("User dismissed the install prompt"))
-//       })
-//     })
-//   })
-// })
-// // Prompt the user to use chrome on android or safari on ios
-// // The prompt message is in french, once it is displayed it should not be displayed again
-// const isAndroid = /android/i.test(navigator.userAgent)
-// const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent)
-// const isChrome = /chrome/i.test(navigator.userAgent)
-// const isSafari = /safari/i.test(navigator.userAgent)
-// if (isAndroid && !isChrome) return alert("Merci d'utiliser Chrome sur Android et d'installer cette application")
-// if (isIOS && !isSafari) return alert("Merci d'utiliser Safari sur iOS et d'installer cette application")
-// if (localStorage.prompted) return
-// alert("Merci d'installer cette application en utilisant le bouton `Ajouter à l'écran d'accueil`")
-// localStorage.prompted = true
-// }
 </script>

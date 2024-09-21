@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "ionic serve --external",
-    "build": "vite build",
+    "dev": "COMMIT_COUNT=$(git rev-list --count HEAD) COMMIT_HASH=$(git rev-parse --short HEAD) ionic serve --external",
+    "build": "COMMIT_COUNT=$(git rev-list --count HEAD) COMMIT_HASH=$(git rev-parse --short HEAD) vite build",
     "preview": "vite preview",
     "test:e2e": "cypress run",
     "test:unit": "vitest",
