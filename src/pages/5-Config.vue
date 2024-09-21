@@ -25,7 +25,7 @@
         <ion-input v-model="$state.work" label="🏢 Travail"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>VERSION: {{ window.VERSION }} // {{ os }} // {{ browser }}</ion-label>
+        <ion-label>VERSION: {{ version }} // {{ os }} // {{ browser }}</ion-label>
       </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
@@ -35,6 +35,7 @@
 </template>
 
 <script setup lang="ts">
+import { version } from "../../package.json"
 import { ref, onMounted } from "vue"
 const isInstalled = ref(window.matchMedia("(display-mode: standalone)").matches || !!window.navigator.standalone)
 const isNotifiable = ref(false)
