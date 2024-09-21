@@ -45,6 +45,12 @@ async function initApp() {
   window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
   app.mount("#app")
+  // Return to home page after 1.5 hours of inactivity
+  let timer: any
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) return (timer = setInterval(() => router.push("/"), 1.5 * 60 * 60 * 1000))
+    return clearInterval(timer)
+  })
 }
 initApp()
 
