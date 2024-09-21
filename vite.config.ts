@@ -8,11 +8,16 @@ import { defineConfig } from "vite"
 import { version } from "./package.json"
 import { execSync } from "child_process"
 
-const count = +execSync("git rev-list --count HEAD").toString().trim() + 1 || +version.split(".")[0]
-const hash = execSync("git rev-parse --short HEAD").toString().trim() || process.env.VERCEL_GIT_COMMIT_SHA
-const VERSION = `${count}.0.0-${hash}`
-console.log(`VERSION: ${VERSION}`)
-if (VERSION !== version) execSync(`npm version ${VERSION} --no-git-tag-version`)
+// NOTE: The hash is lagging one version in dev and in package.json but OK in prod
+let VERSION
+if (process.env.VERCEL_GIT_COMMIT_SHA) {
+  VERSION = version.split("-")[0] + "-" + process.env.VERCEL_GIT_COMMIT_SHA
+} else {
+  const count = +execSync("git rev-list --count HEAD").toString().trim() + 1
+  const hash = execSync("git rev-parse --short HEAD").toString().trim()
+  VERSION = `${count}.0.0-${hash}`
+  if (VERSION !== version) execSync(`npm version ${VERSION} --no-git-tag-version`)
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
