@@ -9,18 +9,22 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <div style="display: flex; flex-direction: column; height: 100%; gap: 60px; padding: 60px 20px" v-if="!current">
-        <div style="font-size: 2rem; font-weight: 700; text-align: center">Mon itinéraire</div>
-        <card :trip="currentTrip" />
-        <div style="font-size: 2rem; font-weight: 700; text-align: center">Je vérifie</div>
-        <div style="display: flex; gap: 10px">
-          <div style="flex: 1">
-            <img style="height: 110px; padding: 30px" src="/img/battery.svg" />
-            <div style="font-size: 1.5rem; font-weight: 500; text-align: center; text-wrap: balance">La batterie de mon téléphone</div>
-          </div>
-          <div style="flex: 1">
-            <img style="height: 110px; object-fit: cover" src="/img/card.png" />
-            <div style="font-size: 1.5rem; font-weight: 500; text-align: center; text-wrap: balance">Mon ticket de transport</div>
+      <div style="display: flex; flex-direction: column; justify-content: space-around; height: 100%; padding: 20px" v-if="!current">
+        <div>
+          <div style="font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 20px">Mon itinéraire</div>
+          <card :trip="currentTrip" />
+        </div>
+        <div>
+          <div style="font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 20px">Je vérifie</div>
+          <div style="display: flex; gap: 10px">
+            <div style="flex: 1">
+              <img style="height: 110px; padding: 30px" src="/img/battery.svg" />
+              <div style="font-size: 1.5rem; font-weight: 500; text-align: center; text-wrap: balance">La batterie de mon téléphone</div>
+            </div>
+            <div style="flex: 1">
+              <img style="height: 110px; object-fit: cover" src="/img/card.png" />
+              <div style="font-size: 1.5rem; font-weight: 500; text-align: center; text-wrap: balance">Mon ticket de transport</div>
+            </div>
           </div>
         </div>
         <ion-button style="height: 80px; font-size: 1.5rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>

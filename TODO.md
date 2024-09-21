@@ -39,12 +39,12 @@ Lot 2: Septembre
 - [x] avant dernier arrêt (pulsation)
 - [x] à 10% (notification)
 - [x] à 90% (écran suivant)
-- [ ] Page "C'est parti"
-- [ ] Page "Vous êtes arrivé", confetti et bouton de retour
-- [ ] Timer 1h30 appli en background pour reset
+- [x] Page "C'est parti"
+- [x] Page "Vous êtes arrivé", confetti et bouton de retour
+- [-] Passe Design ensemble
 - [ ] Géoloc
 - [ ] Carte d'aide
-- [ ] Passe Design ensemble
+- [ ] Timer 1h30 appli en background pour reset
 - [ ] Annotation conditionnelle + ajouter un picto
 - [ ] BugFix Android Olivier (Notification)
 - [x] BugFix Iphone (il faut installer l'appli, depuis Safari) / RAS
