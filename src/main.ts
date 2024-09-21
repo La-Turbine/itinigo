@@ -46,6 +46,11 @@ async function initApp() {
   window.$state = app.config.globalProperties.$state = $state
   app.config.globalProperties.window = window
   app.mount("#app")
+  // Start as helper in config page when no trips are present
+  if (!$state.trips.length) {
+    $state.mode = "helper"
+    router.push("/config")
+  }
   // Return to home page after 1.5 hours of inactivity
   let timer: any
   document.addEventListener("visibilitychange", () => {

@@ -6,9 +6,14 @@ import { VitePWA } from "vite-plugin-pwa"
 import path from "path"
 import { defineConfig } from "vite"
 import { version } from "./package.json"
+import { execSync } from "child_process"
 
-console.log("COMMIT_COUNT:", version)
-console.log("COMMIT_HASH:", process.env.GIT_COMMIT_SHA)
+const count = +execSync("git rev-list --count HEAD").toString().trim() + 1 || +version.split(".")[0]
+const hash = execSync("git rev-parse --short HEAD").toString().trim() || process.env.VERCEL_GIT_COMMIT_SHA
+const VERSION = `${count}.0.0-${hash}`
+console.log(`VERSION: ${VERSION}`)
+if (VERSION !== version) execSync(`npm version ${VERSION} --no-git-tag-version`)
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -22,6 +27,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
+        theme_color: "#f6f7f7",
         icons: [
           {
             src: "pwa-64x64.png",
@@ -50,8 +56,7 @@ export default defineConfig({
     legacy(),
   ],
   define: {
-    COMMIT_COUNT: JSON.stringify(version),
-    COMMIT_HASH: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA),
+    VERSION: JSON.stringify(VERSION),
   },
   resolve: {
     alias: {

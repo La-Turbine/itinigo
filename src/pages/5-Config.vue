@@ -25,7 +25,7 @@
         <ion-input v-model="$state.work" label="🏢 Travail"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>VERSION: {{ window.COMMIT_COUNT }} // {{ window.COMMIT_HASH }} // {{ os }} // {{ browser }}</ion-label>
+        <ion-label>VERSION: {{ window.VERSION }} // {{ os }} // {{ browser }}</ion-label>
       </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
