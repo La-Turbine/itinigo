@@ -18,16 +18,17 @@
       <ion-item button @click="requestLocalisation">
         <ion-label>LOCALISATION {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
+      <ion-item>
+        <ion-input v-model="$state.home" label="🏠 Maison"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input v-model="$state.work" label="🏢 Travail"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>VERSION: {{ window.VERSION }}</ion-label>
+      </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>Maison</ion-label>
-        <ion-input v-model="$state.home" placeholder="Maison"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>Travail</ion-label>
-        <ion-input v-model="$state.work" placeholder="Travail"></ion-input>
       </ion-item>
     </ion-content>
   </ion-page>

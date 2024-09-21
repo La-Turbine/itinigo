@@ -5,6 +5,7 @@ import vue from "@vitejs/plugin-vue"
 import { VitePWA } from "vite-plugin-pwa"
 import path from "path"
 import { defineConfig } from "vite"
+import { execSync } from "child_process"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -46,6 +47,9 @@ export default defineConfig({
     }),
     legacy(),
   ],
+  define: {
+    VERSION: JSON.stringify(execSync("git rev-list --count HEAD").toString().trim() + " // " + execSync("git rev-parse --short HEAD").toString().trim()),
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

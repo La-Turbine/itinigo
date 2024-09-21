@@ -44,6 +44,7 @@ async function initApp() {
   }
   window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
+  app.config.globalProperties.window = window
   app.mount("#app")
   // Return to home page after 1.5 hours of inactivity
   let timer: any
