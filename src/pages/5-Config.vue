@@ -10,13 +10,13 @@
     </ion-header>
     <ion-content>
       <ion-item button @click="requestInstall" :disabled="isInstalled">
-        <ion-label>INSTALL PWA</ion-label>
+        <ion-label>INSTALL PWA - {{ isInstalled ? "ON" : "OFF" }}</ion-label>
       </ion-item>
       <ion-item button @click="requestNotification">
-        <ion-label>NOTIFICATION {{ isNotifiable ? "ON" : "OFF" }}</ion-label>
+        <ion-label>NOTIFICATION - {{ isNotifiable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
       <ion-item button @click="requestLocalisation">
-        <ion-label>LOCALISATION {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
+        <ion-label>LOCALISATION - {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
       <ion-item>
         <ion-input v-model="$state.home" label="🏠 Maison"></ion-input>
@@ -25,7 +25,7 @@
         <ion-input v-model="$state.work" label="🏢 Travail"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>VERSION: {{ window.VERSION }}</ion-label>
+        <ion-label>VERSION: {{ window.VERSION }} // {{ os }} // {{ browser }}</ion-label>
       </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
@@ -39,6 +39,11 @@ import { ref, onMounted } from "vue"
 const isInstalled = ref(window.matchMedia("(display-mode: standalone)").matches || !!window.navigator.standalone)
 const isNotifiable = ref(false)
 const isLocalisable = ref(false)
+const installPrompt = ref<BeforeInstallPromptEvent | null>(null)
+const os = /android|iphone/i.exec(navigator.userAgent)?.[0] ?? "?"
+const browser = /chrome|safari/i.exec(navigator.userAgent)?.[0] ?? "?"
+if (browser === "chrome" && os === "iphone") alert("Merci d'utiliser Safari sur iPhone")
+if (browser !== "chrome" && os === "android") alert("Merci d'utiliser Chrome sur Android")
 onMounted(async () => {
   isNotifiable.value = (await navigator.permissions.query({ name: "notifications" })).state === "granted"
   isLocalisable.value = (await navigator.permissions.query({ name: "geolocation" })).state === "granted"
@@ -46,7 +51,8 @@ onMounted(async () => {
   if (!isLocalisable.value) requestLocalisation()
 })
 async function requestInstall() {
-  alert("Please install this app by using the `Add to Home Screen` button")
+  if (isInstalled.value) return
+  alert("Merci d'installer cette application en utilisant le bouton `Ajouter à l'écran d'accueil`")
 }
 async function requestNotification() {
   if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
@@ -64,6 +70,11 @@ async function reset() {
   await idb.clear()
   location.href = "/"
 }
+window.addEventListener("beforeinstallprompt", (e) => {
+  debugger
+  e.preventDefault()
+  installPrompt.value = e
+})
 // async function initPWA() {
 // Prompt the user to install the app
 // return new Promise((resolve, reject) => {
