@@ -15,3 +15,11 @@
 /* @import "@ionic/vue/css/palettes/dark.always.css"; */
 /* @import "@ionic/vue/css/palettes/dark.class.css"; */
 /* @import "@ionic/vue/css/palettes/dark.system.css"; */
+:root {
+  --ion-toolbar-background: #f6f7f7;
+  --ion-statusbar-background: #f6f7f7;
+}
+.header-md {
+  box-shadow: none!important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
