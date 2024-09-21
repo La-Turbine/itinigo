@@ -1,11 +1,11 @@
 {
   "name": "itinisere",
   "private": true,
-  "version": "0.0.1",
+  "version": "48",
   "type": "module",
   "scripts": {
-    "dev": "COMMIT_COUNT=$(git rev-list --count HEAD) COMMIT_HASH=$(git rev-parse --short HEAD) ionic serve --external",
-    "build": "COMMIT_COUNT=$(git rev-list --count HEAD) COMMIT_HASH=$(git rev-parse --short HEAD) vite build",
+    "dev": "ionic serve --external",
+    "build": "vite build",
     "preview": "vite preview",
     "test:e2e": "cypress run",
     "test:unit": "vitest",

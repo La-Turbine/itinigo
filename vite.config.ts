@@ -5,7 +5,10 @@ import vue from "@vitejs/plugin-vue"
 import { VitePWA } from "vite-plugin-pwa"
 import path from "path"
 import { defineConfig } from "vite"
+import { version } from "./package.json"
 
+console.log("COMMIT_COUNT:", version)
+console.log("COMMIT_HASH:", process.env.GIT_COMMIT_SHA)
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -47,8 +50,8 @@ export default defineConfig({
     legacy(),
   ],
   define: {
-    COMMIT_COUNT: JSON.stringify(process.env.COMMIT_COUNT),
-    COMMIT_HASH: JSON.stringify(process.env.COMMIT_HASH),
+    COMMIT_COUNT: JSON.stringify(version),
+    COMMIT_HASH: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA),
   },
   resolve: {
     alias: {
