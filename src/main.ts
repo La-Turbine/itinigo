@@ -46,8 +46,8 @@ async function initApp() {
   window.$state = app.config.globalProperties.$state = $state
   app.config.globalProperties.window = window
   app.mount("#app")
-  // Start as helper in config page when no trips are present
-  if (!$state.trips.length) {
+  // Start as helper in config page when no name is set
+  if (!$state.name) {
     $state.mode = "helper"
     router.push("/config")
   }

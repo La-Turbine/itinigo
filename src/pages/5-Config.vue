@@ -19,10 +19,16 @@
         <ion-label>LOCALISATION - {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
       <ion-item>
-        <ion-input v-model="$state.home" label="🏠 Maison"></ion-input>
+        <ion-input v-model="$state.name" label="👋 Prénom" placeholder="Bruno"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input v-model="$state.work" label="🏢 Travail"></ion-input>
+        <ion-input v-model="$state.phone" label="📱 N° Aide" placeholder="0612121212"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input v-model="$state.home" label="🏠 Maison" placeholder="40 Rue du Drac"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input v-model="$state.work" label="🏢 Travail" placeholder="40 Rue du Drac"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>VERSION: {{ version }} // {{ os }} // {{ browser }}</ion-label>

@@ -30,14 +30,17 @@
         <ion-button style="height: 80px; font-size: 1.5rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>
       </div>
       <div style="display: flex; flex-direction: column; height: 100%" v-else-if="!current.stops">
-        <div style="position: relative; display: flex; height: 85%">
+        <div style="position: relative; display: flex; height: 80%">
           <img style="max-width: 100%; max-height: 100%; height: auto; margin: auto" :src="$state.photos[current.id]" />
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
-        <div style="display: flex; flex: 1">
-          <h2 style="padding: 4px; margin: auto">{{ current?.text }}</h2>
-          <ion-button @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
-          <ion-button @click="$router.push('/')" v-else="currentStep < steps.length">RETOUR</ion-button>
+        <div style="display: flex; flex-direction: column; flex: 1; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
+          <h2 style="margin: auto; text-align: center; text-wrap: balance; font-size: 150%">{{ current?.text }}</h2>
+          <div style="display: flex; gap: 10px">
+            <ion-button style="margin-left: auto; font-size: 125%" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+            <ion-button style="flex: 1; font-size: 125%" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
+            <ion-button style="flex: 1; font-size: 125%" @click="$router.push('/')" v-else="currentStep < steps.length">RETOUR</ion-button>
+          </div>
         </div>
       </div>
       <!-- https://play.tailwindcss.com/90GckuhEBW -->
@@ -54,7 +57,7 @@
               class="animate-ping"
               v-if="i === current.stops.length - 1 && progress.number > i - 2"
             ></div>
-            <div style="min-width: 10rem; min-height: 2rem; transform: translateY(-100%); text-align: center; text-wrap: balance">{{ stop.name }}</div>
+            <div style="min-width: 10rem; min-height: 2rem; transform: translateY(-100%); text-align: center; text-wrap: balance">{{ stop.text }}</div>
           </div>
           <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1rem; transform: translateY(-50%); border-radius: 9999px; background-color: #d1d5db"></div>
           <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1rem; transform: translateY(-50%); border-radius: 9999px; background-color: #93c5fd" :style="progress"></div>

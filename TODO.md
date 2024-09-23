@@ -12,11 +12,9 @@ Figma Aidant: https://www.figma.com/design/Xj4Ir5jPl7wvXCbNAu6cAA/Mon-Itinigo---
 Figma Utilisateur: https://www.figma.com/design/Xj4Ir5jPl7wvXCbNAu6cAA/Mon-Itinigo---Maquette-V2?node-id=2576-1125
 
 - [x] - Liste des trajets
-- [ ] - Choix du trajet, Vérification, C'est Parti
-- [ ] - Suivi du trajet (Photo + Texte + Bouton Suivant)
-- [ ] - Carte d'aide
-- [ ] - Google Maps
-- [ ] - Appel / SMS
+- [x] - Choix du trajet, Vérification, C'est Parti
+- [x] - Suivi du trajet (Photo + Texte + Bouton Suivant)
+- [x] - Carte d'aide / Google Maps / Appel / SMS
 
 ---
 
@@ -41,13 +39,12 @@ Lot 2: Septembre
 - [x] à 90% (écran suivant)
 - [x] Page "C'est parti"
 - [x] Page "Vous êtes arrivé", confetti et bouton de retour
-- [-] Passe Design ensemble
-- [ ] Géoloc
-- [ ] Carte d'aide
-- [ ] Timer 1h30 appli en background pour reset
-- [ ] Annotation conditionnelle + ajouter un picto
-- [ ] BugFix Android Olivier (Notification)
-- [x] BugFix Iphone (il faut installer l'appli, depuis Safari) / RAS
+- [x] Timer 1h30 appli en background pour reset
+- [x] Configuration - Maison / Travail / Installation PWA / Numéro Version
+- [x] Arrivée en mode aidant sur la page config quand pas de trajet / theme_color #f6f7f7
+- [x] Passe Design ensemble
+- [x] Carte d'aide
+- [-] Géoloc
 
 Lot 3: Octobre
 
@@ -58,8 +55,11 @@ Lot 3: Octobre
 > 1j > tech avancés (mode PWA, mode offline, vercel toolbar, rapport d'accessibilité)
 > ...
 
+- [ ] Annotation conditionnelle + ajouter un picto
 - [ ] Ré-annoter
-- [ ] Comportement spécifique pour le BUS (valider à l'intérieur, appuyer sur le bouton d'arrêt)
+- [ ] Comportement spécifique pour le BUS (appuie sur le bouton, notification avant)
+- [ ] BugFix Android Olivier (Notification)
+- [x] BugFix Iphone (il faut installer l'appli, depuis Safari) / RAS
 
 = 15j
 = 10000€, répartit sur Août / Septembre / Octobre
@@ -73,14 +73,12 @@ Il y aura une démo à la fin de chaque lot et en cours de dev si besoin.
 ---
 
 - Helper: Configuration
-
   - Photos Aidant + Utilisateur
   - Règles Notifications (Son / Vibration / SMS)
   - Affichage Texte (ON / OFF)
   - Carte d'aide (Texte + Numéros de téléphone pour Appel + SMS)
   - Aide Utilisation App
   - Export PDF
-
 - User: Liste des trajets
 - User: Suivre un trajet
   - Feature 3: Attendre + Notification?
