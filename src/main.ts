@@ -37,7 +37,7 @@ async function initApp() {
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => [...context.querySelectorAll(selector)]
   window.notify = async (message, title = "Notification") => {
-    const notification = { body: message, icon: "/favicon.svg", badge: "/favicon.svg" }
+    const notification = { body: message, icon: "/favicon.svg", badge: "/favicon.svg", data: { url: location.href } }
     const registration = await navigator.serviceWorker.getRegistration()
     if (registration?.showNotification) return registration.showNotification(title, notification)
     return new Notification(title, notification)
