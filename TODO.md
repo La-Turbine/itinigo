@@ -60,6 +60,7 @@ Lot 3: Octobre
 - [ ] Comportement spécifique pour le BUS (appuie sur le bouton, notification avant)
 - [ ] BugFix Android Olivier (Notification)
 - [x] BugFix Iphone (il faut installer l'appli, depuis Safari) / RAS
+- [ ] Mode Offline
 
 = 15j
 = 10000€, répartit sur Août / Septembre / Octobre

@@ -94,6 +94,21 @@ navigator.geolocation.watchPosition(
 const timer = ref(0)
 setInterval(() => timer.value++, 20)
 watch(() => current.value, () => (timer.value = 0)) // prettier-ignore
+// WIP
+let wakeLock = null
+async function requestWakeLock() {
+  try {
+    wakeLock = await navigator.wakeLock.request("screen")
+    wakeLock.addEventListener("release", () => console.log("Wake Lock was released"))
+    console.log("Wake Lock is active")
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`)
+  }
+}
+document.addEventListener("visibilitychange", () => {
+  if (wakeLock !== null && document.visibilityState === "visible") requestWakeLock()
+})
+requestWakeLock()
 const progress = computed(() => {
   // HACK
   if ($state.fake) {
