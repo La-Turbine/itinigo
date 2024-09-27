@@ -26,8 +26,6 @@ export default defineConfig({
       },
     }),
     VitePWA({
-      srcDir: "src",
-      filename: "sw.ts",
       registerType: "autoUpdate",
       manifest: {
         theme_color: "#f6f7f7",
