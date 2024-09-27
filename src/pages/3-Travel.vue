@@ -5,8 +5,7 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
-        <ion-title>{{ currentTrip.from.text }} - {{ currentTrip.to.text }}</ion-title>
-        <ion-title>{{ $route.params.id }} - {{ currentStep }} - {{ lat }} {{ lng }}</ion-title>
+        <div style="font-size: 80%; font-weight: 500">{{ currentTrip.from.text }} - {{ currentTrip.to.text }}</div>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -63,6 +62,7 @@
           <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1rem; transform: translateY(-50%); border-radius: 9999px; background-color: #d1d5db"></div>
           <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1rem; transform: translateY(-50%); border-radius: 9999px; background-color: #93c5fd" :style="progress"></div>
         </div>
+        <pre>{{ progress }}</pre>
       </div>
     </ion-content>
   </ion-page>
@@ -74,11 +74,7 @@ const currentTrip = $state.trips[$route.params.id - 1] || {}
 const currentStep = computed(() => +($route.query.step || 0))
 const steps = computed(() => currentTrip.sequences.flatMap((v) => (v.stops ? [v.photos[0], v, v.photos[1]].filter((v) => v) : v.photos)).filter((v) => v.stops || v.text))
 const current = computed(() => steps.value[currentStep.value - 1])
-// HACK
-const timer = ref(0)
-setInterval(() => timer.value++, 20)
-watch(() => current.value, () => (timer.value = 0)) // prettier-ignore
-// WIP
+const stops = ref([])
 const lat = ref(0)
 const lng = ref(0)
 navigator.geolocation.watchPosition(
@@ -94,13 +90,11 @@ navigator.geolocation.watchPosition(
     maximumAge: 0, // Don't use cached position
   }
 )
-// WIP
 const progress = computed(() => {
-  const number = Math.floor(timer.value / 100)
-  const percentage = (timer.value % 100) / 100
-  return { number, percentage, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
+  if (!current.value?.stops || !lat.value || !lng.value) return { number: 0, percentage: 0, distance: 0, width: "0", maxWidth: "100%" }
+  const { number, percentage, distance } = progressBetweenStops({ lat: lat.value, lng: lng.value }, current.value.stops)
+  return { number, percentage, distance, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
 })
-const stops = ref([])
 watch(
   () => progress.value.number,
   (number) => {
@@ -122,6 +116,27 @@ watch(
 async function confetti() {
   const confetti = await import("https://esm.sh/canvas-confetti")
   confetti.default({ particleCount: 500, spread: 100, origin: { y: 0.5 } })
+}
+function progressBetweenStops(currentPos, stops) {
+  function haversineDistance(point1, point2) {
+    const R = 6371e3 // Earth radius in meters
+    const toRad = (x) => (x * Math.PI) / 180
+    const dLat = toRad(point2.lat - point1.lat)
+    const dLon = toRad(point2.lng - point1.lng)
+    const lat1 = toRad(point1.lat)
+    const lat2 = toRad(point2.lat)
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    return R * c // Distance in meters
+  }
+  if (haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1])) return { number: -1, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
+  for (let i = 0; i < stops.length - 1; i++) {
+    const totalDist = haversineDistance(stops[i], stops[i + 1])
+    const distFromStart = haversineDistance(stops[i], currentPos)
+    const progress = Math.min((distFromStart / totalDist) * 100, 100)
+    if (progress < 100) return { number: i, percentage: progress.toFixed(2) / 100, distance: totalDist - distFromStart }
+  }
+  return { number: stops.length - 2, percentage: 1, distance: 0 }
 }
 </script>
 
