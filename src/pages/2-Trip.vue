@@ -211,6 +211,10 @@ const nexts = {
     })
     const text = await response.text()
     const html = new DOMParser().parseFromString(text, "text/html")
+    const nodes = $("script", html)
+      .innerText.split("#link_solutionPlanTrip")
+      .slice(1, -1)
+      .flatMap((text) => JSON.parse(/\[[^\]]*\]/.exec(text)[0]))
     const css = `<link href="https://static.PPP38v2.cityway.fr/Content/css/site-638562226680000000.css" rel="stylesheet" crossorigin="anonymous">
 <style>
 .JourneyPlanner { padding: 10px;height: 140px;overflow:hidden; }
@@ -220,12 +224,16 @@ const nexts = {
     state.sequences = $$(".detail-trip", html).map((el) => {
       const sequence = []
       $$("td:nth-child(1) > .item-line", el).forEach((el, i) => {
-        const before = { text: $(".details span", el.parentElement.parentElement.previousElementSibling).firstChild.textContent.trim(), lat: 0, lng: 0 }
+        function extract(text) {
+          const node = nodes.find((node) => node.Name === text)
+          return { text, lat: node?.Latitude, lng: node?.Longitude }
+        }
+        const before = extract($(".details span", el.parentElement.parentElement.previousElementSibling).firstChild.textContent.trim())
         const intermediary = $$("ul li", el.parentElement.parentElement).map((el) => {
           const { lat, lng } = $("[data-lat]", el).dataset
           return { text: el.firstChild.textContent.trim(), lat: +lat, lng: +lng }
         })
-        const after = { text: $(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim(), lat: 0, lng: 0 }
+        const after = extract($(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim())
         const stops = [before, ...intermediary, after].filter((v) => v)
         sequence.push({ transport: `Je marche vers l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })
         sequence.push({ transport: `J'attend à l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })

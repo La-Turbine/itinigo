@@ -5,7 +5,8 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
-        <ion-title>Trajet {{ $route.params.id }} - {{ currentStep }} - {{ currentTrip.from }} - {{ currentTrip.to }}</ion-title>
+        <ion-title>{{ currentTrip.from.text }} - {{ currentTrip.to.text }}</ion-title>
+        <ion-title>{{ $route.params.id }} - {{ currentStep }} - {{ lat }} {{ lng }}</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -77,18 +78,29 @@ const current = computed(() => steps.value[currentStep.value - 1])
 const timer = ref(0)
 setInterval(() => timer.value++, 20)
 watch(() => current.value, () => (timer.value = 0)) // prettier-ignore
-// HACK
+// WIP
+const lat = ref(0)
+const lng = ref(0)
+navigator.geolocation.watchPosition(
+  (position) => {
+    const { latitude, longitude } = position.coords
+    lat.value = latitude
+    lng.value = longitude
+  },
+  (error) => console.error(`Error: ${error.message}`),
+  {
+    enableHighAccuracy: true, // Use GPS if available
+    timeout: 5000, // Maximum time to wait for a response (in ms)
+    maximumAge: 0, // Don't use cached position
+  }
+)
+// WIP
 const progress = computed(() => {
   const number = Math.floor(timer.value / 100)
   const percentage = (timer.value % 100) / 100
   return { number, percentage, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
 })
 const stops = ref([])
-const battery = ref(0)
-onMounted(async () => {
-  const manager = await navigator.getBattery()
-  battery.value = manager?.level
-})
 watch(
   () => progress.value.number,
   (number) => {
