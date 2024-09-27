@@ -88,3 +88,5 @@ Il y aura une démo à la fin de chaque lot et en cours de dev si besoin.
 ## NOTES
 
 Pour le debug sur ANDROID, activé le "Developer Mode", activé le "USB Debugging" et autorisé lors de la connection USB. Puis aller dans "chrome://inspect/#devices".
+
+Pour générer les icones: `npx @vite-pwa/assets-generator  --preset minimal-2023 public/favicon.svg`
