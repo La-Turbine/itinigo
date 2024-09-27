@@ -27,8 +27,10 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: "autoUpdate",
-      srcDir: "src",
-      filename: "service-worker.js"
+      injectRegister: "auto",
+      srcDir: "public",
+      filename: "service-worker.js",
+      strategies: "injectManifest",
       manifest: {
         theme_color: "#f6f7f7",
         icons: [

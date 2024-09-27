@@ -66,7 +66,8 @@
         </ion-list>
 
         <ion-item v-if="currentStep !== 2">
-          <ion-back-button text="Précédent" icon="" default-href="/" fill="outline" v-if="currentStep > 1"></ion-back-button>
+          <ion-button fill="outline" @click="$router.push('/')" v-if="currentStep === 3">Retour</ion-button>
+          <ion-button fill="outline" @click="$router.push({ query: { step: currentStep - 1 } })" v-if="currentStep === 4">Précédent</ion-button>
           <ion-button type="submit" style="margin-left: auto">Suivant</ion-button>
         </ion-item>
       </form>

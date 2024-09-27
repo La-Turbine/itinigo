@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue"
+import { ref, computed, watch } from "vue"
 const currentTrip = $state.trips[$route.params.id - 1] || {}
 const currentStep = computed(() => +($route.query.step || 0))
 const steps = computed(() => currentTrip.sequences.flatMap((v) => (v.stops ? [v.photos[0], v, v.photos[1]].filter((v) => v) : v.photos)).filter((v) => v.stops || v.text))
@@ -102,8 +102,9 @@ navigator.geolocation.watchPosition(
 // // HACK
 const progress = computed(() => {
   if (!current.value?.stops || !lat.value || !lng.value) return { number: 0, percentage: 0, distance: 0, width: "0", maxWidth: "100%" }
-  const { number, percentage, distance } = progressBetweenStops({ lat: lat.value, lng: lng.value }, current.value.stops)
-  return { number, percentage: percentage < 0.15 ? 0 : percentage > 0.85 ? 1 : percentage, distance, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
+  let { number, percentage, distance } = progressBetweenStops({ lat: lat.value, lng: lng.value }, current.value.stops)
+  percentage = percentage < 0.15 ? 0 : percentage > 0.85 ? 1 : percentage
+  return { number, percentage, distance, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
 })
 watch(
   () => progress.value.number,
@@ -139,7 +140,7 @@ function progressBetweenStops(currentPos, stops) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     return R * c // Distance in meters
   }
-  if (haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1])) return { number: -1, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
+  // if (haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1])) return { number: 0, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
   for (let i = 0; i < stops.length - 1; i++) {
     const totalDist = haversineDistance(stops[i], stops[i + 1])
     const distFromStart = haversineDistance(stops[i], currentPos)
