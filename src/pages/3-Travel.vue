@@ -140,7 +140,12 @@ function progressBetweenStops(currentPos, stops) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     return R * c // Distance in meters
   }
-  // if (haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1])) return { number: 0, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
+  if (
+    haversineDistance(currentPos, stops[0]) < 1000 &&
+    haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1]) &&
+    haversineDistance(currentPos, stops[2]) > haversineDistance(stops[1], stops[2])
+  )
+    return { number: 0, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
   for (let i = 0; i < stops.length - 1; i++) {
     const totalDist = haversineDistance(stops[i], stops[i + 1])
     const distFromStart = haversineDistance(stops[i], currentPos)
