@@ -27,10 +27,9 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: "autoUpdate",
-      injectRegister: "auto",
-      srcDir: "public",
-      filename: "service-worker.js",
-      strategies: "injectManifest",
+      workbox: {
+        importScripts: ["service-worker.js"],
+      },
       manifest: {
         theme_color: "#f6f7f7",
         icons: [
