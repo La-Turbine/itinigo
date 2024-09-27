@@ -103,7 +103,7 @@ navigator.geolocation.watchPosition(
 const progress = computed(() => {
   if (!current.value?.stops || !lat.value || !lng.value) return { number: 0, percentage: 0, distance: 0, width: "0", maxWidth: "100%" }
   const { number, percentage, distance } = progressBetweenStops({ lat: lat.value, lng: lng.value }, current.value.stops)
-  return { number, percentage: percentage < 0.15 ? 0 : percentage, distance, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
+  return { number, percentage: percentage < 0.15 ? 0 : percentage > 0.85 ? 1 : percentage, distance, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
 })
 watch(
   () => progress.value.number,
@@ -112,12 +112,12 @@ watch(
     stops.value[number].scrollIntoView({ behavior: "smooth", block: "center", inline: "center" })
     if (number !== stops.value.length - 2) return
     watch(
-      () => progress.value.percentage < 0.2,
+      () => progress.value.percentage < 0.15,
       () => notify("Préparez-vous à descendre, quand les portes s'ouvriront"),
       { once: true }
     )
     watch(
-      () => progress.value.percentage < 0.9,
+      () => progress.value.percentage < 0.85,
       () => $router.push({ query: { step: currentStep.value + 1 } }),
       { once: true }
     )
