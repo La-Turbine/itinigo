@@ -33,6 +33,15 @@
       <ion-item>
         <ion-label>VERSION: {{ version }} // {{ os }} // {{ browser }}</ion-label>
       </ion-item>
+      <ion-item button @click="$state.fake = !$state.fake">
+        <ion-label>FAKE TIMER {{ $state.fake ? "ON" : "OFF" }}</ion-label>
+      </ion-item>
+      <ion-item button color="success" @click="onExport">
+        <ion-label>EXPORT</ion-label>
+      </ion-item>
+      <ion-item button color="warning">
+        <ion-input type="file" accept=".json" @change="onImport"></ion-input>
+      </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
       </ion-item>
@@ -76,6 +85,24 @@ async function requestLocalisation() {
     (position) => console.log(position),
     (err) => console.log(err)
   )
+}
+async function onExport() {
+  const blob = new Blob([JSON.stringify($state)], { type: "application/json" })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = `itinigo-${new Date().toISOString().slice(0, 10)}.json`
+  a.click()
+}
+async function onImport(e) {
+  const file = e.target.files[0]
+  const reader = new FileReader()
+  reader.onload = () =>
+    Object.entries(JSON.parse(reader.result)).forEach(([key, value]) => {
+      if (key === "photos") idb.clear().then(() => Object.entries(value).forEach(([key, value]) => idb.set(key, value)))
+      $state[key] = value
+    })
+  reader.readAsText(file)
 }
 async function reset() {
   if (!confirm("Are you sure you want to reset?")) return

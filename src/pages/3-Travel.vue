@@ -90,17 +90,17 @@ navigator.geolocation.watchPosition(
     maximumAge: 0, // Don't use cached position
   }
 )
-// // HACK
-// const timer = ref(0)
-// setInterval(() => timer.value++, 20)
-// watch(() => current.value, () => (timer.value = 0)) // prettier-ignore
-// const progress = computed(() => {
-//   const number = Math.floor(timer.value / 100)
-//   const percentage = (timer.value % 100) / 100
-//   return { number, percentage, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
-// })
-// // HACK
+// HACK
+const timer = ref(0)
+setInterval(() => timer.value++, 20)
+watch(() => current.value, () => (timer.value = 0)) // prettier-ignore
 const progress = computed(() => {
+  // HACK
+  if ($state.fake) {
+    const number = Math.floor(timer.value / 100)
+    const percentage = (timer.value % 100) / 100
+    return { number, percentage, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
+  }
   if (!current.value?.stops || !lat.value || !lng.value) return { number: 0, percentage: 0, distance: 0, width: "0", maxWidth: "100%" }
   let { number, percentage, distance } = progressBetweenStops({ lat: lat.value, lng: lng.value }, current.value.stops)
   percentage = percentage < 0.15 ? 0 : percentage > 0.85 ? 1 : percentage
