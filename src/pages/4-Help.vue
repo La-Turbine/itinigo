@@ -17,7 +17,7 @@
           <div style="font-size: 1.25rem; font-weight: 600; text-align: center; text-wrap: balance">Pourriez-vous m’aider à rejoindre ma destination s’il vous plait ?</div>
           <div style="font-size: 1.25rem; font-weight: 600; text-align: center; text-wrap: balance">Merci beaucoup.</div>
           <hr style="border-top: 1px solid rgba(0, 0, 0, 0.5); width: 50%" />
-          <div style="font-size: 1.25rem; font-weight: 600">Mon Itinéraraire</div>
+          <div style="font-size: 1.25rem; font-weight: 600">Mon Itinéraire</div>
           <div style="font-size: 1.25rem">
             <div style="font-weight: 600">Arrêt de départ :</div>
             <div>Berriat - Le Magasin, Tram A</div>

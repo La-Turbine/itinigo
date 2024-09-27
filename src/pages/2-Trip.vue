@@ -67,11 +67,7 @@
 
         <ion-item v-if="currentStep !== 2">
           <ion-back-button text="Précédent" icon="" default-href="/" fill="outline" v-if="currentStep > 1"></ion-back-button>
-          <ion-button type="submit" style="margin-left: auto" v-if="currentStep !== 3">Suivant</ion-button>
-          <div style="margin-left: auto; display: flex; gap: 4px" v-else>
-            <ion-button type="submit" color="danger" @click.stop="next('remove')">Supprimé</ion-button>
-            <ion-button type="submit" color="success">Sauvegardé</ion-button>
-          </div>
+          <ion-button type="submit" style="margin-left: auto">Suivant</ion-button>
         </ion-item>
       </form>
     </ion-content>
@@ -105,13 +101,13 @@ const texts = [
   "Tourner à gauche",
   "Aller tout droit",
   "Tourner à droite",
-  "Passage Piéton",
-  "Passage Piéton avec feu",
+  "Quand le feu piéton est vert, traversez le passage piéton",
+  "Passage piéton sans feu, attention avant de traverser",
   "Vérifiez le nom de l'arrêt",
   "Vérifiez la direction",
   "Validez votre ticket",
   "Attendez à l'arrêt",
-  "Montez dans le tram/bus",
+  "Quand le tram/bus arrive, vérifiez la direction",
   "Montez dans le tram/bus",
   "Descendez du tram/bus",
 ]
@@ -245,23 +241,13 @@ const nexts = {
     $router.push({ query: { step: currentStep.value + 1 } })
   },
   async 2() {
-    $router.push({ query: { step: currentStep.value + 1 } })
-  },
-  async 3(num) {
-    if (typeof num === "number") {
-      state.sequence = num
-      $router.push({ query: { step: currentStep.value + 1 } })
-      return
-    }
-    if (num === "remove") {
-      $state.trips.splice($route.params.id - 1, 1)
-      $router.push("/")
-      return
-    }
     const from = { text: state.from.text.split(" - ")[0], lat: state.from.Latitude, lng: state.from.Longitude }
     const to = { text: state.to.text.split(" - ")[0], lat: state.to.Latitude, lng: state.to.Longitude }
     $state.trips[$route.params.id - 1] = { from, to, sequences: currentChoice.value }
-    $router.push("/")
+    $router.push({ query: { step: currentStep.value + 1 } })
+  },
+  async 3(num) {
+    $router.push({ query: { step: currentStep.value + 1 } })
   },
   async 4(num) {
     $router.push({ query: { step: currentStep.value - 1 } })
