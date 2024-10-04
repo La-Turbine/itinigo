@@ -28,8 +28,18 @@
         </div>
 
         <ion-list v-if="currentStep === 3">
-          <ion-item button detail="false" @click="next((state.sequence = i))" v-for="(sequence, i) in currentChoice">
-            {{ sequence.transport }}{{ sequence.stops ? ` (${sequence.stops.length} arrêts) [${sequence.stops[0].text} > ${sequence.stops.at(-1).text}]` : "" }}
+          <ion-item style="font-size: 90%" button detail @click="next((state.sequence = i))" v-for="(sequence, i) in currentChoice">
+            <div>
+              {{ sequence.transport }}
+              <br />
+              <span style="font-size: 90%">{{ sequence.stops ? ` ${sequence.stops.length} arrêts, de ${sequence.stops[0].text} à ${sequence.stops.at(-1).text}` : "" }}</span>
+            </div>
+            <ion-note style="margin: auto; padding: 2px; font-size: 90%" slot="end" v-if="sequence.photos.length && sequence.photos.length === sequence.photos.filter((v) => v.image).length">
+              {{ sequence.photos.length }}
+            </ion-note>
+            <ion-note style="margin: auto; padding: 2px; font-size: 90%" slot="end" v-if="sequence.photos.length !== sequence.photos.filter((v) => v.id).length">
+              {{ sequence.photos.filter((v) => v.id).length }}/{{ sequence.photos.length }}
+            </ion-note>
           </ion-item>
         </ion-list>
 
@@ -46,12 +56,10 @@
             <ion-reorder-group disabled="false" @ionItemReorder="reorderPhoto">
               <ion-item-sliding v-for="(photo, i) in currentSequence.photos" :key="photo">
                 <ion-item>
-                  <div style="display: flex; gap: 8px; padding: 4px">
-                    <img :src="`/img/${photo.type}.svg`" style="max-height: 40px; aspect-ratio: 1" />
-                    <img :src="$state.photos[photo.id]" style="max-height: 40px; aspect-ratio: 1" v-if="photo.id" />
-                    <img src="/img/camera.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refCamera)" />
-                    <img src="/img/gallery.svg" style="max-height: 40px; aspect-ratio: 1" @click="clickPhoto(photo, state.refGallery)" />
-                    <ion-input v-model="photo.text" placeholder="Description"></ion-input>
+                  <div style="width: 100%; display: flex; gap: 8px; padding: 4px">
+                    <img :src="`/img/${photo.type}.svg`" style="max-height: 40px" />
+                    <img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refInput)" />
+                    <ion-input style="font-size: 90%; flex: 1" v-model="photo.text" placeholder="Description"></ion-input>
                   </div>
                   <ion-reorder slot="end"></ion-reorder>
                 </ion-item>
@@ -60,16 +68,16 @@
                 </ion-item-options>
               </ion-item-sliding>
             </ion-reorder-group>
-            <input type="file" accept="image/*" capture="environment" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
-            <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
+            <input type="file" accept="image/*;capture" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" />
           </ion-list>
         </ion-list>
 
-        <ion-item v-if="currentStep !== 2">
-          <ion-button fill="outline" @click="$router.push('/')" v-if="currentStep === 3">Retour</ion-button>
-          <ion-button fill="outline" @click="$router.push({ query: { step: currentStep - 1 } })" v-if="currentStep === 4">Précédent</ion-button>
-          <ion-button type="submit" style="margin-left: auto">Suivant</ion-button>
-        </ion-item>
+        <div style="display: flex; padding: 8px" v-if="currentStep === 1"><ion-button type="submit" style="margin-left: auto">Suivant</ion-button></div>
+        <div style="display: flex; padding: 8px" v-if="currentStep === 3"><ion-button fill="outline" @click="$router.push('/')">Retour Trajets</ion-button></div>
+        <div style="display: flex; padding: 8px" v-if="currentStep === 4">
+          <ion-button fill="outline" @click="$router.push({ query: { step: currentStep - 1 } })">Retour Étape 3</ion-button>
+          <ion-button style="margin-left: auto" @click="state.sequence === currentChoice.length - 1 ? $router.push({ query: { step: currentStep - 1 } }) : state.sequence++">Suivant</ion-button>
+        </div>
       </form>
     </ion-content>
     <tldraw-annotator :url="$state.photos[currentPhoto]" @done="annotatePhoto" v-if="currentPhoto" />
@@ -232,9 +240,10 @@ const nexts = {
         })
         const after = extract($(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim())
         const stops = [before, ...intermediary, after].filter((v) => v)
+        const type = el.innerText.length === 1 ? `Tram ${el.innerText}` : `Bus ${el.innerText}`
         sequence.push({ transport: `Je marche vers l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })
         sequence.push({ transport: `J'attend à l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })
-        sequence.push({ transport: `Je monte dans le ${el.innerText}`, stops, photos: [] })
+        sequence.push({ transport: `Je monte dans le ${type}`, type, stops, photos: [] })
       })
       sequence.push({ transport: `Je marche vers ma destination`, photos: [] })
       return sequence

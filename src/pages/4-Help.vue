@@ -20,17 +20,15 @@
           <div style="font-size: 1.25rem; font-weight: 600">Mon Itinéraire</div>
           <div style="font-size: 1.25rem">
             <div style="font-weight: 600">Arrêt de départ :</div>
-            <div>Berriat - Le Magasin, Tram A</div>
+            <div>{{ first.stops[0].text }}, {{ first.type }}</div>
           </div>
           <div style="font-size: 1.25rem">
             <div style="font-weight: 600">Arrêt d’arrivée :</div>
-            <div>Notre-Dame, Musée, Tram B</div>
+            <div>{{ last.stops.at(-1).text }}, {{ last.type }}</div>
           </div>
           <div style="font-size: 1.25rem">
             <div style="font-weight: 600">Je souhaite me rendre ici :</div>
-            <div>Musée de Grenoble,</div>
-            <div>5 Place de Lavalette</div>
-            <div>38000 Grenoble</div>
+            <div>{{ travel.to.text }}</div>
           </div>
           <hr style="border-top: 1px solid rgba(0, 0, 0, 0.5); width: 50%" />
           <div style="display: flex; gap: 10px; padding: 10px">
@@ -61,13 +59,17 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue"
+const travel = computed(() => $state.trips[$route.query.travel - 1])
+const first = computed(() => travel.value.sequences.find((v) => v.type))
+const last = computed(() => travel.value.sequences.findLast((v) => v.type))
 function help() {
   $router.push(`/help?travel=${$route.query.travel}&mode=card`)
 }
 function map() {
   navigator.geolocation.getCurrentPosition(goto, (err) => goto())
   function goto(position) {
-    const to = $state.trips[$route.query.travel - 1].to.lat + "," + $state.trips[$route.query.travel - 1].to.lng
+    const to = travel.value.to.lat + "," + travel.value.to.lng
     if (!position) return (window.location.href = `https://www.google.com/maps?q=${to}`)
     const from = position.coords.latitude + "," + position.coords.longitude
     window.location.href = `https://www.google.com/maps/dir/?api=1&origin=${from}&destination=${to}&travelmode=walking`

@@ -31,6 +31,7 @@ export default defineConfig({
         importScripts: ["service-worker.js"],
       },
       manifest: {
+        orientation: "portrait",
         theme_color: "#f6f7f7",
         icons: [
           {
