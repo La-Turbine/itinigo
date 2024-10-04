@@ -72,12 +72,28 @@ window.addEventListener("beforeinstallprompt", (e) => {
 })
 async function requestInstall() {
   if (isInstalled.value) return
-  if (!installPrompt) return alert("Impossible d'installer l'application")
+  if (os === "iphone") return alert(`Pour installer cette application, appuyez sur le bouton "Partager" dans Safari, puis sélectionnez "Ajouter à l'écran d'accueil".`)
+  if (!installPrompt) return alert(`Pour installer cette application, appuyez sur le bouton "Installer" dans Chrome.`)
   installPrompt.prompt()
 }
 async function requestNotification() {
-  if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
-  return notify("Préparez-vous à recevoir des notifications")
+  if ('Notification' in window) alert("Notification in window")
+  if ('serviceWorker' in navigator) alert("serviceWorker in navigator")
+  try {
+    const registration = await navigator.serviceWorker.getRegistration()
+    if (registration?.showNotification) alert("registration.showNotification")
+    if (registration?.showNotification) return registration.showNotification("title")
+  } catch(e) {
+    alert(e)
+  }
+  // try {
+  //   Notification.requestPermission().then(p => alert(p)).catch(e => alert(e))
+  // } catch(e) {
+  //   alert(e)
+  // }
+  // alert("Notification.requestPermission")
+  // if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
+  // return notify("Préparez-vous à recevoir des notifications")
 }
 async function requestLocalisation() {
   if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))
