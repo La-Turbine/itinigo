@@ -60,6 +60,8 @@
           <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1rem; transform: translateY(-50%); border-radius: 9999px; background-color: #93c5fd" :style="progress"></div>
         </div>
         <pre>{{ progress }}</pre>
+        <ion-button style="position: absolute; top: 0; background: white; border-radius: 4px" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+        <ion-button style="position: absolute; top: 0; right: 0; background: white; border-radius: 4px" fill="outline" @click="$router.push({ query: { step: currentStep + 1 } })">SUIVANT</ion-button>
       </div>
     </ion-content>
   </ion-page>
