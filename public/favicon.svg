@@ -1,10 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="69.7 269.9 78.7 78.6">
-  <path d="M148.3 310.9v-25.4c0-8.6-7-15.6-15.6-15.6H85.3c-8.5 0-15.4 6.8-15.6 15.3v48.1c.2 8.4 7.1 15.2 15.6 15.2h47.3c8.3 0 15-6.5 15.6-14.6h.1v-23z" style="fill: #4264a6"></path>
-  <path d="m148.3 305.8-78.5 17.6v9.9c.2 8.4 7.1 15.2 15.6 15.2h47.3c8.3 0 15-6.5 15.6-14.6h.1v-28.1z" style="fill: #39b1e6"></path>
-  <ellipse cx="109" cy="314.3" rx="16.6" ry="13.8" style="fill: none"></ellipse>
-  <circle cx="134" cy="284.5" r="6.5" style="fill: #fff"></circle>
-  <circle cx="134" cy="284.5" r="2.9" style="fill: #4264a6"></circle>
-  <path d="m71.3 322.8 75.7-17" style="fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-miterlimit: 10"></path>
-  <path d="M92.9 322.3c5.8 5.5 17.4 6.7 26.1 2.3s11.5-13.5 5.5-18.2c-5.9-4.6-16.8-7-25.5-2.6s-11.6 13.2-6.1 18.5z" style="fill: #fff"></path>
-  <path d="M108.9 292.5c-10.8 0-19.6 8.8-19.6 19.6 0 4 1.2 7.7 3.2 10.8l13.7 21.1c.6.9 1.5 1.5 2.6 1.5s2.1-.6 2.6-1.5l13.7-21.1c2-3.1 3.2-6.8 3.2-10.8.2-10.8-8.6-19.6-19.4-19.6z" style="fill: #fff"></path>
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" id="Calque_1" x="0" y="0" style="enable-background: new 0 0 113.4 113.4" version="1.1" viewBox="0 0 113.4 113.4">
+  <path d="M96.6 57.2V31.8c0-8.6-7-15.6-15.6-15.6H33.7c-8.5 0-15.4 6.8-15.6 15.3V79.6c.2 8.4 7.1 15.2 15.6 15.2H81c8.3 0 15-6.5 15.6-14.6h.1V60.4l-.1-3.2z" style="fill: #4264a6" />
+  <path d="M96.6 52.1 18.1 69.7v9.9c.2 8.4 7.1 15.2 15.6 15.2H81c8.3 0 15-6.5 15.6-14.6h.1V57.3l-.1-5.2z" style="fill: #39b1e6" />
+  <path d="M57.5 29c-10.8 0-19.6 8.8-19.6 19.6 0 4 1.2 7.7 3.2 10.8l13.7 21.1c.6.9 1.5 1.5 2.6 1.5s2.1-.6 2.6-1.5l13.7-21.1c2-3.1 3.2-6.8 3.2-10.8C77 37.7 68.3 29 57.5 29z" style="fill: #fff" />
+  <path d="m19.5 68.7 75.7-17" style="fill: none; stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-miterlimit: 10" />
+  <circle cx="57.4" cy="48.4" r="8.5" style="fill: #4264a6" />
 </svg>

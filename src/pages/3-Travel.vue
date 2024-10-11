@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
-        <div style="font-size: 80%; font-weight: 500">{{ currentTrip.from.text }} - {{ currentTrip.to.text }}</div>
+        <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from.text) }} - {{ homework(currentTrip.to.text) }}</div>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -34,13 +34,10 @@
           <img style="max-width: 100%; max-height: 100%; height: auto; margin: auto" :src="$state.photos[current.id]" />
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
-        <div style="display: flex; flex-direction: column; flex: 1; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
-          <h2 style="margin: auto; text-align: center; text-wrap: balance; font-size: 150%">{{ current?.text }}</h2>
-          <div style="display: flex; gap: 10px">
-            <ion-button style="margin-left: auto; font-size: 125%" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
-            <ion-button style="flex: 1; font-size: 125%" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
-            <ion-button style="flex: 1; font-size: 125%" @click="$router.push('/')" v-else="currentStep < steps.length">RETOUR</ion-button>
-          </div>
+        <div style="display: flex; flex: 1; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
+          <h2 style="margin: auto; text-align: center; text-wrap: balance; font-size: 140%">{{ current?.text }}</h2>
+          <ion-button style="position: absolute; margin-top: -60px; font-size: 100%" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+          <ion-button style="font-size: 125%" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
         </div>
       </div>
       <!-- https://play.tailwindcss.com/90GckuhEBW -->
@@ -168,6 +165,11 @@ function progressBetweenStops(currentPos, stops) {
     if (progress < 100) return { number: i, percentage: progress.toFixed(2) / 100, distance: totalDist - distFromStart }
   }
   return { number: stops.length - 2, percentage: 1, distance: 0 }
+}
+function homework(place: string) {
+  if (place.toLowerCase() === $state.home?.toLowerCase()) return "🏠 Maison"
+  if (place.toLowerCase() === $state.work?.toLowerCase()) return "🏢 Travail"
+  return place
 }
 </script>
 

@@ -61,7 +61,7 @@
                 <ion-item>
                   <div style="width: 100%; display: flex; gap: 8px; padding: 4px">
                     <img :src="`/img/${photo.type}.svg`" style="max-height: 40px" />
-                    <div style="display: flex;flex-direction: column; gap: 10px">
+                    <div style="display: flex; flex-direction: column; gap: 10px">
                       <img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refGallery)" />
                       <img src="/img/camera.svg" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refCamera)" v-if="/android/i.test(window.navigator.userAgent)" />
                     </div>
@@ -80,10 +80,12 @@
           </ion-list>
         </ion-list>
 
-        <div style="display: flex; padding: 8px" v-if="currentStep === 1"><ion-button type="submit" style="margin-left: auto">Suivant</ion-button></div>
+        <div style="display: flex; padding: 8px" v-if="currentStep === 1">
+          <ion-button type="submit" :style="`margin-left: auto;${state.from.Latitude && state.to.Latitude ? '' : 'pointer-events: none;opacity: 0.5'}`">Suivant</ion-button>
+        </div>
         <div style="display: flex; padding: 8px" v-if="currentStep === 3"><ion-button fill="outline" @click="$router.push('/')">Retour Trajets</ion-button></div>
         <div style="display: flex; padding: 8px" v-if="currentStep === 4">
-          <ion-button fill="outline" @click="$router.push({ query: { step: currentStep - 1 } })">Retour Étape 3</ion-button>
+          <ion-button fill="outline" @click="$router.push({ query: { step: currentStep - 1 } })">Retour Séquences</ion-button>
           <ion-button style="margin-left: auto" @click="state.sequence === currentChoice.length - 1 ? $router.push({ query: { step: currentStep - 1 } }) : state.sequence++">Suivant</ion-button>
         </div>
       </form>

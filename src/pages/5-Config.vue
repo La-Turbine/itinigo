@@ -9,15 +9,6 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-item button @click="requestInstall" :disabled="isInstalled">
-        <ion-label>INSTALL PWA - {{ isInstalled ? "ON" : "OFF" }}</ion-label>
-      </ion-item>
-      <ion-item button @click="requestNotification">
-        <ion-label>NOTIFICATION - {{ isNotifiable ? "ON" : "OFF" }}</ion-label>
-      </ion-item>
-      <ion-item button @click="requestLocalisation">
-        <ion-label>LOCALISATION - {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
-      </ion-item>
       <ion-item>
         <ion-input v-model="$state.name" label="👋 Prénom" placeholder="Bruno"></ion-input>
       </ion-item>
@@ -30,17 +21,31 @@
       <ion-item>
         <ion-input v-model="$state.work" label="🏢 Travail" placeholder="40 Rue du Drac"></ion-input>
       </ion-item>
+      <ion-item button @click="requestInstall" :disabled="isInstalled">
+        <ion-label>INSTALLATION - {{ isInstalled ? "ON" : "OFF" }}</ion-label>
+      </ion-item>
+      <ion-item button @click="requestNotification">
+        <ion-label>NOTIFICATION - {{ isNotifiable ? "ON" : "OFF" }}</ion-label>
+      </ion-item>
+      <ion-item button @click="requestLocalisation">
+        <ion-label>LOCALISATION - {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
+      </ion-item>
+      <div style="height: 60px"></div>
       <ion-item>
-        <ion-label>VERSION: {{ version }} // {{ os }} // {{ browser }}</ion-label>
+        <ion-label>
+          VERSION:
+          <b style="font-size: 125%">{{ version.split(".")[0] }}</b>
+          // {{ os }} // {{ browser }}
+        </ion-label>
       </ion-item>
       <ion-item button @click="$state.fake = !$state.fake">
-        <ion-label>FAKE TIMER {{ $state.fake ? "ON" : "OFF" }}</ion-label>
+        <ion-label>FAKE TIMER - {{ $state.fake ? "ON" : "OFF" }}</ion-label>
       </ion-item>
-      <ion-item button color="success" @click="onExport">
+      <ion-item button @click="onExport">
         <ion-label>EXPORT</ion-label>
       </ion-item>
-      <ion-item button color="warning">
-        <ion-input type="file" accept=".json" @change="onImport"></ion-input>
+      <ion-item button>
+        <ion-input label="IMPORT" type="file" accept=".json" @change="onImport"></ion-input>
       </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
