@@ -30,13 +30,13 @@
         <ion-button style="height: 80px; font-size: 1.5rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>
       </div>
       <div style="display: flex; flex-direction: column; height: 100%" v-else-if="!current.stops">
-        <div style="position: relative; display: flex; height: 80%">
-          <img style="max-width: 100%; max-height: 100%; height: auto; margin: auto" :src="$state.photos[current.id]" />
+        <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
+          <img style="max-width: 100%; max-height: 100%; object-fit: cover; user-select: none; pointer-events: none" :src="$state.photos[current.id]" />
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
         <div style="display: flex; flex: 1; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
           <h2 style="margin: auto; text-align: center; text-wrap: balance; font-size: 140%">{{ current?.text }}</h2>
-          <ion-button style="position: absolute; margin-top: -60px; font-size: 100%" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+          <ion-button style="position: absolute; top: 0; background: white; border-radius: 4px" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
           <ion-button style="font-size: 125%" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
         </div>
       </div>
@@ -170,6 +170,17 @@ function homework(place: string) {
   if (place.toLowerCase() === $state.home?.toLowerCase()) return "🏠 Maison"
   if (place.toLowerCase() === $state.work?.toLowerCase()) return "🏢 Travail"
   return place
+}
+const touchStartX = ref(0)
+function onTouchStart(e) {
+  touchStartX.value = e.touches[0].clientX
+}
+function onTouchMove(e) {}
+function onTouchEnd(e) {
+  const touchEndX = e.changedTouches[0].clientX
+  const diffX = touchEndX - touchStartX.value
+  if (diffX > 50) return $router.push({ query: { step: currentStep.value - 1 } })
+  if (diffX < -50) return $router.push({ query: { step: currentStep.value + 1 } })
 }
 </script>
 

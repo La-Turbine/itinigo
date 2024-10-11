@@ -51,8 +51,8 @@
           <ion-item>
             <div style="display: flex; gap: 8px; margin: auto; max-width: fit-content">
               <img :src="`/img/${i}.svg`" @click="currentSequence.photos.push({ type: i, text: texts[i - 1] })" v-for="i in 5" v-if="currentSequence.transport.includes(`Je marche`)" />
-              <img :src="`/img/${i + 5}.svg`" @click="currentSequence.photos.push({ type: i + 5, text: texts[i + 4] })" v-for="i in 5" v-if="currentSequence.transport.includes(`J'attend`)" />
-              <img :src="`/img/${i + 10}.svg`" @click="currentSequence.photos.push({ type: i + 10, text: texts[i + 9] })" v-for="i in 2" v-if="currentSequence.transport.includes(`Je monte`)" />
+              <img :src="`/img/${i + 5}.svg`" @click="currentSequence.photos.push({ type: i + 5, text: texts[i + 4] })" v-for="i in 5" v-else-if="currentSequence.transport.includes(`J'attend`)" />
+              <img :src="`/img/${i + 11}.svg`" @click="currentSequence.photos.push({ type: i + 11, text: texts[i + 10], id })" v-for="(id, i) in ['IN', 'OUT']" v-else />
             </div>
           </ion-item>
           <ion-list>

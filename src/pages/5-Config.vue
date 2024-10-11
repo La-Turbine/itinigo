@@ -13,7 +13,7 @@
         <ion-input v-model="$state.name" label="👋 Prénom" placeholder="Bruno"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input v-model="$state.phone" label="📱 N° Aide" placeholder="0612121212"></ion-input>
+        <ion-input v-model="$state.phone" label="📞 N° Aide" placeholder="0612121212"></ion-input>
       </ion-item>
       <ion-item>
         <ion-input v-model="$state.home" label="🏠 Maison" placeholder="40 Rue du Drac"></ion-input>

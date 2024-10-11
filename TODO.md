@@ -1,31 +1,5 @@
 # Mon Itinigo
 
-Lot 1: Août
-
-> 1j+ > setup / tech / contrat / planning
-> 1j > formulaire trajet / photos
-> 1j+ > itinisere API + carte choix
-> 1j > suivi trajet
-
-Lot 2: Septembre
-
-> 1j+ > annotations photos
-> 1j+ > séquences (marche, attente, transport) avec notifications avant l'arrivée
-> 1j > aide / maps / appel / sms
-> 1j > configuration
-> 1j > design
-
-Lot 3: Octobre
-
-> 3j > design + feedback
-> 1j > geolocalisation (l'utilisateur s'éloigne)
-> 1j+ > export PDF / Print
-> 1j > export / import
-> 1j > tech avancés (mode PWA, mode offline, vercel toolbar, rapport d'accessibilité)
-> ...
-
-Lot 3:
-
 - [ ] slide droite/gauche
 - [ ] Annotation conditionnelle + ajouter un picto + picto rond plein/rond vide
 - [ ] Ré-annoter
@@ -35,8 +9,12 @@ Lot 3:
 - [ ] Timer 1h30 pour revenir à l'écran d'acceuil
 - [ ] BugFix Android Olivier (Notification)
 - [ ] BugFix Iphone (Notification)
-- ~~SMS~~
+- [ ] SMS d'aide
+- [ ] Passation Code / Hébergement / Domain
+- ~~Geolocalisation, l'utilisateur s'éloigne~~
 - ~~Export PDF~~
+- ~~Mode offline~~
+- ~~Vercel toolbar / rapport d'accessibilité~~
 
 ## NOTES
 
