@@ -10,3 +10,11 @@ self.addEventListener("notificationclick", (event) => {
     })
   )
 })
+self.addEventListener("sync", (event) => {
+  if (event.tag === "notify") {
+    self.registration.showNotification("Sync Event", {
+      body: "Triggered by sync",
+      icon: "/icon.png",
+    })
+  }
+})

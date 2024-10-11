@@ -1,7 +1,7 @@
 {
   "name": "itinisere",
   "private": true,
-  "version": "71.0.0-70ebd73",
+  "version": "73.0.0-27bd272",
   "type": "module",
   "scripts": {
     "dev": "ionic serve --external",

@@ -77,23 +77,10 @@ async function requestInstall() {
   installPrompt.prompt()
 }
 async function requestNotification() {
-  if ('Notification' in window) alert("Notification in window")
-  if ('serviceWorker' in navigator) alert("serviceWorker in navigator")
-  try {
-    const registration = await navigator.serviceWorker.getRegistration()
-    if (registration?.showNotification) alert("registration.showNotification")
-    if (registration?.showNotification) return registration.showNotification("title")
-  } catch(e) {
-    alert(e)
-  }
-  // try {
-  //   Notification.requestPermission().then(p => alert(p)).catch(e => alert(e))
-  // } catch(e) {
-  //   alert(e)
-  // }
-  // alert("Notification.requestPermission")
-  // if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
-  // return notify("Préparez-vous à recevoir des notifications")
+  // const registration = await navigator.serviceWorker.ready
+  // if ("sync" in registration) (registration as any).sync.register("notify")
+  if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
+  return notify("Préparez-vous à recevoir des notifications")
 }
 async function requestLocalisation() {
   if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))

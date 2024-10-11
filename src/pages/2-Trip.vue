@@ -5,7 +5,10 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
-        <ion-title>Trajet {{ $route.params.id }} - Étape {{ currentStep }}</ion-title>
+        <ion-title v-if="currentStep === 1">Trajet {{ $route.params.id }} - Saisie Itinéraire</ion-title>
+        <ion-title v-if="currentStep === 2">Trajet {{ $route.params.id }} - Choix Itinéraire</ion-title>
+        <ion-title v-if="currentStep === 3">Trajet {{ $route.params.id }} - Choix Séquence</ion-title>
+        <ion-title v-if="currentStep === 4">Trajet {{ $route.params.id }} - Détails Séquence</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -16,7 +19,7 @@
           </ion-item>
           <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'from'">{{ item.text }}</ion-item>
           <ion-item>
-            <ion-input label="Arrivé" :value="state.to.text" @ionInput="onSearch" @ionFocus="onFocus('to')" @ionBlur="onBlur('to')" required></ion-input>
+            <ion-input label="Arrivée" :value="state.to.text" @ionInput="onSearch" @ionFocus="onFocus('to')" @ionBlur="onBlur('to')" required></ion-input>
           </ion-item>
           <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'to'">{{ item.text }}</ion-item>
         </ion-list>
@@ -58,8 +61,11 @@
                 <ion-item>
                   <div style="width: 100%; display: flex; gap: 8px; padding: 4px">
                     <img :src="`/img/${photo.type}.svg`" style="max-height: 40px" />
-                    <img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refInput)" />
-                    <ion-input style="font-size: 90%; flex: 1" v-model="photo.text" placeholder="Description"></ion-input>
+                    <div style="display: flex;flex-direction: column; gap: 10px">
+                      <img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refGallery)" />
+                      <img src="/img/camera.svg" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refCamera)" v-if="/android/i.test(window.navigator.userAgent)" />
+                    </div>
+                    <ion-textarea style="flex: 1; font-size: 90%" fill="solid" :auto-grow="true" v-model="photo.text"></ion-textarea>
                   </div>
                   <ion-reorder slot="end"></ion-reorder>
                 </ion-item>
@@ -68,7 +74,9 @@
                 </ion-item-options>
               </ion-item-sliding>
             </ion-reorder-group>
-            <input type="file" accept="image/*;capture" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" />
+            <!-- <input type="file" accept="image/*;capture" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" /> -->
+            <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
+            <input type="file" accept="image/*" capture="environment" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
           </ion-list>
         </ion-list>
 
@@ -107,9 +115,9 @@ const state = reactive({
 const focused = ref("")
 const items = ref([])
 const texts = [
-  "Tourner à gauche",
-  "Aller tout droit",
-  "Tourner à droite",
+  "Tournez à gauche",
+  "Allez tout droit",
+  "Tournez à droite",
   "Quand le feu piéton est vert, traversez le passage piéton",
   "Passage piéton sans feu, attention avant de traverser",
   "Vérifiez le nom de l'arrêt",
@@ -242,7 +250,7 @@ const nexts = {
         const stops = [before, ...intermediary, after].filter((v) => v)
         const type = el.innerText.length === 1 ? `Tram ${el.innerText}` : `Bus ${el.innerText}`
         sequence.push({ transport: `Je marche vers l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })
-        sequence.push({ transport: `J'attend à l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })
+        sequence.push({ transport: `J'attends à l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })
         sequence.push({ transport: `Je monte dans le ${type}`, type, stops, photos: [] })
       })
       sequence.push({ transport: `Je marche vers ma destination`, photos: [] })
@@ -268,3 +276,17 @@ async function next(...args) {
   await fn(...args)
 }
 </script>
+
+<style>
+/* ion-textarea {
+  height: 40px;
+  min-height: 40px!important;
+} */
+.textarea-wrapper {
+  --padding-end: 0px;
+  --padding-start: 0px;
+}
+textarea {
+  padding: 8px !important;
+}
+</style>
