@@ -31,7 +31,7 @@
       </div>
       <div style="display: flex; flex-direction: column; height: 100%" v-else-if="!current.stops">
         <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-          <img style="max-width: 100%; max-height: 100%; object-fit: cover; user-select: none; pointer-events: none" :src="$state.photos[current.id]" />
+          <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[current.id]" :style="cardStyle" />
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
         <div style="display: flex; flex: 1; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
@@ -172,15 +172,21 @@ function homework(place: string) {
   return place
 }
 const touchStartX = ref(0)
+const translateX = ref(0)
+const cardStyle = ref({})
 function onTouchStart(e) {
   touchStartX.value = e.touches[0].clientX
 }
-function onTouchMove(e) {}
+function onTouchMove(e) {
+  translateX.value = e.touches[0].clientX - touchStartX.value
+  cardStyle.value = { transform: `translateX(${translateX.value}px)` }
+}
 function onTouchEnd(e) {
+  cardStyle.value = {}
   const touchEndX = e.changedTouches[0].clientX
   const diffX = touchEndX - touchStartX.value
-  if (diffX > 50) return $router.push({ query: { step: currentStep.value - 1 } })
-  if (diffX < -50) return $router.push({ query: { step: currentStep.value + 1 } })
+  if (diffX > 100) return $router.push({ query: { step: currentStep.value - 1 } })
+  if (diffX < -100) return $router.push({ query: { step: currentStep.value + 1 } })
 }
 </script>
 
