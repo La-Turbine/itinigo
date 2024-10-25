@@ -1,7 +1,7 @@
 {
   "name": "itinisere",
   "private": true,
-  "version": "81.0.0-dc2f4d1",
+  "version": "82.0.0-dd3987c",
   "type": "module",
   "scripts": {
     "dev": "ionic serve --external",
@@ -24,7 +24,7 @@
     "@r2wc/react-to-web-component": "^2.0.3",
     "@vueuse/core": "^10.11.0",
     "ionicons": "^7.0.0",
-    "tldraw": "^2.4.4",
+    "tldraw": "3.4.0",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },

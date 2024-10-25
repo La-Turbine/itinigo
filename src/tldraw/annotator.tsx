@@ -1,6 +1,7 @@
 // https://examples.tldraw.com/image-annotator/full
-// https://tldraw.dev/examples/ui/image-component
-// https://tldraw.dev/examples/ui/custom-menus
+// https://examples.tldraw.com/image-component
+// https://examples.tldraw.com/custom-menus
+// https://examples.tldraw.com/shape-with-geometry
 import "./annotator.css"
 import React from "react"
 import { useCallback, useEffect, useState } from "react"
@@ -13,12 +14,10 @@ import {
   SVGContainer,
   track,
   useEditor,
+  //
   TLComponents,
   TLImageShape,
   TLShapeId,
-  createTLStore,
-  getSnapshot,
-  loadSnapshot,
   DefaultColorThemePalette,
   DefaultColorStyle,
   DefaultFillStyle,
@@ -31,13 +30,6 @@ import {
   OvalToolbarItem,
   EllipseToolbarItem,
   TriangleToolbarItem,
-  //
-  // StateNode,
-  // useTools,
-  // useIsToolSelected,
-  // TLUiOverrides,
-  // TldrawUiMenuItem,
-  // TLUiAssetUrlOverrides,
 } from "tldraw"
 type AnnotatorImage = {
   src: string
@@ -51,7 +43,6 @@ type AnnotatorImage = {
 // - prevent locked shape context menu
 // - inertial scrolling for constrained camera
 export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage; onDone(result: Blob): void }) {
-  const [store] = useState(() => createTLStore())
   const [imageShapeId, setImageShapeId] = useState<TLShapeId | null>(null)
   const [editor, setEditor] = useState(null as Editor | null)
 
@@ -82,6 +73,20 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
           isAnimated: false,
         },
       },
+      {
+        id: "asset:disc",
+        typeName: "asset",
+        type: "image",
+        meta: {},
+        props: {
+          w: 100,
+          h: 50,
+          mimeType: "image/svg/xml",
+          src: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><ellipse cx="50" cy="25" rx="50" ry="25" fill="#4465e9" /></svg>`)}`,
+          name: "image",
+          isAnimated: false,
+        },
+      },
     ])
     const shapeId = createShapeId()
     editor.createShape<TLImageShape>({
@@ -94,6 +99,18 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
         w: image.width,
         h: image.height,
         assetId,
+      },
+    })
+    editor.createShape<TLImageShape>({
+      id: "shape:disc",
+      type: "image",
+      x: image.width / 2 - 150,
+      y: image.height - 150,
+      isLocked: false,
+      props: {
+        w: 300,
+        h: 150,
+        assetId: "asset:disc",
       },
     })
 
@@ -169,18 +186,12 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     editor.setCamera(editor.getCamera(), { reset: true })
   }, [editor, imageShapeId, image])
 
-  function onDone2(blob: Blob) {
-    // TODO: export the snapshot instead of the blob, to be able to reuse the annotations
-    // const snapshot = getSnapshot(store)
-    // console.log(snapshot)
-    onDone(blob)
-  }
-
   function onUiEvent(event: string, options: any) {
     if (event === "select-tool" && options.id === "arrow") {
+      editor.setStyleForNextShapes(DefaultColorStyle, "black")
       editor.setStyleForNextShapes(DefaultColorStyle, "blue")
       editor.setStyleForNextShapes(DefaultFillStyle, "solid")
-      editor.setStyleForNextShapes(ArrowShapeArrowheadStartStyle, "dot")
+      // editor.setStyleForNextShapes(ArrowShapeArrowheadStartStyle, "dot")
       editor.setStyleForNextShapes(ArrowShapeArrowheadEndStyle, "dot")
     }
     if (event === "select-tool" && options.id === "geo-ellipse") {
@@ -201,14 +212,11 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
   DefaultColorStyle.setDefaultValue("green")
   DefaultSizeStyle.setDefaultValue("xl")
   function Toolbar() {
-    // const tools = useTools()
-    // const isStickerSelected = useIsToolSelected(tools["sticker"])
     return (
       <DefaultToolbar>
-        {/* <TldrawUiMenuItem {...tools["sticker"]} isSelected={isStickerSelected} /> */}
         <SelectToolbarItem />
         {[1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <ArrowToolbarItem />}
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <EllipseToolbarItem />}
+        {/* {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <EllipseToolbarItem />} */}
         {[1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <OvalToolbarItem />}
         {[4, 5].includes(currentPhoto.type) && <TriangleToolbarItem />}
       </DefaultToolbar>
@@ -236,52 +244,11 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     // add a "done" button in the top right for when the user is ready to export
     SharePanel: useCallback(() => {
       if (!imageShapeId) return null
-      return <DoneButton imageShapeId={imageShapeId} onClick={onDone2} />
+      return <DoneButton imageShapeId={imageShapeId} onClick={onDone} />
     }, [imageShapeId, onDone]),
   }
 
-  // const OFFSET = 12
-  // class StickerTool extends StateNode {
-  //   static override id = "sticker"
-  //   override onEnter() {
-  //     this.editor.setCursor({ type: "cross", rotation: 0 })
-  //   }
-  //   override onPointerDown() {
-  //     const { currentPagePoint } = this.editor.inputs
-  //     this.editor.createShape({
-  //       type: "text",
-  //       x: currentPagePoint.x - OFFSET,
-  //       y: currentPagePoint.y - OFFSET,
-  //       props: { text: "❤️" },
-  //     })
-  //   }
-  // }
-
-  // const overrides: TLUiOverrides = {
-  //   tools(editor, tools) {
-  //     // Create a tool item in the ui's context.
-  //     tools.sticker = {
-  //       id: "sticker",
-  //       icon: "heart-icon",
-  //       label: "Sticker",
-  //       kbd: "s",
-  //       onSelect: () => {
-  //         editor.setCurrentTool("sticker")
-  //       },
-  //     }
-  //     return tools
-  //   },
-  // }
-
-  // const assetUrls: TLUiAssetUrlOverrides = {
-  //   icons: {
-  //     "heart-icon": "/heart-icon.svg",
-  //   },
-  // }
-
-  // const tools = [StickerTool]
-
-  return <Tldraw onMount={onMount} onUiEvent={onUiEvent} store={store} components={components} forceMobile />
+  return <Tldraw onMount={onMount} onUiEvent={onUiEvent} components={components} forceMobile />
 }
 
 /**
