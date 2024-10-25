@@ -29,6 +29,15 @@ import {
   SelectToolbarItem,
   ArrowToolbarItem,
   OvalToolbarItem,
+  EllipseToolbarItem,
+  TriangleToolbarItem,
+  //
+  // StateNode,
+  // useTools,
+  // useIsToolSelected,
+  // TLUiOverrides,
+  // TldrawUiMenuItem,
+  // TLUiAssetUrlOverrides,
 } from "tldraw"
 type AnnotatorImage = {
   src: string
@@ -172,11 +181,19 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
       editor.setStyleForNextShapes(DefaultColorStyle, "blue")
       editor.setStyleForNextShapes(DefaultFillStyle, "solid")
       editor.setStyleForNextShapes(ArrowShapeArrowheadStartStyle, "dot")
-      editor.setStyleForNextShapes(ArrowShapeArrowheadEndStyle, "triangle")
+      editor.setStyleForNextShapes(ArrowShapeArrowheadEndStyle, "dot")
+    }
+    if (event === "select-tool" && options.id === "geo-ellipse") {
+      editor.setStyleForNextShapes(DefaultColorStyle, "blue")
+      editor.setStyleForNextShapes(DefaultFillStyle, "fill")
     }
     if (event === "select-tool" && options.id === "geo-oval") {
       editor.setStyleForNextShapes(DefaultColorStyle, "green")
       editor.setStyleForNextShapes(DefaultFillStyle, "none")
+    }
+    if (event === "select-tool" && options.id === "geo-triangle") {
+      editor.setStyleForNextShapes(DefaultColorStyle, "red")
+      editor.setStyleForNextShapes(DefaultFillStyle, "solid")
     }
   }
 
@@ -184,14 +201,20 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
   DefaultColorStyle.setDefaultValue("green")
   DefaultSizeStyle.setDefaultValue("xl")
   function Toolbar() {
+    // const tools = useTools()
+    // const isStickerSelected = useIsToolSelected(tools["sticker"])
     return (
       <DefaultToolbar>
+        {/* <TldrawUiMenuItem {...tools["sticker"]} isSelected={isStickerSelected} /> */}
         <SelectToolbarItem />
-        <ArrowToolbarItem />
-        <OvalToolbarItem />
+        {[1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <ArrowToolbarItem />}
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <EllipseToolbarItem />}
+        {[1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <OvalToolbarItem />}
+        {[4, 5].includes(currentPhoto.type) && <TriangleToolbarItem />}
       </DefaultToolbar>
     )
   }
+
   const components: TLComponents = {
     ActionsMenu: null,
     ContextMenu: null,
@@ -217,7 +240,48 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     }, [imageShapeId, onDone]),
   }
 
-  return <Tldraw onMount={onMount} onUiEvent={onUiEvent} store={store} components={components} />
+  // const OFFSET = 12
+  // class StickerTool extends StateNode {
+  //   static override id = "sticker"
+  //   override onEnter() {
+  //     this.editor.setCursor({ type: "cross", rotation: 0 })
+  //   }
+  //   override onPointerDown() {
+  //     const { currentPagePoint } = this.editor.inputs
+  //     this.editor.createShape({
+  //       type: "text",
+  //       x: currentPagePoint.x - OFFSET,
+  //       y: currentPagePoint.y - OFFSET,
+  //       props: { text: "❤️" },
+  //     })
+  //   }
+  // }
+
+  // const overrides: TLUiOverrides = {
+  //   tools(editor, tools) {
+  //     // Create a tool item in the ui's context.
+  //     tools.sticker = {
+  //       id: "sticker",
+  //       icon: "heart-icon",
+  //       label: "Sticker",
+  //       kbd: "s",
+  //       onSelect: () => {
+  //         editor.setCurrentTool("sticker")
+  //       },
+  //     }
+  //     return tools
+  //   },
+  // }
+
+  // const assetUrls: TLUiAssetUrlOverrides = {
+  //   icons: {
+  //     "heart-icon": "/heart-icon.svg",
+  //   },
+  // }
+
+  // const tools = [StickerTool]
+
+  return <Tldraw onMount={onMount} onUiEvent={onUiEvent} store={store} components={components} forceMobile />
 }
 
 /**

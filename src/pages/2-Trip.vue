@@ -165,6 +165,7 @@ function deletePhoto(index) {
   currentSequence.value.photos.splice(index, 1)
 }
 function clickPhoto(photo, input) {
+  window.currentPhoto = photo
   state.currentPhoto = photo
   input.click()
 }
