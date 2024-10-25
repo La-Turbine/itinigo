@@ -48,17 +48,21 @@ async function initApp() {
   window.$state = app.config.globalProperties.$state = $state
   app.config.globalProperties.window = window
   app.mount("#app")
+  // Return to home page after 2 hours of inactivity (same page)
+  // Return to last page on refresh, when < 2 hours of inactivity
+  router.afterEach((to) => ($state.route = { fullPath: to.fullPath, timestamp: Date.now() }))
+  if (Date.now() - $state.route.timestamp < 1000 * 60 * 60 * 2) router.push($state.route.fullPath)
+  else router.push("/")
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) return
+    if (Date.now() - $state.route.timestamp < 1000 * 60 * 60 * 2) return
+    router.push("/")
+  })
   // Start as helper in config page when no name is set
   if (!$state.name) {
     $state.mode = "helper"
     router.push("/config")
   }
-  // Return to home page after 1.5 hours of inactivity
-  let timer: any
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) return (timer = setInterval(() => router.push("/"), 1.5 * 60 * 60 * 1000))
-    return clearInterval(timer)
-  })
 }
 initApp()
 
