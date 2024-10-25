@@ -279,7 +279,7 @@ function DoneButton({ imageShapeId, onClick }: { imageShapeId: TLShapeId; onClic
         onClick(blob)
       }}
     >
-      Done
+      Terminer
     </button>
   )
 }
