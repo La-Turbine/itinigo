@@ -37,10 +37,11 @@
               <br />
               <span style="font-size: 90%">{{ sequence.stops ? ` ${sequence.stops.length} arrêts, de ${sequence.stops[0].text} à ${sequence.stops.at(-1).text}` : "" }}</span>
             </div>
-            <ion-note style="margin: auto; padding: 2px; font-size: 90%" slot="end" v-if="sequence.photos.length && sequence.photos.length === sequence.photos.filter((v) => v.image).length">
-              {{ sequence.photos.length }}
-            </ion-note>
-            <ion-note style="margin: auto; padding: 2px; font-size: 90%" slot="end" v-if="sequence.photos.length !== sequence.photos.filter((v) => v.id).length">
+            <ion-note
+              style="margin: auto; padding: 2px; font-size: 90%"
+              slot="end"
+              :color="!sequence.photos.length || sequence.photos.filter((v) => v.id).length !== sequence.photos.length ? 'danger' : 'success'"
+            >
               {{ sequence.photos.filter((v) => v.id).length }}/{{ sequence.photos.length }}
             </ion-note>
           </ion-item>
@@ -57,22 +58,20 @@
           </ion-item>
           <ion-list>
             <ion-reorder-group disabled="false" @ionItemReorder="reorderPhoto">
-              <ion-item-sliding v-for="(photo, i) in currentSequence.photos" :key="photo">
-                <ion-item>
-                  <div style="width: 100%; display: flex; gap: 8px; padding: 4px">
-                    <img :src="`/img/${photo.type}.svg`" style="max-height: 40px" />
-                    <div style="display: flex; flex-direction: column; gap: 10px">
-                      <img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refGallery)" />
-                      <img src="/img/camera.svg" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refCamera)" v-if="/android/i.test(window.navigator.userAgent)" />
-                    </div>
-                    <ion-textarea style="flex: 1; font-size: 90%" fill="solid" :auto-grow="true" v-model="photo.text"></ion-textarea>
+              <ion-item v-for="(photo, i) in currentSequence.photos" :key="photo">
+                <div style="width: 100%; display: flex; gap: 8px; padding: 4px">
+                  <ion-button style="position: absolute; left: 0; bottom: 0; width: 20px; height: 20px" color="danger" @click="deletePhoto(i)">
+                    <ion-icon slot="icon-only" :icon="trash"></ion-icon>
+                  </ion-button>
+                  <img :src="`/img/${photo.type}.svg`" style="max-height: 40px" />
+                  <div style="display: flex; flex-direction: column; gap: 10px">
+                    <img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refGallery)" />
+                    <img src="/img/camera.svg" style="max-width: 40px; max-height: 40px" @click="clickPhoto(photo, state.refCamera)" v-if="/android/i.test(window.navigator.userAgent)" />
                   </div>
-                  <ion-reorder slot="end"></ion-reorder>
-                </ion-item>
-                <ion-item-options side="end">
-                  <ion-item-option color="danger" @click="deletePhoto(i)">Delete</ion-item-option>
-                </ion-item-options>
-              </ion-item-sliding>
+                  <ion-textarea style="flex: 1; font-size: 90%" fill="solid" :auto-grow="true" v-model="photo.text"></ion-textarea>
+                </div>
+                <ion-reorder slot="end"></ion-reorder>
+              </ion-item>
             </ion-reorder-group>
             <!-- <input type="file" accept="image/*;capture" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" /> -->
             <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
@@ -95,6 +94,7 @@
 </template>
 
 <script setup lang="ts">
+import { trash } from "ionicons/icons"
 import { ref, reactive, computed } from "vue"
 // https://api.ppp38v2.cityway.fr/search/address?keywords=40+rue&maxitems=10&pointtypes=&categories=&LocalityIds=&OperatorIds=
 // https://api.ppp38v2.cityway.fr/journeyplanner/hubs/plantrips?KeywordDep=40+RUE+ABB%C3%89+GR%C3%89GOIRE+-+38000+GRENOBLE+Adresse&PointDep=152084_3_40&NumDep=40&KeywordArr=HOTEL+DE+VILLE+-+38000+GRENOBLE+Arr%C3%AAt&PointArr=2002289_4&KeywordVia=&PointVia=&NumVia=&DurationVia=30&Date=28%2F07%2F2024&TypeDate=68&Hour=13&Minute=45&Submit=True&TypeTrip=PlanTrip&Algorithm=Fastest&WalkDistance=2000&WalkSpeed=4&Modes=Bus&Modes=Coach&Modes=Metro&Modes=Tram&Modes=Tod&Modes=Tgv&Modes=Ter&Modes=Train&Modes=Plane&Partners=14&Partners=28&Partners=24&Partners=30&Partners=15&Partners=5&Partners=2&Partners=22&Partners=18&Partners=29&Partners=6&Partners=8&Partners=31&Partners=3&Partners=13&Partners=12&Partners=26&Partners=27&Partners=7&Partners=17&BikeDistance=10&BikeSecure=2&BikeLeave=0&BikeSpeed=15&CarDistance=100&CarLeave=0

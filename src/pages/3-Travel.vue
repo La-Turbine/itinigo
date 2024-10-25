@@ -12,22 +12,22 @@
       <div style="display: flex; flex-direction: column; justify-content: space-around; height: 100%; padding: 20px" v-if="!current">
         <div>
           <div style="font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 20px">Mon itinéraire</div>
-          <card :trip="currentTrip" />
+          <card style="margin: 0" :trip="currentTrip" />
         </div>
         <div>
           <div style="font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 20px">Je vérifie</div>
           <div style="display: flex; gap: 10px">
             <div style="flex: 1">
               <img style="height: 110px; padding: 30px" src="/img/battery.svg" />
-              <div style="font-size: 1.5rem; font-weight: 500; text-align: center; text-wrap: balance">La batterie de mon téléphone</div>
+              <div style="font-size: 1.4rem; font-weight: 500; text-align: center; text-wrap: balance">La batterie de mon téléphone</div>
             </div>
             <div style="flex: 1">
               <img style="height: 110px; object-fit: cover" src="/img/card.png" />
-              <div style="font-size: 1.5rem; font-weight: 500; text-align: center; text-wrap: balance">Mon ticket de transport</div>
+              <div style="font-size: 1.4rem; font-weight: 500; text-align: center; text-wrap: balance">Mon ticket de transport</div>
             </div>
           </div>
         </div>
-        <ion-button style="height: 80px; font-size: 1.5rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>
+        <ion-button style="height: 80px; font-size: 1.4rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>
       </div>
       <div style="display: flex; flex-direction: column; height: 100%" v-else-if="!current.stops">
         <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
@@ -35,8 +35,8 @@
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
         <div style="display: flex; flex: 1; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
-          <h2 style="margin: auto; text-align: center; text-wrap: balance; font-size: 140%">{{ current?.text }}</h2>
-          <ion-button style="position: absolute; top: 0; background: white; border-radius: 4px" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+          <h2 style="margin: auto; text-align: center; text-wrap: balance; max-height: 140px" :ref="adjust">{{ current?.text }}</h2>
+          <ion-button style="position: absolute; top: 0; left: 0; background: white; border-radius: 4px" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
           <ion-button style="font-size: 125%" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
         </div>
       </div>
@@ -50,7 +50,7 @@
             ref="stops"
           >
             <div
-              style="position: absolute; z-index: 10; margin: -0.5rem; height: 1.5rem; width: 1.5rem; border-radius: 9999px; background-color: #2563eb"
+              style="position: absolute; z-index: 10; margin: -0.5rem; height: 1.4rem; width: 1.4rem; border-radius: 9999px; background-color: #2563eb"
               class="animate-ping"
               v-if="i === current.stops.length - 1 && progress.number > i - 2"
             ></div>
@@ -76,6 +76,8 @@ const current = computed(() => steps.value[currentStep.value - 1])
 const stops = ref([])
 const lat = ref(0)
 const lng = ref(0)
+Notification.requestPermission()
+// TODO: retry on error
 navigator.geolocation.watchPosition(
   (position) => {
     const { latitude, longitude } = position.coords
@@ -154,19 +156,23 @@ function progressBetweenStops(currentPos, stops) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     return R * c // Distance in meters
   }
-  if (
-    haversineDistance(currentPos, stops[0]) < 1000 &&
-    haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1]) &&
-    haversineDistance(currentPos, stops[2]) > haversineDistance(stops[1], stops[2])
-  )
-    return { number: 0, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
-  for (let i = 0; i < stops.length - 1; i++) {
-    const totalDist = haversineDistance(stops[i], stops[i + 1])
-    const distFromStart = haversineDistance(stops[i], currentPos)
-    const progress = Math.min((distFromStart / totalDist) * 100, 100)
-    if (progress < 100) return { number: i, percentage: progress.toFixed(2) / 100, distance: totalDist - distFromStart }
+  try {
+    if (
+      haversineDistance(currentPos, stops[0]) < 1000 &&
+      haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1]) &&
+      haversineDistance(currentPos, stops[2]) > haversineDistance(stops[1], stops[2])
+    )
+      return { number: 0, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
+    for (let i = 0; i < stops.length - 1; i++) {
+      const totalDist = haversineDistance(stops[i], stops[i + 1])
+      const distFromStart = haversineDistance(stops[i], currentPos)
+      const progress = Math.min((distFromStart / totalDist) * 100, 100)
+      if (progress < 100) return { number: i, percentage: progress.toFixed(2) / 100, distance: totalDist - distFromStart }
+    }
+    return { number: stops.length - 2, percentage: 1, distance: 0 }
+  } catch (e) {
+    return { number: 0, percentage: 0, distance: 0 }
   }
-  return { number: stops.length - 2, percentage: 1, distance: 0 }
 }
 function homework(place: string) {
   if (place.toLowerCase() === $state.home?.toLowerCase()) return "🏠 Maison"
@@ -189,6 +195,14 @@ function onTouchEnd(e) {
   const diffX = touchEndX - touchStartX.value
   if (diffX > 100) return $router.push({ query: { step: currentStep.value - 1 } })
   if (diffX < -100) return $router.push({ query: { step: currentStep.value + 1 } })
+}
+function adjust(ref: any) {
+  setTimeout(() => adjustFontSize(ref, 32))
+}
+function adjustFontSize(el: HTMLElement, size = +getComputedStyle(el).fontSize) {
+  if (!el) return
+  el.style.fontSize = `${size}px`
+  while (el.scrollHeight > el.offsetHeight || el.scrollWidth > el.offsetWidth) el.style.fontSize = `${--size}px`
 }
 </script>
 
