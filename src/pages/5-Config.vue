@@ -9,6 +9,10 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
+      <ion-item button @click="downloadManual">
+        <ion-label>MODE D'EMPLOI</ion-label>
+      </ion-item>
+      <div style="height: 40px"></div>
       <ion-item>
         <ion-input v-model="$state.name" label="👋 Prénom" placeholder="Bruno"></ion-input>
       </ion-item>
@@ -30,7 +34,7 @@
       <ion-item button @click="requestLocalisation">
         <ion-label>LOCALISATION - {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
-      <div style="height: 60px"></div>
+      <div style="height: 40px"></div>
       <ion-item>
         <ion-label>
           VERSION:
@@ -84,8 +88,8 @@ async function requestInstall() {
 async function requestNotification() {
   // const registration = await navigator.serviceWorker.ready
   // if ("sync" in registration) (registration as any).sync.register("notify")
-  if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
-  return notify("Préparez-vous à recevoir des notifications")
+  // if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
+  // return notify("Préparez-vous à recevoir des notifications")
 }
 async function requestLocalisation() {
   if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))
@@ -116,5 +120,11 @@ async function reset() {
   if (!confirm("Are you sure you want to reset?")) return
   await idb.clear()
   location.href = "/"
+}
+function downloadManual() {
+  const a = document.createElement("a")
+  a.href = "/manual.pdf"
+  a.download = "itinigo-manual.pdf"
+  a.click()
 }
 </script>

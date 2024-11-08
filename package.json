@@ -1,7 +1,7 @@
 {
-  "name": "itinisere",
+  "name": "itinigo",
   "private": true,
-  "version": "83.0.0-10309db",
+  "version": "84.0.0-2066395",
   "type": "module",
   "scripts": {
     "dev": "ionic serve --external",
