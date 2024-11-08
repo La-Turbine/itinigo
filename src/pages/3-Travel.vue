@@ -76,7 +76,7 @@ const current = computed(() => steps.value[currentStep.value - 1])
 const stops = ref([])
 const lat = ref(0)
 const lng = ref(0)
-// Notification.requestPermission()
+if ("Notification" in window) Notification.requestPermission()
 // TODO: retry on error
 navigator.geolocation.watchPosition(
   (position) => {

@@ -35,7 +35,7 @@
         <ion-label>LOCALISATION - {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
       <div style="height: 40px"></div>
-      <ion-item>
+      <ion-item button @click="window.location.reload()">
         <ion-label>
           VERSION:
           <b style="font-size: 125%">{{ version.split(".")[0] }}</b>
