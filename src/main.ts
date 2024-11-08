@@ -39,7 +39,7 @@ async function initApp() {
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => [...context.querySelectorAll(selector)]
   window.notify = async function(message, title) {
-    push(message, title)
+    await push(message, title)
     alert(message)
   }
   window.push = async (message, title = "Notification") => {
