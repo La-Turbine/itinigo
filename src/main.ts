@@ -38,8 +38,12 @@ async function initApp() {
   await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => [...context.querySelectorAll(selector)]
-  window.notify = async (message, title = "Notification") => {
-    const notification = { body: message, icon: "/favicon.svg", badge: "/favicon.svg", data: { url: location.href } }
+  window.notify = async function(message, title) {
+    push(message, title)
+    alert(message)
+  }
+  window.push = async (message, title = "Notification") => {
+    const notification = { body: message, icon: "/pwa-192x192.png", badge: "/pwa-192x192.png", data: { url: location.href } }
     const registration = await navigator.serviceWorker.getRegistration()
     if (registration?.showNotification) return registration.showNotification(title, notification)
     return new Notification(title, notification)
