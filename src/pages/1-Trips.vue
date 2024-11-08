@@ -4,8 +4,8 @@
       <ion-toolbar>
         <ion-title>Trajets</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="$state.mode = $state.mode === 'helper' ? 'user' : 'helper'">
-            <ion-icon :icon="$state.mode === 'helper' ? accessibility : walk"></ion-icon>
+          <ion-button @click="changeMode">
+            <ion-icon :icon="$state.mode === 'helper' ? settings : walk"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -31,8 +31,13 @@
 </template>
 
 <script setup lang="ts">
-import { accessibility, walk, add, trash } from "ionicons/icons"
+import { settings, walk, add, trash } from "ionicons/icons"
 function deleteTrip(index) {
+  if (!confirm("Voulez-vous vraiment supprimer ce trajet ?")) return
   $state.trips.splice(index, 1)
+}
+function changeMode() {
+  if ($state.mode === 'user' && !confirm("Voulez-vous passer en mode édition ?")) return
+  $state.mode = $state.mode === 'helper' ? 'user' : 'helper'
 }
 </script>

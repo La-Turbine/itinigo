@@ -32,8 +32,8 @@ async function initApp() {
     { mode: "user", trips: [], photos: {} }
   )
   const $state = reactive(db)
-  $state.photos.IN = "/img/IN.jpg"
-  $state.photos.OUT = "/img/OUT.jpg"
+  $state.photos.IN = "/img/IN.png"
+  $state.photos.OUT = "/img/OUT.png"
   watch($state, (next) => idb.set("$state", JSON.stringify({ ...next, photos: {} })), { flush: "pre", deep: true })
   await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
@@ -51,7 +51,7 @@ async function initApp() {
   // Return to home page after 2 hours of inactivity (same page)
   // Return to last page on refresh, when < 2 hours of inactivity
   router.afterEach((to) => ($state.route = { fullPath: to.fullPath, timestamp: Date.now() }))
-  if (Date.now() - $state.route.timestamp < 1000 * 60 * 60 * 2) router.push($state.route.fullPath)
+  if (Date.now() - $state.route?.timestamp < 1000 * 60 * 60 * 2) router.push($state.route.fullPath)
   else router.push("/")
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) return

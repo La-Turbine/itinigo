@@ -53,7 +53,7 @@
             </div>
             <div style="margin: auto 0; font-weight: 500; text-wrap: balance">Je continue mon trajet à pied avec Google maps.</div>
           </div>
-          <div style="display: flex; max-width: 28rem; padding: 20px; background-color: white; border-radius: 0.5rem; border: 1px solid rgba(0, 0, 0, 0.15); gap: 20px" @click="call">
+          <div style="display: flex; max-width: 28rem; padding: 20px; background-color: white; border-radius: 0.5rem; border: 1px solid rgba(0, 0, 0, 0.15); gap: 20px" @click="call" v-if="$state.phone">
             <div style="font-size: 50px">📞</div>
             <div style="margin: auto 0; font-weight: 500; text-wrap: balance">J’appelle un proche</div>
           </div>

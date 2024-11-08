@@ -162,6 +162,8 @@ function reorderPhoto(event) {
   event.detail.complete(currentSequence.value.photos)
 }
 function deletePhoto(index) {
+  if (!confirm("Voulez-vous vraiment supprimer cette photo ?")) return
+  delete $state.photos[currentSequence.value.photos[index].id]
   currentSequence.value.photos.splice(index, 1)
 }
 function clickPhoto(photo, input) {
@@ -230,7 +232,7 @@ const nexts = {
     const nodes = $("script", html)
       .innerText.split("#link_solutionPlanTrip")
       .slice(1, -1)
-      .flatMap((text) => JSON.parse(/\[[^\]]*\]/.exec(text)[0]))
+      .flatMap((text) => JSON.parse(/\[[^;]]*\]/.exec(text)[0])) // HACK: extract JSON array, it can also contain arrays for long trips so the non matching character is `;` instead of `]`
     const css = `<link href="https://static.PPP38v2.cityway.fr/Content/css/site-638562226680000000.css" rel="stylesheet" crossorigin="anonymous">
 <style>
 .JourneyPlanner { padding: 10px;height: 140px;overflow:hidden; }

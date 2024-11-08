@@ -58,6 +58,12 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
 
     // Create the asset and image shape
     const assetId = AssetRecordType.createId()
+    const disc = {
+      w: image.width * 0.5,
+      h: image.height * 0.15,
+      x: image.width * 0.25,
+      y: image.height * 0.83,
+    }
     editor.createAssets([
       {
         id: assetId,
@@ -104,12 +110,12 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     editor.createShape<TLImageShape>({
       id: "shape:disc",
       type: "image",
-      x: image.width / 2 - 150,
-      y: image.height - 150,
+      x: disc.x,
+      y: disc.y,
       isLocked: false,
       props: {
-        w: 300,
-        h: 150,
+        w: disc.w,
+        h: disc.h,
         assetId: "asset:disc",
       },
     })

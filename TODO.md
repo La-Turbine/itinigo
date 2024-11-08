@@ -1,15 +1,13 @@
-# Mon Itinigo
+# Itinigo
 
-- [ ] slide droite/gauche
-- [ ] Annotation conditionnelle + ajouter un picto + picto rond plein/rond vide
-- [ ] Ré-annoter
 - [ ] Comportement spécifique pour le BUS (appuie sur le bouton, notification avant)
-- [ ] Application en background (notification + gps)
-- [ ] Ré-ouvrir après kill
-- [ ] Timer 1h30 pour revenir à l'écran d'acceuil
-- [ ] BugFix Android Olivier (Notification)
 - [ ] BugFix Iphone (Notification)
+- [ ] BugFix Android Olivier (Notification)
+
+- [ ] Application en background (notification + gps)
 - [ ] SMS d'aide
+
+- [ ] Ré-annoter
 - [ ] Passation Code / Hébergement / Domain
 - ~~Geolocalisation, l'utilisateur s'éloigne~~
 - ~~Export PDF~~
@@ -19,6 +17,8 @@
 ## NOTES
 
 Pour le debug sur ANDROID, activé le "Developer Mode", activé le "USB Debugging" et autorisé lors de la connection USB. Puis aller dans "chrome://inspect/#devices".
+
+Pour démarrer le simulateur d'iphone: `open -a Simulator`
 
 Pour générer les icones: `npx @vite-pwa/assets-generator  --preset minimal-2023 public/favicon.svg`
 
