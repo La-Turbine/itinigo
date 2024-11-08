@@ -86,10 +86,10 @@ async function requestInstall() {
   installPrompt.prompt()
 }
 async function requestNotification() {
-  // const registration = await navigator.serviceWorker.ready
-  // if ("sync" in registration) (registration as any).sync.register("notify")
-  // if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
-  // return notify("Préparez-vous à recevoir des notifications")
+  const registration = await navigator.serviceWorker.ready
+  if ("sync" in registration) registration.sync.register("notify")
+  if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
+  return notify("Préparez-vous à recevoir des notifications")
 }
 async function requestLocalisation() {
   if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))

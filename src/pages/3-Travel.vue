@@ -196,7 +196,7 @@ function onTouchEnd(e) {
   if (diffX > 100) return $router.push({ query: { step: currentStep.value - 1 } })
   if (diffX < -100) return $router.push({ query: { step: currentStep.value + 1 } })
 }
-function adjust(ref: any) {
+function adjust(ref) {
   setTimeout(() => adjustFontSize(ref, 32))
 }
 function adjustFontSize(el: HTMLElement, size = +getComputedStyle(el).fontSize) {
