@@ -3,7 +3,10 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/"></ion-back-button>
+          <!-- <ion-back-button default-href="/"></ion-back-button> -->
+          <ion-button @click="back">
+            <ion-icon slot="icon-only" :icon="arrowBackOutline"></ion-icon>
+          </ion-button>
         </ion-buttons>
         <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from.text) }} - {{ homework(currentTrip.to.text) }}</div>
       </ion-toolbar>
@@ -31,12 +34,12 @@
       </div>
       <div style="display: flex; flex-direction: column; height: 100%" v-else-if="!current.stops">
         <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-          <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[current.id]" :style="cardStyle" />
+          <img style="max-width: 100%; max-height: 100%; object-fit: cover; user-select: none; pointer-events: none" :src="$state.photos[current.id]" :style="cardStyle" />
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
-        <div style="display: flex; flex: 1; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
+        <div style="display: flex; height: 20%; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
           <h2 style="margin: auto; text-align: center; text-wrap: balance; max-height: 140px" :ref="adjust">{{ current?.text }}</h2>
-          <ion-button style="position: absolute; top: 0; left: 0; background: white; border-radius: 4px" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+          <ion-button style="position: absolute; top: 0; left: 0; border-radius: 4px" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
           <ion-button style="font-size: 125%" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
         </div>
       </div>
@@ -60,14 +63,15 @@
           <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1rem; transform: translateY(-50%); border-radius: 9999px; background-color: #93c5fd" :style="progress"></div>
         </div>
         <pre>{{ progress }}</pre>
-        <ion-button style="position: absolute; top: 0; background: white; border-radius: 4px" fill="outline" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
-        <ion-button style="position: absolute; top: 0; right: 0; background: white; border-radius: 4px" fill="outline" @click="$router.push({ query: { step: currentStep + 1 } })">SUIVANT</ion-button>
+        <ion-button style="position: absolute; top: 0; border-radius: 4px" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+        <ion-button style="position: absolute; top: 0; right: 0; border-radius: 4px" color="light" @click="$router.push({ query: { step: currentStep + 1 } })">SUIVANT</ion-button>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
+import { arrowBackOutline } from "ionicons/icons"
 import { ref, computed, watch } from "vue"
 const currentTrip = $state.trips[$route.params.id - 1] || {}
 const currentStep = computed(() => +($route.query.step || 0))
@@ -130,7 +134,7 @@ watch(
     if (number !== stops.value.length - 2) return
     watch(
       () => progress.value.percentage < 0.15,
-      () => notify("Préparez-vous à descendre, quand les portes s'ouvriront"),
+      () => notify("Préparez-vous à descendre quand les portes s'ouvriront"),
       { once: true }
     )
     watch(
@@ -198,11 +202,16 @@ function onTouchEnd(e) {
 }
 function adjust(ref) {
   setTimeout(() => adjustFontSize(ref, 32))
+  setTimeout(() => adjustFontSize(ref, 32), 200)
 }
 function adjustFontSize(el: HTMLElement, size = +getComputedStyle(el).fontSize) {
   if (!el) return
   el.style.fontSize = `${size}px`
   while (el.scrollHeight > el.offsetHeight || el.scrollWidth > el.offsetWidth) el.style.fontSize = `${--size}px`
+}
+function back() {
+  if (!confirm("Êtes-vous sûr de vouloir quitter le guidage ?")) return
+  $router.push("/")
 }
 </script>
 

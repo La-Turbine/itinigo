@@ -1,9 +1,12 @@
 # Itinigo
 
+- [x] BugFix Iphone (Notification)
+- [x] BugFix Android Olivier (Notification)
 - [ ] Comportement spécifique pour le BUS (appuie sur le bouton, notification avant)
-- [ ] BugFix Iphone (Notification)
-- [ ] BugFix Android Olivier (Notification)
-
+      [ ] Textes différents
+      [ ] Photos différentes
+      [ ] Notifications déclenchement après l'avant dernier arrêt pour le bus
+      [ ] Etapes différentes, appuyer sur le bouton et valider après la montée
 - [ ] Application en background (notification + gps)
 - [ ] SMS d'aide
 
