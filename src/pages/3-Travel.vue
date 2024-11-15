@@ -34,7 +34,7 @@
       </div>
       <div style="display: flex; flex-direction: column; height: 100%" v-else-if="!current.stops">
         <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-          <img style="max-width: 100%; max-height: 100%; object-fit: cover; user-select: none; pointer-events: none" :src="$state.photos[current.id]" :style="cardStyle" />
+          <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[current.id]" :style="cardStyle" />
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
         <div style="display: flex; height: 20%; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
@@ -134,7 +134,7 @@ watch(
     if (number !== stops.value.length - 2) return
     watch(
       () => progress.value.percentage < 0.15,
-      () => notify("Préparez-vous à descendre quand les portes s'ouvriront"),
+      () => notify("Préparez-vous à descendre quand les portes s'ouvriront", "Préparez-vous à descendre"),
       { once: true }
     )
     watch(

@@ -38,20 +38,21 @@ async function initApp() {
   await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => [...context.querySelectorAll(selector)]
-  window.notify = async function (message) {
-    await push(message)
+  window.notify = async function (message, title) {
+    await push(message, title)
     alert(message)
   }
-  window.push = async (message = "") => {
+  window.push = async (message, title) => {
+    title = title || message
     const notification = {
+      body: message,
       icon: "/pwa-192x192.png",
-      image: "/pwa-192x192.png",
-      badge: "/pwa-64x64.png",
+      badge: "https://itinigo.vercel.app/pwa-64x64.png",
       data: { url: location.href },
     }
     const registration = await navigator.serviceWorker.getRegistration()
-    if (registration?.showNotification) return registration.showNotification(message, notification)
-    return new Notification(message, notification)
+    if (registration?.showNotification) return registration.showNotification(title, notification)
+    return new Notification(title, notification)
   }
   window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
