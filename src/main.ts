@@ -44,11 +44,9 @@ async function initApp() {
   }
   window.push = async (message = "") => {
     const notification = {
-      // body: message,
       icon: "/pwa-192x192.png",
-      // badge: "/pwa-192x192.png",
-      vibrate: [200, 100, 200, 100, 200, 100, 200],
-      tag: "vibration-sample",
+      image: "/pwa-192x192.png",
+      badge: "/pwa-64x64.png",
       data: { url: location.href },
     }
     const registration = await navigator.serviceWorker.getRegistration()
