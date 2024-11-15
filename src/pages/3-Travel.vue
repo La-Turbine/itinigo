@@ -12,7 +12,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <div style="display: flex; flex-direction: column; justify-content: space-around; height: 100%; padding: 20px" v-if="!current">
+      <div style="display: flex; flex-direction: column; justify-content: space-around; padding: 20px; height: 100%; overflow: hidden" v-if="!current">
         <div>
           <div style="font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 20px">Mon itinéraire</div>
           <card style="margin: 0" :trip="currentTrip" />
@@ -32,19 +32,26 @@
         </div>
         <ion-button style="height: 80px; font-size: 1.4rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>
       </div>
-      <div style="display: flex; flex-direction: column; height: 100%" v-else-if="!current.stops">
+      <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden" v-else-if="!current.stops">
         <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
           <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[current.id]" :style="cardStyle" />
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
         <div style="display: flex; height: 20%; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
-          <h2 style="margin: auto; text-align: center; text-wrap: balance; max-height: 140px" :ref="adjust">{{ current?.text }}</h2>
+          <h2 style="margin: auto; text-align: center; text-wrap: balance; max-height: 100%" :ref="adjust">{{ current?.text }}</h2>
           <ion-button style="position: absolute; top: 0; left: 0; border-radius: 4px" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
           <ion-button style="font-size: 125%" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
+          <ion-button style="font-size: 125%" @click="$router.push('/')" color="warning" v-if="currentStep === steps.length">
+            RETOUR
+            <br />
+            AUX
+            <br />
+            TRAJETS
+          </ion-button>
         </div>
       </div>
       <!-- https://play.tailwindcss.com/90GckuhEBW -->
-      <div style="height: 100%; width: 100vw; overflow-x: auto" v-else>
+      <div style="height: 100%; width: 100vw; overflow-x: auto; overflow-y: hidden" v-else>
         <div style="position: relative; display: flex; min-width: fit-content; align-items: center; justify-content: space-between; margin: 4rem">
           <div
             style="z-index: 10; margin: 4rem; height: 1rem; width: 1rem; display: flex; align-items: center; justify-content: center; border-radius: 9999px; background-color: white"
@@ -198,6 +205,7 @@ function onTouchEnd(e) {
   const touchEndX = e.changedTouches[0].clientX
   const diffX = touchEndX - touchStartX.value
   if (diffX > 100) return $router.push({ query: { step: currentStep.value - 1 } })
+  if (diffX < -100 && currentStep.value === steps.length) return $router.push("/")
   if (diffX < -100) return $router.push({ query: { step: currentStep.value + 1 } })
 }
 function adjust(ref) {

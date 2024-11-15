@@ -47,7 +47,7 @@ async function initApp() {
     const notification = {
       body: message,
       icon: "/pwa-192x192.png",
-      badge: "https://itinigo.vercel.app/pwa-64x64.png",
+      badge: "/pwa-192x192.png",
       data: { url: location.href },
     }
     const registration = await navigator.serviceWorker.getRegistration()
