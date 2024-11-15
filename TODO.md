@@ -3,10 +3,16 @@
 - [x] BugFix Iphone (Notification)
 - [x] BugFix Android Olivier (Notification)
 - [x] Comportement spécifique pour le BUS (appuie sur le bouton, notification avant)
-      [ ] BONUS: photo du bouton valider (pareil pour le tram)
+- [x] SMS d'aide
 - [ ] Application en background (notification + gps)
-- [ ] SMS d'aide
 
+BONUS:
+
+- [ ] photo bus + bouton valider tram/bus
+- [ ] mettre automatiquement les photos montée / descendre
+- [ ] mettre automatiquement la dernière étapes "Bravo, vous êtes arrivée à destination !"
+- [ ] afficher la flèche de direction
+- [ ] ne pas pouvoir mettre du texte dans une flèche
 - [ ] Ré-annoter
 - [ ] Passation du Code / Hébergement / Domain
 - ~~Geolocalisation, l'utilisateur s'éloigne~~

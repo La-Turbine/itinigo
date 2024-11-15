@@ -56,6 +56,22 @@ async function initApp() {
     if (registration?.showNotification) return registration.showNotification(title, notification)
     return new Notification(title, notification)
   }
+  window.sms = async (message, number) => {
+    if (!number) return alert("Please enter a valid phone number")
+    if (!message) return alert("Please enter a message")
+    const TWILIO_ACCOUNT_SID = ""
+    const TWILIO_AUTH_TOKEN = ""
+    const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`, {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${btoa(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`)}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({ To: number, From: "+14696091036", Body: message }),
+    })
+    if (!response.ok) throw new Error(await response.text())
+    return response.json()
+  }
   window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
   app.config.globalProperties.window = window

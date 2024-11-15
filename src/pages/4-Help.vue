@@ -53,7 +53,11 @@
             </div>
             <div style="margin: auto 0; font-weight: 500; text-wrap: balance">Je continue mon trajet à pied avec Google maps.</div>
           </div>
-          <div style="display: flex; max-width: 28rem; padding: 20px; background-color: white; border-radius: 0.5rem; border: 1px solid rgba(0, 0, 0, 0.15); gap: 20px" @click="call" v-if="$state.phone">
+          <div
+            style="display: flex; max-width: 28rem; padding: 20px; background-color: white; border-radius: 0.5rem; border: 1px solid rgba(0, 0, 0, 0.15); gap: 20px"
+            @click="call"
+            v-if="$state.phone"
+          >
             <div style="font-size: 50px">📞</div>
             <div style="margin: auto 0; font-weight: 500; text-wrap: balance">J’appelle un proche</div>
           </div>
@@ -84,7 +88,17 @@ function map() {
     window.location.href = `https://www.google.com/maps/dir/?api=1&origin=${from}&destination=${to}&travelmode=walking`
   }
 }
-function call() {
-  window.location.href = "tel:+33" + $state.phone?.slice(1)
+async function call() {
+  const phone = `+33${$state.phone!.replace(/^(0|\+33)/, "")}`
+  const destination = travel.value.to.text
+  navigator.geolocation.getCurrentPosition(goto, (err) => goto())
+  async function goto(position) {
+    if (position) {
+      const from = position.coords.latitude + "," + position.coords.longitude
+      const map = `https://www.google.com/maps?q=${from}`
+      await sms(`Bonjour, je suis en difficulté, je suis ici: ${map} et je cherche à me rendre ici: ${destination}`, phone)
+    } else await sms(`Bonjour, je suis en difficulté, je cherche à me rendre ici: ${destination}`, phone)
+    window.location.href = `tel:${phone}`
+  }
 }
 </script>
