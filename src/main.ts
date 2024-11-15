@@ -32,8 +32,10 @@ async function initApp() {
     { mode: "user", trips: [], photos: {} }
   )
   const $state = reactive(db)
-  $state.photos.IN = "/img/IN.png"
-  $state.photos.OUT = "/img/OUT.png"
+  $state.photos.INBUS = "/img/INBUS.png"
+  $state.photos.OUTBUS = "/img/OUTBUS.png"
+  $state.photos.INTRAM = "/img/INTRAM.png"
+  $state.photos.OUTTRAM = "/img/OUTTRAM.png"
   watch($state, (next) => idb.set("$state", JSON.stringify({ ...next, photos: {} })), { flush: "pre", deep: true })
   await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)

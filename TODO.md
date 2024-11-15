@@ -2,16 +2,13 @@
 
 - [x] BugFix Iphone (Notification)
 - [x] BugFix Android Olivier (Notification)
-- [ ] Comportement spécifique pour le BUS (appuie sur le bouton, notification avant)
-      [ ] Textes différents
-      [ ] Photos différentes
-      [ ] Notifications déclenchement après l'avant dernier arrêt pour le bus
-      [ ] Etapes différentes, appuyer sur le bouton et valider après la montée
+- [x] Comportement spécifique pour le BUS (appuie sur le bouton, notification avant)
+      [ ] BONUS: photo du bouton valider (pareil pour le tram)
 - [ ] Application en background (notification + gps)
 - [ ] SMS d'aide
 
 - [ ] Ré-annoter
-- [ ] Passation Code / Hébergement / Domain
+- [ ] Passation du Code / Hébergement / Domain
 - ~~Geolocalisation, l'utilisateur s'éloigne~~
 - ~~Export PDF~~
 - ~~Mode offline~~

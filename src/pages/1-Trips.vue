@@ -18,7 +18,7 @@
           </ion-button>
           <card style="margin: 20px" :trip="trip" @click="$router.push($state.mode === 'helper' ? `/trip/${i + 1}?step=3` : `/travel/${i + 1}`)" />
         </div>
-        <ion-item @click="$router.push(`/trip/${$state.trips.length + 1}`)" v-if="$state.mode === 'helper'">
+        <ion-item @click="add" v-if="$state.mode === 'helper'">
           <ion-icon :icon="add"></ion-icon>
           <ion-label>Ajouter un trajet</ion-label>
         </ion-item>
@@ -39,5 +39,9 @@ function deleteTrip(index) {
 function changeMode() {
   if ($state.mode === 'user' && !confirm("Voulez-vous passer en mode édition ?")) return
   $state.mode = $state.mode === 'helper' ? 'user' : 'helper'
+}
+function add() {
+  if (navigator.onLine === false) return alert("Vous devez être connecté à internet pour ajouter un trajet")
+  $router.push(`/trip/${$state.trips.length + 1}`)
 }
 </script>

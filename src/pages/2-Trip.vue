@@ -51,9 +51,34 @@
           <ion-list-header>{{ currentSequence.transport }}</ion-list-header>
           <ion-item>
             <div style="display: flex; gap: 8px; margin: auto; max-width: fit-content">
-              <img :src="`/img/${i}.svg`" @click="currentSequence.photos.push({ type: i, text: texts[i - 1] })" v-for="i in 5" v-if="currentSequence.transport.includes(`Je marche`)" />
-              <img :src="`/img/${i + 5}.svg`" @click="currentSequence.photos.push({ type: i + 5, text: texts[i + 4] })" v-for="i in 5" v-else-if="currentSequence.transport.includes(`J'attend`)" />
-              <img :src="`/img/${i + 11}.svg`" @click="currentSequence.photos.push({ type: i + 11, text: texts[i + 10], id })" v-for="(id, i) in ['IN', 'OUT']" v-else />
+              <img
+                :src="`/img/${i}.svg`"
+                @click="currentSequence.photos.push({ type: i, text: texts[i - 1].replace('tram/bus', currentSequence.type) })"
+                v-for="i in 5"
+                v-if="currentSequence.transport.startsWith(`Je marche`)"
+              />
+              <img
+                :src="`/img/${i + 5}.svg`"
+                :style="i === 3 && currentSequence.type.startsWith(`Bus`) && 'display: none'"
+                @click="currentSequence.photos.push({ type: i + 5, text: texts[i + 4].replace('tram/bus', currentSequence.type) })"
+                v-for="i in 5"
+                v-if="currentSequence.transport.startsWith(`J'attend`)"
+              />
+              <img
+                :src="`/img/11.svg`"
+                @click="currentSequence.photos.push({ type: 11, text: texts[10].replace('tram/bus', currentSequence.type), id: currentSequence.type.startsWith(`Bus`) ? 'INBUS' : 'INTRAM' })"
+                v-if="currentSequence.transport.startsWith(`Je monte`)"
+              />
+              <img
+                :src="`/img/${3 + 5}.svg`"
+                @click="currentSequence.photos.push({ type: 3 + 5, text: texts[3 + 4].replace('tram/bus', currentSequence.type) })"
+                v-if="currentSequence.transport.startsWith(`Je monte`) && currentSequence.type.startsWith(`Bus`)"
+              />
+              <img
+                :src="`/img/12.svg`"
+                @click="currentSequence.photos.push({ type: 12, text: texts[11].replace('tram/bus', currentSequence.type), id: currentSequence.type.startsWith(`Bus`) ? 'OUTBUS' : 'OUTTRAM' })"
+                v-if="currentSequence.transport.startsWith(`Je monte`)"
+              />
             </div>
           </ion-item>
           <ion-list>
@@ -254,9 +279,10 @@ const nexts = {
         const after = extract($(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim())
         const stops = [before, ...intermediary, after].filter((v) => v)
         const type = el.innerText.length === 1 ? `Tram ${el.innerText}` : `Bus ${el.innerText}`
-        sequence.push({ transport: `Je marche vers l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })
-        sequence.push({ transport: `J'attends à l'arrêt n°${i + 1} ${stops[0].text}`, photos: [] })
-        sequence.push({ transport: `Je monte dans le ${type}`, type, stops, photos: [] })
+        const num = i + 1
+        sequence.push({ transport: `Je marche vers l'arrêt n°${num} ${stops[0].text}`, num, type, photos: [] })
+        sequence.push({ transport: `J'attends à l'arrêt n°${num} ${stops[0].text}`, num, type, photos: [] })
+        sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, photos: [] })
       })
       sequence.push({ transport: `Je marche vers ma destination`, photos: [] })
       return sequence

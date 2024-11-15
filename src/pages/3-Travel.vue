@@ -82,7 +82,7 @@ import { arrowBackOutline } from "ionicons/icons"
 import { ref, computed, watch } from "vue"
 const currentTrip = $state.trips[$route.params.id - 1] || {}
 const currentStep = computed(() => +($route.query.step || 0))
-const steps = computed(() => currentTrip.sequences.flatMap((v) => (v.stops ? [v.photos[0], v, v.photos[1]].filter((v) => v) : v.photos)).filter((v) => v.stops || v.text))
+const steps = computed(() => currentTrip.sequences.flatMap((v) => (v.stops ? [...v.photos.slice(0, -1), v, v.photos.at(-1)] : v.photos)).filter((v) => v.stops || v.text))
 const current = computed(() => steps.value[currentStep.value - 1])
 const stops = ref([])
 const lat = ref(0)
@@ -141,7 +141,10 @@ watch(
     if (number !== stops.value.length - 2) return
     watch(
       () => progress.value.percentage < 0.15,
-      () => notify("Préparez-vous à descendre quand les portes s'ouvriront", "Préparez-vous à descendre"),
+      () => {
+        if (current.value.type.startsWith("Bus")) return notify("Appuyez sur le bouton pour demander l'arrêt et préparez-vous à descendre au prochain arrêt", "Appuyez sur le bouton")
+        return notify("Préparez-vous à descendre quand les portes s'ouvriront", "Préparez-vous à descendre")
+      },
       { once: true }
     )
     watch(
