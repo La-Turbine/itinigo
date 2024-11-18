@@ -74,8 +74,8 @@
 <script setup lang="ts">
 import { computed } from "vue"
 const travel = computed(() => $state.trips[$route.query.travel - 1])
-const first = computed(() => travel.value.sequences.find((v) => v.type))
-const last = computed(() => travel.value.sequences.findLast((v) => v.type))
+const first = computed(() => travel.value.sequences.find((v) => v.stops))
+const last = computed(() => travel.value.sequences.findLast((v) => v.stops))
 function help() {
   $router.push(`/help?travel=${$route.query.travel}&mode=card`)
 }
@@ -96,8 +96,9 @@ async function call() {
     if (position) {
       const from = position.coords.latitude + "," + position.coords.longitude
       const map = `https://www.google.com/maps?q=${from}`
-      await sms(`Bonjour, je suis en difficulté, je suis ici: ${map} et je cherche à me rendre ici: ${destination}`, phone)
-    } else await sms(`Bonjour, je suis en difficulté, je cherche à me rendre ici: ${destination}`, phone)
+      // not awaiting for sms to be sent
+      sms(`Bonjour, je suis en difficulté, je suis ici: ${map} et je cherche à me rendre ici: ${destination}`, phone)
+    } else sms(`Bonjour, je suis en difficulté, je cherche à me rendre ici: ${destination}`, phone)
     window.location.href = `tel:${phone}`
   }
 }
