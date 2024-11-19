@@ -106,21 +106,21 @@ navigator.geolocation.watchPosition(
 const timer = ref(0)
 setInterval(() => timer.value++, 20)
 watch(() => current.value, () => (timer.value = 0)) // prettier-ignore
-// WIP
-let wakeLock = null
-async function requestWakeLock() {
-  try {
-    wakeLock = await navigator.wakeLock.request("screen")
-    wakeLock.addEventListener("release", () => console.log("Wake Lock was released"))
-    console.log("Wake Lock is active")
-  } catch (err) {
-    console.error(`${err.name}, ${err.message}`)
-  }
-}
-document.addEventListener("visibilitychange", () => {
-  if (wakeLock !== null && document.visibilityState === "visible") requestWakeLock()
-})
-requestWakeLock()
+// // WIP
+// let wakeLock = null
+// async function requestWakeLock() {
+//   try {
+//     wakeLock = await navigator.wakeLock.request("screen")
+//     wakeLock.addEventListener("release", () => console.log("Wake Lock was released"))
+//     console.log("Wake Lock is active")
+//   } catch (err) {
+//     console.error(`${err.name}, ${err.message}`)
+//   }
+// }
+// document.addEventListener("visibilitychange", () => {
+//   if (wakeLock !== null && document.visibilityState === "visible") requestWakeLock()
+// })
+// requestWakeLock()
 const progress = computed(() => {
   // HACK
   if ($state.fake) {
@@ -155,6 +155,7 @@ watch(
   }
 )
 async function confetti() {
+  if (currentStep.value !== steps.value.length) return
   const confetti = await import("https://esm.sh/canvas-confetti")
   confetti.default({ particleCount: 500, spread: 100, origin: { y: 0.5 } })
 }
