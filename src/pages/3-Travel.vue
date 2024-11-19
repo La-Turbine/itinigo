@@ -80,9 +80,9 @@
 <script setup lang="ts">
 import { arrowBackOutline } from "ionicons/icons"
 import { ref, computed, watch } from "vue"
-const currentTrip = $state.trips[$route.params.id - 1] || {}
+const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 0))
-const steps = computed(() => currentTrip.sequences.flatMap((v) => (v.stops ? [...v.photos.slice(0, -1), v, v.photos.at(-1)] : v.photos)).filter((v) => v.stops || v.text))
+const steps = computed(() => currentTrip.value.sequences.flatMap((v) => (v.stops ? [...v.photos.slice(0, -1), v, v.photos.at(-1)] : v.photos)).filter((v) => v.stops || v.text))
 const current = computed(() => steps.value[currentStep.value - 1])
 const stops = ref([])
 const lat = ref(0)
@@ -155,7 +155,6 @@ watch(
   }
 )
 async function confetti() {
-  if (currentStep.value !== steps.value.length) return
   const confetti = await import("https://esm.sh/canvas-confetti")
   confetti.default({ particleCount: 500, spread: 100, origin: { y: 0.5 } })
 }
