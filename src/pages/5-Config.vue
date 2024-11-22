@@ -48,8 +48,8 @@
       <ion-item button @click="onExport">
         <ion-label>EXPORT</ion-label>
       </ion-item>
-      <ion-item button>
-        <ion-input label="IMPORT" type="file" accept=".json" @change="onImport"></ion-input>
+      <ion-item button @click="onImport">
+        <ion-label>IMPORT</ion-label>
       </ion-item>
       <ion-item button color="danger" @click="reset">
         <ion-label>RESET</ion-label>
@@ -106,15 +106,23 @@ async function onExport() {
   a.download = `itinigo-${new Date().toISOString().slice(0, 10)}.json`
   a.click()
 }
-async function onImport(e) {
-  const file = e.target.files[0]
-  const reader = new FileReader()
-  reader.onload = () =>
-    Object.entries(JSON.parse(reader.result)).forEach(([key, value]) => {
-      if (key === "photos") idb.clear().then(() => Object.entries(value).forEach(([key, value]) => idb.set(key, value)))
-      $state[key] = value
-    })
-  reader.readAsText(file)
+async function onImport() {
+  const input = document.createElement("input")
+  input.type = "file"
+  input.accept = ".json"
+  input.onchange = async () => {
+    const file = input.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      Object.entries(JSON.parse(reader.result)).forEach(([key, value]) => {
+        if (key === "photos") idb.clear().then(() => Object.entries(value).forEach(([key, value]) => idb.set(key, value)))
+        $state[key] = value
+      })
+    }
+    reader.readAsText(file)
+  }
+  input.click()
 }
 async function reset() {
   if (!confirm("Êtes-vous sûr de vouloir réinitialiser l'application ?")) return

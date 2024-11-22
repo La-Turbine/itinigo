@@ -3,10 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <!-- <ion-back-button default-href="/"></ion-back-button> -->
-          <ion-button @click="back">
-            <ion-icon slot="icon-only" :icon="arrowBackOutline"></ion-icon>
-          </ion-button>
+          <ion-back-button default-href="/" @pointerdown.prevent="back"></ion-back-button>
         </ion-buttons>
         <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from?.text ?? "") }} - {{ homework(currentTrip.to?.text ?? "") }}</div>
       </ion-toolbar>
@@ -78,7 +75,6 @@
 </template>
 
 <script setup lang="ts">
-import { arrowBackOutline } from "ionicons/icons"
 import { ref, computed, watch } from "vue"
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 0))
@@ -95,7 +91,10 @@ navigator.geolocation.watchPosition(
     lat.value = latitude
     lng.value = longitude
   },
-  (error) => console.error(`Error: ${error.message}`),
+  (error) => {
+    // alert("Erreur de géolocalisation, veuillez réessayer")
+    console.error(error)
+  },
   {
     enableHighAccuracy: true, // Use GPS if available
     timeout: 5000, // Maximum time to wait for a response (in ms)
@@ -106,6 +105,7 @@ navigator.geolocation.watchPosition(
 const timer = ref(0)
 setInterval(() => timer.value++, 20)
 watch(() => current.value, () => (timer.value = 0)) // prettier-ignore
+// TODO: For Android: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/periodicSync
 // // WIP
 // let wakeLock = null
 // async function requestWakeLock() {
