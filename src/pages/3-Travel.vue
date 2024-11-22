@@ -38,10 +38,10 @@
           <img style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>
         <div style="display: flex; height: 20%; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)">
-          <h2 style="margin: auto; text-align: center; text-wrap: balance; max-height: 100%" :ref="adjust">{{ current?.text }}</h2>
+          <h2 style="margin: auto; text-align: center; text-wrap: balance; max-height: 100%; white-space: pre-line" :ref="adjust">{{ current?.text }}</h2>
           <ion-button style="position: absolute; top: 0; left: 0; border-radius: 4px" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
           <ion-button style="font-size: 125%" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
-          <ion-button style="font-size: 125%" @click="$router.push('/')" color="warning" v-if="currentStep === steps.length">
+          <ion-button style="font-size: 125%" @click="$router.push('/')" v-if="currentStep === steps.length">
             RETOUR
             <br />
             AUX
@@ -142,8 +142,8 @@ watch(
     watch(
       () => progress.value.percentage < 0.15,
       () => {
-        if (current.value.type.startsWith("Bus")) return notify("Appuyez sur le bouton pour demander l'arrêt et préparez-vous à descendre au prochain arrêt", "Appuyez sur le bouton")
-        return notify("Préparez-vous à descendre quand les portes s'ouvriront", "Préparez-vous à descendre")
+        if (current.value.type.startsWith("Bus")) return notify("Appuyez sur le bouton pour demander l'arrêt.\nPréparez-vous à descendre au prochain arrêt", "Appuyez sur le bouton")
+        return notify("Préparez-vous à descendre quand les portes s'ouvriront.", "Préparez-vous à descendre")
       },
       { once: true }
     )

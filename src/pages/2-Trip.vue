@@ -66,7 +66,7 @@
               />
               <img
                 :src="`/img/11.svg`"
-                @click="currentSequence.photos.push({ type: 11, text: texts[10].replace('tram/bus', currentSequence.type), id: currentSequence.type.startsWith(`Bus`) ? 'INBUS' : 'INTRAM' })"
+                @click="currentSequence.photos.push({ type: 11, text: texts[10].replace('tram/bus', currentSequence.type), id: currentSequence.type.startsWith(`Bus`) ? 'BUSIN' : 'TRAMIN' })"
                 v-if="currentSequence.transport.startsWith(`Je monte`)"
               />
               <img
@@ -76,7 +76,7 @@
               />
               <img
                 :src="`/img/12.svg`"
-                @click="currentSequence.photos.push({ type: 12, text: texts[11].replace('tram/bus', currentSequence.type), id: currentSequence.type.startsWith(`Bus`) ? 'OUTBUS' : 'OUTTRAM' })"
+                @click="currentSequence.photos.push({ type: 12, text: texts[11].replace('tram/bus', currentSequence.type), id: currentSequence.type.startsWith(`Bus`) ? 'BUSOUT' : 'TRAMOUT' })"
                 v-if="currentSequence.transport.startsWith(`Je monte`)"
               />
             </div>
@@ -258,7 +258,7 @@ const nexts = {
       .innerText.split("#link_solutionPlanTrip")
       .slice(1, -1)
       .flatMap((text) => JSON.parse(/\[[^;]]*\]/.exec(text)[0])) // HACK: extract JSON array, it can also contain arrays for long trips so the non matching character is `;` instead of `]`
-    const css = `<link href="https://static.PPP38v2.cityway.fr/Content/css/site-638562226680000000.css" rel="stylesheet" crossorigin="anonymous">
+    const css = `<link href="https://static.PPP38v2.cityway.fr/Content/css/site-638672790640000000.css" rel="stylesheet" crossorigin="anonymous">
 <style>
 .JourneyPlanner { padding: 10px;height: 140px;overflow:hidden; }
 .JourneyPlanner .trip-solutions .link-detail .type-trip { position: absolute;bottom: 5px; }
@@ -279,12 +279,21 @@ const nexts = {
         const after = extract($(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim())
         const stops = [before, ...intermediary, after].filter((v) => v)
         const type = el.innerText.length === 1 ? `Tram ${el.innerText}` : `Bus ${el.innerText}`
+        const tram = [
+          { type: 11, text: `Montez dans le ${type}`, id: "TRAMIN" },
+          { type: 12, text: `Descendez du ${type}`, id: "TRAMOUT" },
+        ]
+        const bus = [
+          { type: 11, text: `Montez dans le ${type}`, id: "BUSIN" },
+          { type: 8, text: "Validez votre ticket", id: "BUSVALID" },
+          { type: 12, text: `Descendez du ${type}`, id: "BUSOUT" },
+        ]
         const num = i + 1
         sequence.push({ transport: `Je marche vers l'arrêt n°${num} ${stops[0].text}`, num, type, photos: [] })
         sequence.push({ transport: `J'attends à l'arrêt n°${num} ${stops[0].text}`, num, type, photos: [] })
-        sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, photos: [] })
+        sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, photos: el.innerText.length === 1 ? tram : bus })
       })
-      sequence.push({ transport: `Je marche vers ma destination`, photos: [] })
+      sequence.push({ transport: `Je marche vers ma destination`, photos: [{ type: 2, text: "Vous êtes arrivé !" }] })
       return sequence
     })
     $router.push({ query: { step: currentStep.value + 1 } })

@@ -117,7 +117,7 @@ async function onImport(e) {
   reader.readAsText(file)
 }
 async function reset() {
-  if (!confirm("Are you sure you want to reset?")) return
+  if (!confirm("Êtes-vous sûr de vouloir réinitialiser l'application ?")) return
   await idb.clear()
   location.href = "/"
 }
