@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @pointerdown.prevent="back"></ion-back-button>
+          <ion-back-button default-href="/" @pointerdown="back" @click.stop></ion-back-button>
         </ion-buttons>
         <ion-title v-if="currentStep === 1">Trajet {{ $route.params.id }} - Saisie Itinéraire</ion-title>
         <ion-title v-if="currentStep === 2">Trajet {{ $route.params.id }} - Choix Itinéraire</ion-title>
@@ -20,6 +20,9 @@
           <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'from'">{{ item.text }}</ion-item>
           <ion-item>
             <ion-input label="Arrivée" :value="state.to.text" @ionInput="onSearch" @ionFocus="onFocus('to')" @ionBlur="onBlur('to')" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input label="Date" v-model="state.date" type="datetime-local"></ion-input>
           </ion-item>
           <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'to'">{{ item.text }}</ion-item>
         </ion-list>
@@ -133,6 +136,7 @@ const currentSequence = computed(() => state.sequences[state.choice][state.seque
 const state = reactive({
   from: { text: currentTrip.from || "" },
   to: { text: currentTrip.to || "" },
+  date: new Date().toISOString().slice(0, 16),
   choices: [],
   choice: 0,
   sequences: currentTrip.sequences ? [currentTrip.sequences] : [],
@@ -236,9 +240,9 @@ const nexts = {
       PointArr: ["Id", "PointType", "Number"].map((k) => state.to[k]).filter((v) => v).join("_"), // prettier-ignore
       LatArr: state.to.Latitude,
       LngArr: state.to.Longitude,
-      Date: new Date().toLocaleDateString("en-GB"),
-      Hour: new Date().getHours(),
-      Minute: new Date().getMinutes(),
+      Date: new Date(state.date).toLocaleDateString("en-GB"),
+      Hour: new Date(state.date).getHours(),
+      Minute: new Date(state.date).getMinutes(),
       IgnoreDisruptions: true, // default to false
       WalkDistance: 2000,
       WalkSpeed: 4,

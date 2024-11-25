@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @pointerdown.prevent="back"></ion-back-button>
+          <ion-back-button default-href="/" @pointerdown="back" @click.stop></ion-back-button>
         </ion-buttons>
         <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from?.text ?? "") }} - {{ homework(currentTrip.to?.text ?? "") }}</div>
       </ion-toolbar>
@@ -66,7 +66,6 @@
           <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1rem; transform: translateY(-50%); border-radius: 9999px; background-color: #d1d5db"></div>
           <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1rem; transform: translateY(-50%); border-radius: 9999px; background-color: #93c5fd" :style="progress"></div>
         </div>
-        <pre>{{ progress }}</pre>
         <ion-button style="position: absolute; top: 0; border-radius: 4px" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
         <ion-button style="position: absolute; top: 0; right: 0; border-radius: 4px" color="light" @click="$router.push({ query: { step: currentStep + 1 } })">SUIVANT</ion-button>
       </div>
