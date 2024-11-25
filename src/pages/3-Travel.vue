@@ -3,9 +3,12 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @pointerdown="back" @click.stop></ion-back-button>
+          <ion-back-button default-href="/" @click.stop="back"></ion-back-button>
         </ion-buttons>
         <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from?.text ?? "") }} - {{ homework(currentTrip.to?.text ?? "") }}</div>
+        <ion-buttons slot="end">
+          <ion-button @click="checkLoc" color="danger" v-if="!gps"><ion-icon :icon="locate"></ion-icon></ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -74,6 +77,7 @@
 </template>
 
 <script setup lang="ts">
+import { locate } from "ionicons/icons"
 import { ref, computed, watch } from "vue"
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 0))
@@ -82,24 +86,45 @@ const current = computed(() => steps.value[currentStep.value - 1])
 const stops = ref([])
 const lat = ref(0)
 const lng = ref(0)
+const gps = ref(false)
 if ("Notification" in window) Notification.requestPermission()
-// TODO: retry on error
-navigator.geolocation.watchPosition(
-  (position) => {
-    const { latitude, longitude } = position.coords
-    lat.value = latitude
-    lng.value = longitude
-  },
-  (error) => {
-    // alert("Erreur de géolocalisation, veuillez réessayer")
-    console.error(error)
-  },
-  {
-    enableHighAccuracy: true, // Use GPS if available
-    timeout: 5000, // Maximum time to wait for a response (in ms)
-    maximumAge: 0, // Don't use cached position
-  }
-)
+checkLoc()
+function checkLoc() {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      gps.value = true
+      watchLoc()
+    },
+    (error) => {
+      gps.value = false
+      alert("Veuillez activer la localisation pour continuer.")
+    },
+    {
+      enableHighAccuracy: true, // Use GPS if available
+      timeout: 100, // Maximum time to wait for a response (in ms)
+      maximumAge: 0, // Don't use cached position
+    }
+  )
+}
+function watchLoc() {
+  navigator.geolocation.watchPosition(
+    (position) => {
+      gps.value = true
+      const { latitude, longitude } = position.coords
+      lat.value = latitude
+      lng.value = longitude
+    },
+    (error) => {
+      gps.value = false
+      console.error(error)
+    },
+    {
+      enableHighAccuracy: true, // Use GPS if available
+      timeout: 5000, // Maximum time to wait for a response (in ms)
+      maximumAge: 0, // Don't use cached position
+    }
+  )
+}
 // HACK
 const timer = ref(0)
 setInterval(() => timer.value++, 20)

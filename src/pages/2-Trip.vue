@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @pointerdown="back" @click.stop></ion-back-button>
+          <ion-back-button default-href="/" @click.stop="back"></ion-back-button>
         </ion-buttons>
         <ion-title v-if="currentStep === 1">Trajet {{ $route.params.id }} - Saisie Itinéraire</ion-title>
         <ion-title v-if="currentStep === 2">Trajet {{ $route.params.id }} - Choix Itinéraire</ion-title>
