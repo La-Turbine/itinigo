@@ -7,7 +7,7 @@
         </ion-buttons>
         <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from?.text ?? "") }} - {{ homework(currentTrip.to?.text ?? "") }}</div>
         <ion-buttons slot="end">
-          <ion-button @click="checkLoc" color="danger" v-if="!gps"><ion-icon :icon="locate"></ion-icon></ion-button>
+          <ion-button @click="watchLoc" color="danger" v-if="!lat"><ion-icon :icon="locate"></ion-icon></ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -86,41 +86,22 @@ const current = computed(() => steps.value[currentStep.value - 1])
 const stops = ref([])
 const lat = ref(0)
 const lng = ref(0)
-const gps = ref(false)
 if ("Notification" in window) Notification.requestPermission()
-checkLoc()
-function checkLoc() {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      gps.value = true
-      watchLoc()
-    },
-    (error) => {
-      gps.value = false
-      alert("Veuillez activer la localisation pour continuer.")
-    },
-    {
-      enableHighAccuracy: true, // Use GPS if available
-      timeout: 100, // Maximum time to wait for a response (in ms)
-      maximumAge: 0, // Don't use cached position
-    }
-  )
-}
+watchLoc()
 function watchLoc() {
   navigator.geolocation.watchPosition(
     (position) => {
-      gps.value = true
       const { latitude, longitude } = position.coords
       lat.value = latitude
       lng.value = longitude
     },
     (error) => {
-      gps.value = false
       console.error(error)
+      alert("Veuillez activer la localisation.")
     },
     {
       enableHighAccuracy: true, // Use GPS if available
-      timeout: 5000, // Maximum time to wait for a response (in ms)
+      timeout: 500, // Maximum time to wait for a response (in ms)
       maximumAge: 0, // Don't use cached position
     }
   )
