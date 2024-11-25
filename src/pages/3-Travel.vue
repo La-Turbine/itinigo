@@ -30,7 +30,7 @@
             </div>
           </div>
         </div>
-        <ion-button style="height: 80px; font-size: 1.4rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>
+        <ion-button style="height: 80px; font-size: 1.4rem; font-weight: 700" @click="watchLoc($router.push({ query: { step: 1 } }))">C'est Parti !</ion-button>
       </div>
       <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden" v-else-if="!current.stops">
         <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
@@ -89,6 +89,7 @@ const lng = ref(0)
 if ("Notification" in window) Notification.requestPermission()
 watchLoc()
 function watchLoc() {
+  if (lat.value && lng.value) return
   navigator.geolocation.watchPosition(
     (position) => {
       const { latitude, longitude } = position.coords
