@@ -3,12 +3,9 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @click.stop="back"></ion-back-button>
+          <ion-back-button default-href="/" @pointerdown="back" @click.stop></ion-back-button>
         </ion-buttons>
         <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from?.text ?? "") }} - {{ homework(currentTrip.to?.text ?? "") }}</div>
-        <ion-buttons slot="end">
-          <ion-button @click="watchLoc" color="danger" v-if="!lat"><ion-icon :icon="locate"></ion-icon></ion-button>
-        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -30,7 +27,7 @@
             </div>
           </div>
         </div>
-        <ion-button style="height: 80px; font-size: 1.4rem; font-weight: 700" @click="watchLoc($router.push({ query: { step: 1 } }))">C'est Parti !</ion-button>
+        <ion-button style="height: 80px; font-size: 1.4rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>
       </div>
       <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden" v-else-if="!current.stops">
         <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
@@ -77,7 +74,6 @@
 </template>
 
 <script setup lang="ts">
-import { locate } from "ionicons/icons"
 import { ref, computed, watch } from "vue"
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 0))
@@ -87,26 +83,23 @@ const stops = ref([])
 const lat = ref(0)
 const lng = ref(0)
 if ("Notification" in window) Notification.requestPermission()
-watchLoc()
-function watchLoc() {
-  if (lat.value && lng.value) return
-  navigator.geolocation.watchPosition(
-    (position) => {
-      const { latitude, longitude } = position.coords
-      lat.value = latitude
-      lng.value = longitude
-    },
-    (error) => {
-      console.error(error)
-      alert("Veuillez activer la localisation.")
-    },
-    {
-      enableHighAccuracy: true, // Use GPS if available
-      timeout: 500, // Maximum time to wait for a response (in ms)
-      maximumAge: 0, // Don't use cached position
-    }
-  )
-}
+// TODO: retry on error
+navigator.geolocation.watchPosition(
+  (position) => {
+    const { latitude, longitude } = position.coords
+    lat.value = latitude
+    lng.value = longitude
+  },
+  (error) => {
+    // alert("Erreur de géolocalisation, veuillez réessayer")
+    console.error(error)
+  },
+  {
+    enableHighAccuracy: true, // Use GPS if available
+    timeout: 5000, // Maximum time to wait for a response (in ms)
+    maximumAge: 0, // Don't use cached position
+  }
+)
 // HACK
 const timer = ref(0)
 setInterval(() => timer.value++, 20)
