@@ -20,6 +20,16 @@
         <ion-input v-model="$state.phone" label="📞 N° Aide" placeholder="0612121212"></ion-input>
       </ion-item>
       <ion-item>
+        <ion-textarea
+          style="font-size: 80%"
+          rows="3"
+          :auto-grow="true"
+          v-model="$state.instruction"
+          label="📋 Instruction"
+          placeholder="Je comprends tout ce que vous dites si vous me parlez lentement."
+        ></ion-textarea>
+      </ion-item>
+      <ion-item>
         <ion-input v-model="$state.home" label="🏠 Maison" placeholder="40 Rue du Drac"></ion-input>
       </ion-item>
       <ion-item>

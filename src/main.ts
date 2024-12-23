@@ -76,6 +76,25 @@ async function initApp() {
   }
   window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
+  const $position = reactive({})
+  window.$position = app.config.globalProperties.$position = $position
+  retryPosition()
+  function retryPosition() {
+    watchPosition()
+    setInterval(watchPosition, 10000)
+  }
+  function watchPosition() {
+    if ($position.value?.timestamp) return
+    navigator.geolocation.watchPosition(
+      (position) => ($position.value = position),
+      (error) => ($position.value = {}),
+      {
+        enableHighAccuracy: true, // Use GPS if available
+        timeout: 1000, // Maximum time to wait for a response (in ms)
+        maximumAge: 0, // Don't use cached position
+      }
+    )
+  }
   app.config.globalProperties.window = window
   app.mount("#app")
   // Return to home page after 2 hours of inactivity (same page)

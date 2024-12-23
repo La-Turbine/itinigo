@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-        <ion-button style="height: 80px; font-size: 1.4rem; font-weight: 700" @click="$router.push({ query: { step: 1 } })">C'est Parti !</ion-button>
+        <ion-button style="height: 80px; font-size: 1.4rem; font-weight: 700" @click="gogo">C'est Parti !</ion-button>
       </div>
       <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden" v-else-if="!current.stops">
         <div style="position: relative; display: flex; height: 80%" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
@@ -74,32 +74,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue"
+import { ref, computed, watch, onMounted, onUnmounted } from "vue"
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 0))
 const steps = computed(() => currentTrip.value.sequences?.flatMap((v) => (v.stops ? [...v.photos.slice(0, -1), v, v.photos.at(-1)] : v.photos)).filter((v) => v.stops || v.text) ?? [])
 const current = computed(() => steps.value[currentStep.value - 1])
 const stops = ref([])
-const lat = ref(0)
-const lng = ref(0)
+const lat = computed(() => window.$position.value?.coords?.latitude ?? 0)
+const lng = computed(() => window.$position.value?.coords?.longitude ?? 0)
 if ("Notification" in window) Notification.requestPermission()
-// TODO: retry on error
-navigator.geolocation.watchPosition(
-  (position) => {
-    const { latitude, longitude } = position.coords
-    lat.value = latitude
-    lng.value = longitude
-  },
-  (error) => {
-    // alert("Erreur de géolocalisation, veuillez réessayer")
-    console.error(error)
-  },
-  {
-    enableHighAccuracy: true, // Use GPS if available
-    timeout: 5000, // Maximum time to wait for a response (in ms)
-    maximumAge: 0, // Don't use cached position
-  }
-)
 // HACK
 const timer = ref(0)
 setInterval(() => timer.value++, 20)
@@ -222,6 +205,10 @@ function adjustFontSize(el: HTMLElement, size = +getComputedStyle(el).fontSize) 
 function back() {
   if (!confirm("Êtes-vous sûr de vouloir quitter le guidage ?")) return
   $router.push("/")
+}
+function gogo() {
+  if (!$position.value?.timestamp && !confirm("La geolocation n'est pas activé, voulez-vous commencer le guidage malgré tout ?")) return
+  $router.push({ query: { step: 1 } })
 }
 </script>
 
