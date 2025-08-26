@@ -18,20 +18,15 @@
           </ion-button>
           <card style="margin: 20px" :trip="trip" @click="$router.push($state.mode === 'helper' ? `/trip/${i + 1}?step=3` : `/travel/${i + 1}`)" />
         </div>
-        <ion-item @click="add" v-if="$state.mode === 'helper'">
-          <ion-icon :icon="add"></ion-icon>
-          <ion-label>Ajouter un trajet</ion-label>
-        </ion-item>
-        <ion-item color="secondary" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">
-          <ion-label>CONFIG</ion-label>
-        </ion-item>
+        <ion-button style="margin: 10px 20px" expand="block" @click="addTrip" v-if="$state.mode === 'helper'">Ajouter un trajet</ion-button>
+        <ion-button style="margin: 10px 20px" expand="block" fill="outline" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">CONFIG</ion-button>
       </ion-list>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { settings, walk, add, trash } from "ionicons/icons"
+import { settings, walk, trash } from "ionicons/icons"
 function deleteTrip(index) {
   if (!confirm("Voulez-vous vraiment supprimer ce trajet ?")) return
   $state.trips.splice(index, 1)
@@ -40,7 +35,7 @@ function changeMode() {
   if ($state.mode === "user" && !confirm("Voulez-vous passer en mode édition ?")) return
   $state.mode = $state.mode === "helper" ? "user" : "helper"
 }
-function add() {
+function addTrip() {
   if (navigator.onLine === false) return alert("Vous devez être connecté à internet pour ajouter un trajet")
   $router.push(`/trip/${$state.trips.length + 1}`)
 }

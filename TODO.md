@@ -2,14 +2,20 @@
 
 Il y aura 3 lots qui correspondent à 5j de dev, 3j d'analyse, de review et de marge
 
-Lot 1: Août / Septembre > Réorganisation + Ré-annotation
+Lot 1: Août / Septembre > Réorganisation de l'app "Itinigo"
+
+- Merge du formulaire en 4 étapes, en 2 étapes
+- Ajout de 3 pages pour la création, édition d'une étape
+- Ré-annotation d'une photo
+
 Lot 2: Octobre / Novembre > Finission + Feedback + Design
 Lot 3: Décembre / Janvier > BugFix + Amélioration
 
-Page 1: Liste des trajet + bouton "Ajouter un trajet"
-Page 2: Ajouter un trajet
-Page 3: Editer le trajet (liste)
-Page 4: Editer le trajet (detail) + pages photo, titre
+Page 1 - Trips: Liste des trajets
+Page 2 - Trip: Formulaire d'un trajet (Itiniraire / )
+Page 3 - Travel: Visualisation d'un trajet
+Page 4 - Help
+Page 5 - Config
 
 TODO:
 
@@ -34,6 +40,34 @@ Pour démarrer le simulateur d'iphone: `open -a Simulator`
 Pour générer les icones: `npx @vite-pwa/assets-generator  --preset minimal-2023 public/favicon.svg`
 
 https://css-tricks.com/vitepwa-plugin-offline-service-worker/#adding-your-own-service-worker-content
+
+## 2024
+
+Lot 1: Août - Dévelopement 1ère partie (sur 3) du prototype "Mon Intinigo".
+
+- Mise en place technique
+- Utilisateur & Aidant: Page de liste des trajets
+- Utilisateur: Suivi du trajet
+- Aidant: Formulaire de création du trajet (2 première sections + photos)
+- Déploiement & Démonstration
+
+Lot 2: Septembre - Dévelopement 2ème partie (sur 3) du prototype "Mon Intinigo".
+
+- Annotation photos
+- Séquence en Tram & Bus, avec suivi et notification
+- Carte d'Aide / Lien Map / Appel / SMS
+- Configuration
+- Design initial (max 1j)
+
+Lot 3: Octobre/Novembre - Développement 3ème partie (sur 3) du prototype "Mon Intinigo".
+
+- Annotation conditionnelle et ré-annotation des photos
+- Spécificités Bus
+- Maintien de l'éveil de l'application en arrière plan
+- Finitions Design
+- Corrections Bugs
+
+## STEPS
 
 01 ^ - Marchez tout droit jusqu’à la rue Ampère
 02 < - Tournez à gauche aprés la borne rouge
