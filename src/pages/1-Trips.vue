@@ -37,8 +37,8 @@ function deleteTrip(index) {
   $state.trips.splice(index, 1)
 }
 function changeMode() {
-  if ($state.mode === 'user' && !confirm("Voulez-vous passer en mode édition ?")) return
-  $state.mode = $state.mode === 'helper' ? 'user' : 'helper'
+  if ($state.mode === "user" && !confirm("Voulez-vous passer en mode édition ?")) return
+  $state.mode = $state.mode === "helper" ? "user" : "helper"
 }
 function add() {
   if (navigator.onLine === false) return alert("Vous devez être connecté à internet pour ajouter un trajet")

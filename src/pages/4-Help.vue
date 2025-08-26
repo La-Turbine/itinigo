@@ -13,7 +13,7 @@
         <template v-if="$route.query.mode === 'card'">
           <div style="font-size: 2rem; text-align: center; text-wrap: balance">Bonjour 👋,</div>
           <div style="font-size: 1.25rem; text-align: center; text-wrap: balance">Je m’appelle {{ $state.name }} et j’ai besoin de votre aide pour retrouver le fil de mon trajet.</div>
-          <div style="font-size: 1.25rem; text-align: center; text-wrap: balance">{{ $state.instruction || 'Je comprends tout ce que vous dites si vous me parlez lentement.' }}</div>
+          <div style="font-size: 1.25rem; text-align: center; text-wrap: balance">{{ $state.instruction || "Je comprends tout ce que vous dites si vous me parlez lentement." }}</div>
           <div style="font-size: 1.25rem; font-weight: 600; text-align: center; text-wrap: balance">Pourriez-vous m’aider à rejoindre ma destination s’il vous plait ?</div>
           <div style="font-size: 1.25rem; font-weight: 600; text-align: center; text-wrap: balance">Merci beaucoup.</div>
           <hr style="border-top: 1px solid rgba(0, 0, 0, 0.5); width: 50%" />
