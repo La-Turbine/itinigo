@@ -73,7 +73,7 @@
   </ion-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from "vue"
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 0))
@@ -170,7 +170,7 @@ function progressBetweenStops(currentPos, stops) {
     return { number: 0, percentage: 0, distance: 0 }
   }
 }
-function homework(place: string) {
+function homework(place) {
   if (place.toLowerCase() === $state.home?.toLowerCase()) return "🏠 Maison"
   if (place.toLowerCase() === $state.work?.toLowerCase()) return "🏢 Travail"
   return place
@@ -197,12 +197,13 @@ function adjust(ref) {
   setTimeout(() => adjustFontSize(ref, 32))
   setTimeout(() => adjustFontSize(ref, 32), 200)
 }
-function adjustFontSize(el: HTMLElement, size = +getComputedStyle(el).fontSize) {
+function adjustFontSize(el, size = +getComputedStyle(el).fontSize) {
   if (!el) return
   el.style.fontSize = `${size}px`
   while (el.scrollHeight > el.offsetHeight || el.scrollWidth > el.offsetWidth) el.style.fontSize = `${--size}px`
 }
 function back() {
+  if ($state.mode === "helper") return $router.push(`/trip/${$route.params.id}?step=3`)
   if (!confirm("Êtes-vous sûr de vouloir quitter le guidage ?")) return
   $router.push("/")
 }

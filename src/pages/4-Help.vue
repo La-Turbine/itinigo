@@ -71,7 +71,7 @@
   </ion-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed } from "vue"
 const travel = computed(() => $state.trips[$route.query.travel - 1])
 const first = computed(() => travel.value.sequences.find((v) => v.stops))
@@ -89,7 +89,7 @@ function map() {
   }
 }
 async function call() {
-  const phone = `+33${$state.phone!.replace(/^(0|\+33)/, "")}`
+  const phone = `+33${$state.phone.replace(/^(0|\+33)/, "")}`
   const destination = travel.value.to.text
   navigator.geolocation.getCurrentPosition(goto, (err) => goto())
   async function goto(position) {

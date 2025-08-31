@@ -25,7 +25,7 @@
   </ion-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { settings, walk, trash } from "ionicons/icons"
 function deleteTrip(index) {
   if (!confirm("Voulez-vous vraiment supprimer ce trajet ?")) return

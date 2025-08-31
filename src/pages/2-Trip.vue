@@ -3,117 +3,147 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @pointerdown="back" @click.stop></ion-back-button>
+          <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
         <ion-title>Trajet {{ $route.params.id }}</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <form>
-        <ion-list v-if="currentStep < 3">
-          <ion-item>
-            <ion-input label="Départ" :value="state.from.text" @ionInput="onSearch" @ionFocus="onFocus('from')" @ionBlur="onBlur('from')" required></ion-input>
-          </ion-item>
-          <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'from'">{{ item.text }}</ion-item>
-          <ion-item>
-            <ion-input label="Arrivée" :value="state.to.text" @ionInput="onSearch" @ionFocus="onFocus('to')" @ionBlur="onBlur('to')" required></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input label="Date" v-model="state.date" type="datetime-local"></ion-input>
-          </ion-item>
-          <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'to'">{{ item.text }}</ion-item>
-          <ion-button style="margin: 10px 20px" expand="block" @click="next(1)">Suivant</ion-button>
-        </ion-list>
+      <ion-list v-if="currentStep < 3">
+        <ion-item>
+          <ion-input label="Départ" :value="state.from.text" @ionInput="onSearch" @ionFocus="onFocus('from')" @ionBlur="onBlur('from')" required></ion-input>
+        </ion-item>
+        <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'from'">{{ item.text }}</ion-item>
+        <ion-item>
+          <ion-input label="Arrivée" :value="state.to.text" @ionInput="onSearch" @ionFocus="onFocus('to')" @ionBlur="onBlur('to')" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Date" v-model="state.date" type="datetime-local"></ion-input>
+        </ion-item>
+        <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'to'">{{ item.text }}</ion-item>
+        <ion-button style="margin: 10px 20px" expand="block" @click="next(1)">Suivant</ion-button>
+      </ion-list>
 
-        <div v-if="currentStep === 2">
-          <div style="cursor: pointer" @click.stop.prevent="next(2, (state.choice = i))" v-for="(trip, i) in state.choices">
-            <iframe :srcdoc="trip" style="width: 100%; height: 140px; border: 0; pointer-events: none"></iframe>
+      <div v-if="currentStep === 2">
+        <div style="cursor: pointer" @click.stop.prevent="next(2, (state.choice = i))" v-for="(trip, i) in state.choices">
+          <iframe :srcdoc="trip" style="width: 100%; height: 140px; border: 0; pointer-events: none"></iframe>
+        </div>
+      </div>
+
+      <ion-list lines="none" v-for="(sequence, i) in currentTrip.sequences" v-if="currentStep === 3">
+        <ion-item style="font-weight: bold; margin: 20px">{{ sequence.transport }}</ion-item>
+        <div style="margin: -15px 20px 15px" v-if="sequence.stops">
+          <div style="font-weight: bold">{{ sequence.stops.length }} arrêts</div>
+          <div v-for="stop in sequence.stops">{{ stop.text }}</div>
+        </div>
+        <ion-list lines="none">
+          <ion-reorder-group :disabled="!reorder" @ionItemReorder="reorderPhoto(sequence, $event)">
+            <ion-item v-for="(photo, j) in sequence.photos" :key="photo">
+              <div style="width: 100%; display: flex; gap: 8px; padding: 4px" @click="$router.push({ query: { step: 4, sequence: i, photo: j } })">
+                <img style="max-height: 40px; margin: auto" :src="`/img/${photo.type}.svg`" />
+                <div style="flex: 1; margin: auto">{{ photo.text }}</div>
+                <ion-img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" @click.stop="$router.push({ query: { step: 5, sequence: i, photo: j } })" />
+              </div>
+              <ion-reorder slot="end"></ion-reorder>
+              <ion-icon :id="`action-${i}-${j}`" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j } })" :icon="ellipsisVertical"></ion-icon>
+              <ion-action-sheet mode="ios" :trigger="`action-${i}-${j}`" :buttons="actions"></ion-action-sheet>
+            </ion-item>
+          </ion-reorder-group>
+        </ion-list>
+        <ion-button style="margin: 10px 20px" expand="block" @click="addPhoto(i, sequence.photos.length)">Ajouter une étape</ion-button>
+        <div style="padding: 20px; border-bottom: 1px solid #00000040" v-if="i !== currentTrip.sequences.length - 1"></div>
+      </ion-list>
+
+      <div v-if="currentStep === 4">
+        Choissisez une action:
+        <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 20px">
+          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(i)" v-for="i in 5" v-if="currentSequence.transport.startsWith(`Je marche`)">
+            <div>{{ texts[i - 1].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img style="margin-left: auto" :src="`/img/${i}.svg`" />
+          </div>
+          <div
+            style="display: flex; align-items: center; gap: 8px"
+            :style="i === 3 && currentSequence.type.startsWith(`Bus`) && 'display: none'"
+            @click="changeType(i)"
+            v-for="i in 5"
+            v-if="currentSequence.transport.startsWith(`J'attend`)"
+          >
+            <div>{{ texts[i + 4].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img :src="`/img/${i + 5}.svg`" />
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(11)" v-if="currentSequence.transport.startsWith(`Je monte`)">
+            <div>{{ texts[10].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img :src="`/img/11.svg`" />
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(3 + 4)" v-if="currentSequence.transport.startsWith(`Je monte`) && currentSequence.type.startsWith(`Bus`)">
+            <div>{{ texts[3 + 4].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img :src="`/img/${3 + 5}.svg`" />
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(12)" v-if="currentSequence.transport.startsWith(`Je monte`)">
+            <div>{{ texts[11].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img :src="`/img/12.svg`" />
           </div>
         </div>
+        <ion-button style="margin: 10px 20px" expand="block" @click="$router.push({ query: { ...$route.query, step: 5 } })">Confirmer</ion-button>
+        Souhaitez vous renommer l'action ?
+        <ion-textarea style="flex: 1; margin: auto" fill="solid" :auto-grow="true" v-model="currentPhoto.text"></ion-textarea>
+        <ion-button style="margin: 10px 20px" expand="block" @click="$router.push({ query: { ...$route.query, step: 5 } })">Confirmer</ion-button>
+      </div>
 
-        <ion-list lines="none" v-for="(sequence, i) in currentChoice" v-if="currentStep === 3">
-          <ion-item style="font-weight: bold;margin: 20px">{{ sequence.transport }}</ion-item>
-          <ion-list lines="none">
-            <ion-reorder-group disabled="false" @ionItemReorder="reorderPhoto($event, sequence)">
-              <ion-item v-for="(photo, i) in sequence.photos" :key="photo">
-                <div style="width: 100%; display: flex; gap: 8px; padding: 4px">
-                  <ion-button style="position: absolute; left: 0; bottom: 0; width: 20px; height: 20px" color="danger" @click="deletePhoto(i, sequence)">
-                    <ion-icon slot="icon-only" :icon="trash"></ion-icon>
-                  </ion-button>
-                  <img style="max-height: 40px; margin: auto" :src="`/img/${photo.type}.svg`" />
-                  <ion-textarea style="flex: 1; margin: auto" fill="solid" :auto-grow="true" v-model="photo.text"></ion-textarea>
-                  <div style="display: flex; flex-direction: column; gap: 10px">
-                    <img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" @click="clickPhoto(photo, state.refGallery)" />
-                    <img src="/img/camera.svg" style="max-width: 115px; height: 115px" @click="clickPhoto(photo, state.refCamera)" v-if="/android/i.test(window.navigator.userAgent)" />
-                  </div>
-                </div>
-                <ion-reorder slot="end"></ion-reorder>
-              </ion-item>
-            </ion-reorder-group>
-            <!-- <input type="file" accept="image/*;capture" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" /> -->
-            <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
-            <input type="file" accept="image/*" capture="environment" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
-          </ion-list>
-          <ion-item style="padding: 20px;border-bottom: 1px solid #00000040">
-            <div style="display: flex; gap: 8px; margin: auto; max-width: fit-content">
+      <template v-if="currentStep === 5">
+        <template v-for="photoXXX in [currentSequence.photos[+$route.query.photo]]">
+          <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden">
+            <div style="position: relative; display: flex; height: 80%" @click="clickPhoto(photoXXX, state.refGallery)" @touchstart="console.log" @touchmove="console.log" @touchend="console.log">
               <img
-                :src="`/img/${i}.svg`"
-                @click="sequence.photos.push({ type: i, text: texts[i - 1].replace('tram/bus', sequence.type) })"
-                v-for="i in 5"
-                v-if="sequence.transport.startsWith(`Je marche`)"
+                style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none"
+                :src="$state.photos[photoXXX.id] || '/img/gallery.svg'"
+                v-if="!photo"
               />
-              <img
-                :src="`/img/${i + 5}.svg`"
-                :style="i === 3 && sequence.type.startsWith(`Bus`) && 'display: none'"
-                @click="sequence.photos.push({ type: i + 5, text: texts[i + 4].replace('tram/bus', sequence.type) })"
-                v-for="i in 5"
-                v-if="sequence.transport.startsWith(`J'attend`)"
-              />
-              <img
-                :src="`/img/11.svg`"
-                @click="sequence.photos.push({ type: 11, text: texts[10].replace('tram/bus', sequence.type), id: sequence.type.startsWith(`Bus`) ? 'BUSIN' : 'TRAMIN' })"
-                v-if="sequence.transport.startsWith(`Je monte`)"
-              />
-              <img
-                :src="`/img/${3 + 5}.svg`"
-                @click="sequence.photos.push({ type: 3 + 5, text: texts[3 + 4].replace('tram/bus', sequence.type) })"
-                v-if="sequence.transport.startsWith(`Je monte`) && sequence.type.startsWith(`Bus`)"
-              />
-              <img
-                :src="`/img/12.svg`"
-                @click="sequence.photos.push({ type: 12, text: texts[11].replace('tram/bus', sequence.type), id: sequence.type.startsWith(`Bus`) ? 'BUSOUT' : 'TRAMOUT' })"
-                v-if="sequence.transport.startsWith(`Je monte`)"
-              />
+              <tldraw-annotator :url="$state.photos[photo]" @done="annotatePhoto" v-if="photo" />
             </div>
-          </ion-item>
-        </ion-list>
-      </form>
+            <div style="display: flex; height: 20%; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)"></div>
+          </div>
+          <!-- <input type="file" accept="image/*;capture" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" /> -->
+          <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
+          <input type="file" accept="image/*" capture="environment" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
+        </template>
+      </template>
     </ion-content>
-    <tldraw-annotator :url="$state.photos[currentPhoto]" @done="annotatePhoto" v-if="currentPhoto" />
   </ion-page>
 </template>
 
-<script setup lang="ts">
-import { trash } from "ionicons/icons"
+<script setup>
+import { ellipsisVertical } from "ionicons/icons"
 import { ref, reactive, computed } from "vue"
 // https://api.ppp38v2.cityway.fr/search/address?keywords=40+rue&maxitems=10&pointtypes=&categories=&LocalityIds=&OperatorIds=
 // https://api.ppp38v2.cityway.fr/journeyplanner/hubs/plantrips?KeywordDep=40+RUE+ABB%C3%89+GR%C3%89GOIRE+-+38000+GRENOBLE+Adresse&PointDep=152084_3_40&NumDep=40&KeywordArr=HOTEL+DE+VILLE+-+38000+GRENOBLE+Arr%C3%AAt&PointArr=2002289_4&KeywordVia=&PointVia=&NumVia=&DurationVia=30&Date=28%2F07%2F2024&TypeDate=68&Hour=13&Minute=45&Submit=True&TypeTrip=PlanTrip&Algorithm=Fastest&WalkDistance=2000&WalkSpeed=4&Modes=Bus&Modes=Coach&Modes=Metro&Modes=Tram&Modes=Tod&Modes=Tgv&Modes=Ter&Modes=Train&Modes=Plane&Partners=14&Partners=28&Partners=24&Partners=30&Partners=15&Partners=5&Partners=2&Partners=22&Partners=18&Partners=29&Partners=6&Partners=8&Partners=31&Partners=3&Partners=13&Partners=12&Partners=26&Partners=27&Partners=7&Partners=17&BikeDistance=10&BikeSecure=2&BikeLeave=0&BikeSpeed=15&CarDistance=100&CarLeave=0
 // https://www.itinisere.fr/fr/itineraires/4/JourneyPlanner?KeywordDep=40+RUE+ABB%C3%89+GR%C3%89GOIRE+-+38000+GRENOBLE+Adresse&PointDep=152084_3_40&NumDep=40&KeywordArr=HOTEL+DE+VILLE+-+38000+GRENOBLE+Arr%C3%AAt&PointArr=2002289_4&KeywordVia=&PointVia=&NumVia=&DurationVia=30&Date=28%2F07%2F2024&TypeDate=68&Hour=13&Minute=45&Submit=True&TypeTrip=PlanTrip&Algorithm=Fastest&WalkDistance=2000&WalkSpeed=4&Modes=Bus&Modes=Coach&Modes=Metro&Modes=Tram&Modes=Tod&Modes=Tgv&Modes=Ter&Modes=Train&Modes=Plane&Partners=14&Partners=28&Partners=24&Partners=30&Partners=15&Partners=5&Partners=2&Partners=22&Partners=18&Partners=29&Partners=6&Partners=8&Partners=31&Partners=3&Partners=13&Partners=12&Partners=26&Partners=27&Partners=7&Partners=17&BikeDistance=10&BikeSecure=2&BikeLeave=0&BikeSpeed=15&CarDistance=100&CarLeave=0
 // https://www.itinisere.fr/fr/itineraires/4/JourneyPlanner/result?Date=28%2F07%2F2024&TypeDate=68&Hour=13&Minute=45&Algorithm=Fastest&TypeTrip=PlanTrip&ListModes=Bus%7CCoach%7CMetro%7CTram%7CTod%7CTgv%7CTer%7CTrain%7CPlane&ListPartners=14%7C28%7C24%7C30%7C15%7C5%7C2%7C22%7C18%7C29%7C6%7C8%7C31%7C3%7C13%7C12%7C26%7C27%7C7%7C17&CarDistance=100&CarLeave=0&BikeDistance=10&BikeLeave=0&BikeSpeed=15&BikeSecure=2&WalkDistance=2000&WalkSpeed=4&DurationVia=30&PointDep=152084_3_40&NumDep=40&LatDep=45.1867420708696&LngDep=5.71237108565983&PointArr=2002289_4&LatArr=45.187492048825&LngArr=5.73744659885
-const currentPhoto = ref(null)
-const currentTrip = $state.trips[$route.params.id - 1] || {}
+const photo = ref(null)
+let currentTrip = $state.trips[$route.params.id - 1] || {}
 const currentStep = computed(() => +($route.query.step || 1))
-const currentChoice = computed(() => state.sequences[state.choice])
+const currentSequence = computed(() => currentTrip.sequences[+$route.query.sequence])
+const currentPhoto = computed(() => currentSequence.value?.photos[+$route.query.photo])
 const state = reactive({
   from: { text: currentTrip.from || "" },
   to: { text: currentTrip.to || "" },
   date: new Date().toISOString().slice(0, 16),
   choices: [],
   choice: 0,
-  sequences: currentTrip.sequences ? [currentTrip.sequences] : [],
-  sequence: 0,
 })
+const reorder = ref(false)
+const actions = [
+  { text: "Prévisualiser", handler: () => $router.push(`/travel/${$route.params.id}?step=${sumStep(+$route.query.sequence, +$route.query.photo, true)}`) },
+  { text: "Ajouter avant", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo) },
+  { text: "Ajouter après", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo + 1) },
+  { text: "Éditer le titre", handler: () => $router.push({ query: { ...$route.query, step: 4 } }) },
+  { text: "Éditer la photo", handler: () => $router.push({ query: { ...$route.query, step: 5 } }) },
+  { text: "Déplacer", handler: () => (reorder.value = !reorder.value) },
+  { text: "Supprimer", role: "destructive", handler: () => deletePhoto(currentSequence.value, +$route.query.photo) },
+  { text: "Annuler", role: "cancel" },
+]
 // Step 1: Search for "from" and "to" address/location
+// Then 2: Choose an itinerary
 const focused = ref("")
 const items = ref([])
 const texts = [
@@ -126,9 +156,9 @@ const texts = [
   "Vérifiez la direction",
   "Validez votre ticket",
   "Attendez à l'arrêt",
-  "Quand le tram/bus arrive, vérifiez la direction",
-  "Montez dans le tram/bus",
-  "Descendez du tram/bus",
+  "Quand le [tram/bus] arrive, vérifiez la direction",
+  "Montez dans le [tram/bus]",
+  "Descendez du [tram/bus]",
 ]
 async function onSearch(event) {
   const query = event.target.value
@@ -155,17 +185,33 @@ function onFocus(direction) {
 function onBlur(direction) {
   // focused.value = ""
 }
-// Step 2: Choose an itinerary
-// Step 3: Choose a sequence
-// Step 4: Take photos
-function reorderPhoto(event, sequence) {
+// Step 3: List photos
+function reorderPhoto(sequence, event) {
   event.detail.complete(sequence.photos)
 }
-function deletePhoto(index, sequence) {
-  if (!confirm("Voulez-vous vraiment supprimer cette photo ?")) return
+function sumStep(sequence, photo, travel = false) {
+  if (travel) return currentTrip.sequences.slice(0, sequence).reduce((acc, v) => acc + v.photos.length + !!v.stops, 0) + photo + 1
+  return currentTrip.sequences.slice(0, sequence).reduce((acc, v) => acc + v.photos.length, 0) + photo
+}
+function addPhoto(sequenceIndex, photoIndex) {
+  const sequence = currentTrip.sequences[sequenceIndex]
+  const type = sequence.transport.startsWith(`Je marche`) ? 1 : sequence.transport.startsWith(`J'attend`) ? 6 : 11
+  const photo = { type, text: texts[type - 1].replace("[tram/bus]", sequence.type) }
+  sequence.photos.splice(photoIndex, 0, photo)
+  $router.push({ query: { step: 4, sequence: sequenceIndex, photo: photoIndex } })
+}
+function deletePhoto(sequence, index) {
+  // if (!confirm("Voulez-vous vraiment supprimer cette photo ?")) return
   delete $state.photos[sequence.photos[index].id]
   sequence.photos.splice(index, 1)
 }
+function changeType(type) {
+  currentPhoto.value.type = type
+  // if (currentPhoto.value.text && !texts.includes(currentPhoto.value.text)) return
+  currentPhoto.value.text = texts[type - 1].replace("[tram/bus]", currentSequence.value.type)
+}
+// Step 4: Add or Edit title
+// Step 5: Add or Edit the photo + annotations
 function clickPhoto(photo, input) {
   window.currentPhoto = photo
   state.currentPhoto = photo
@@ -186,7 +232,7 @@ function inputPhoto(event) {
     await idb.set(id, reader.result)
     state.currentPhoto.id = id
     $state.photos[id] = reader.result
-    currentPhoto.value = id
+    photo.value = id
   }
   reader.readAsDataURL(file)
 }
@@ -194,11 +240,11 @@ async function annotatePhoto(blob) {
   const reader = new FileReader()
   reader.readAsDataURL(blob)
   reader.onload = async () => {
-    const id = currentPhoto.value
+    const id = photo.value
     const url = reader.result
     await idb.set(id, url)
     $state.photos[id] = url
-    currentPhoto.value = null
+    photo.value = null
   }
 }
 // Utils
@@ -234,7 +280,7 @@ const nexts = {
       .slice(1, -1)
       .flatMap((text) => JSON.parse(/\[[^;]]*\]/.exec(text)[0])) // HACK: extract JSON array, it can also contain arrays for long trips so the non matching character is `;` instead of `]`
     const link = $$("link", new DOMParser().parseFromString(await (await fetch("https://www.itinisere.fr/")).text(), "text/html")).find((el) => el.href.includes("/css/site")).outerHTML
-    const css = `${link.replace("/", "https://static.PPP38v2.cityway.fr/")}
+    const css = `${link.replace(/^\//, "https://static.PPP38v2.cityway.fr/")}
 <style>
 .JourneyPlanner { padding: 10px;height: 140px;overflow:hidden; }
 .JourneyPlanner .trip-solutions .link-detail .type-trip { position: absolute;bottom: 5px; }
@@ -255,6 +301,14 @@ const nexts = {
         const after = extract($(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim())
         const stops = [before, ...intermediary, after].filter((v) => v)
         const type = el.innerText.length === 1 ? `Tram ${el.innerText}` : `Bus ${el.innerText}`
+        const wait = [
+          { type: 6, text: texts[5].replace("[tram/bus]", type) }, // TODO: add [stop] placeholder + replace
+          { type: 7, text: texts[6].replace("[tram/bus]", type) }, // TODO: add [direction] placeholder + replace
+          { type: 8, text: texts[7].replace("[tram/bus]", type) },
+          { type: 9, text: texts[8].replace("[tram/bus]", type) },
+          { type: 10, text: texts[9].replace("[tram/bus]", type) },
+        ]
+        if (el.innerText.length !== 1) wait.splice(3, 1) // remove "Validez votre ticket" for bus
         const tram = [
           { type: 11, text: `Montez dans le ${type}`, id: "TRAMIN" },
           { type: 12, text: `Descendez du ${type}`, id: "TRAMOUT" },
@@ -266,7 +320,7 @@ const nexts = {
         ]
         const num = i + 1
         sequence.push({ transport: `Je marche vers l'arrêt n°${num} ${stops[0].text}`, num, type, photos: [] })
-        sequence.push({ transport: `J'attends à l'arrêt n°${num} ${stops[0].text}`, num, type, photos: [] })
+        sequence.push({ transport: `J'attends à l'arrêt n°${num} ${stops[0].text}`, num, type, photos: wait })
         sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, photos: el.innerText.length === 1 ? tram : bus })
       })
       sequence.push({ transport: `Je marche vers ma destination`, photos: [{ type: 2, text: "Vous êtes arrivé !" }] })
@@ -277,13 +331,7 @@ const nexts = {
   async 2() {
     const from = { text: state.from.text.split(" - ")[0], lat: state.from.Latitude, lng: state.from.Longitude }
     const to = { text: state.to.text.split(" - ")[0], lat: state.to.Latitude, lng: state.to.Longitude }
-    $state.trips[$route.params.id - 1] = { from, to, sequences: currentChoice.value }
-    $router.push({ query: { step: 3 } })
-  },
-  async 3(num) {
-    $router.push({ query: { step: 4 } })
-  },
-  async 4(num) {
+    currentTrip = $state.trips[$route.params.id - 1] = { from, to, sequences: state.sequences[state.choice] }
     $router.push({ query: { step: 3 } })
   },
 }
@@ -291,23 +339,4 @@ async function next(step, ...args) {
   const fn = nexts[step]
   await fn(...args)
 }
-function back() {
-  if (currentStep.value === 1) return $router.push("/")
-  if (currentStep.value === 3 && !false) return $router.push("/")
-  $router.push({ query: { step: currentStep.value - 1 } })
-}
 </script>
-
-<style>
-/* ion-textarea {
-  height: 40px;
-  min-height: 40px!important;
-} */
-.textarea-wrapper {
-  --padding-end: 0px;
-  --padding-start: 0px;
-}
-textarea {
-  padding: 8px !important;
-}
-</style>

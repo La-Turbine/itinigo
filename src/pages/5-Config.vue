@@ -68,7 +68,7 @@
   </ion-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { version } from "../../package.json"
 import { ref, onMounted } from "vue"
 const isInstalled = ref(window.matchMedia("(display-mode: standalone)").matches || !!window.navigator.standalone)
