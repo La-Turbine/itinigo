@@ -4,9 +4,12 @@ Il y aura 3 lots qui correspondent à 5j de dev, 3j d'analyse, de review et de m
 
 Lot 1: Août / Septembre > Réorganisation de l'app "Itinigo"
 
-- Merge du formulaire en 4 étapes, en 2 étapes
-- Ajout de 3 pages pour la création, édition d'une étape
-- Ré-annotation d'une photo
+- [x] Merge du formulaire en 4 étapes, en 2 étapes
+- [x] Ajout de 3 pages pour la création, édition d'une étape
+- [x] Ré-annotation d'une photo
+- [ ] Fix: Suppression d'une photo (puis d'une autre)
+- [ ] Feat: Ajout de la navigation en dessous d'une photo
+
 
 Lot 2: Octobre / Novembre > Finission + Feedback + Design
 Lot 3: Décembre / Janvier > BugFix + Amélioration

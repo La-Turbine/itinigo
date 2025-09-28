@@ -1,8 +1,8 @@
 .DoneButton {
   font: inherit;
-  background: var(--color-primary);
+  background: var(--color-primary, #3182ed);
   border: none;
-  color: var(--color-selected-contrast);
+  color: var(--color-selected-contrast, white);
   font-size: 1rem;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -14,4 +14,9 @@
 }
 .DoneButton:hover {
   filter: brightness(1.1);
+}
+
+/* <button type="button" draggable="false" title="Toggle tool lock" data-testid="tool-lock" class="tlui-button tlui-button__normal tlui-toolbar__lock-button tlui-toolbar__lock-button__mobile"><div class="tlui-icon tlui-icon__small tlui-button__icon" style="mask: url(&quot;https://cdn.tldraw.com/3.4.0/icons/icon/0_merged.svg#unlock&quot;) center 100% / 100% no-repeat;"></div></button> */
+[data-testid="tool-lock"] {
+  display: none;
 }

@@ -93,13 +93,12 @@
       <template v-if="currentStep === 5">
         <template v-for="photoXXX in [currentSequence.photos[+$route.query.photo]]">
           <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden">
-            <div style="position: relative; display: flex; height: 80%" @click="clickPhoto(photoXXX, state.refGallery)" @touchstart="console.log" @touchmove="console.log" @touchend="console.log">
-              <img
-                style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none"
-                :src="$state.photos[photoXXX.id] || '/img/gallery.svg'"
-                v-if="!photo"
-              />
-              <tldraw-annotator :url="$state.photos[photo]" @done="annotatePhoto" v-if="photo" />
+            <div style="position: relative; display: flex; height: 80%" @click="clickPhoto(photoXXX, state.refGallery)">
+              <template v-if="!photo">
+                <button class="DoneButton" style="position: absolute;left: 0;" @click.stop="clickPhoto(photoXXX, state.refGallery, true)" v-if="$state.photos[photoXXX.id]">Changer</button>
+                <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[photoXXX.id] || '/img/gallery.svg'" />
+              </template>
+              <tldraw-annotator :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" @click.stop v-else />
             </div>
             <div style="display: flex; height: 20%; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)"></div>
           </div>
@@ -212,10 +211,11 @@ function changeType(type) {
 }
 // Step 4: Add or Edit title
 // Step 5: Add or Edit the photo + annotations
-function clickPhoto(photo, input) {
-  window.currentPhoto = photo
-  state.currentPhoto = photo
-  input.click()
+function clickPhoto(p, input, change) {
+  window.currentPhoto = p
+  state.currentPhoto = p
+  if (p.id && !change) photo.value = p.id
+  else input.click()
 }
 function inputPhoto(event) {
   const file = event.target.files[0]
@@ -229,6 +229,7 @@ function inputPhoto(event) {
     }
     const id = generateULID()
     await idb.del(state.currentPhoto.id)
+    await idb.del(`${state.currentPhoto.id}:snapshot`)
     await idb.set(id, reader.result)
     state.currentPhoto.id = id
     $state.photos[id] = reader.result
@@ -236,15 +237,17 @@ function inputPhoto(event) {
   }
   reader.readAsDataURL(file)
 }
-async function annotatePhoto(blob) {
+async function annotatePhoto({ blob, snapshot }) {
   const reader = new FileReader()
   reader.readAsDataURL(blob)
   reader.onload = async () => {
     const id = photo.value
-    const url = reader.result
-    await idb.set(id, url)
+    const url = reader.result // .replace("text/plain", "image/svg+xml")
     $state.photos[id] = url
+    $state.photos[`${id}:snapshot`] = JSON.stringify(snapshot)
     photo.value = null
+    await idb.set(id, $state.photos[id])
+    await idb.set(`${id}:snapshot`, $state.photos[`${id}:snapshot`])
   }
 }
 // Utils
