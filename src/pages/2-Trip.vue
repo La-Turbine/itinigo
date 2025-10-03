@@ -30,72 +30,54 @@
         </div>
       </div>
 
-      <ion-list lines="none" v-for="(sequence, i) in currentTrip.sequences" v-if="currentStep === 3">
-        <ion-item style="font-weight: bold; margin: 20px">{{ sequence.transport }}</ion-item>
-        <div style="margin: -15px 20px 15px" v-if="sequence.stops">
-          <div style="font-weight: bold">{{ sequence.stops.length }} arrêts</div>
-          <div v-for="stop in sequence.stops">{{ stop.text }}</div>
+      <div v-if="currentStep === 3">
+        <div style="margin: 20px">
+          <b>Rappel de mon trajet:</b>
+          <div>
+            Départ de <b>{{ currentTrip.from.text }}</b>
+          </div>
+          <div>
+            Transports en
+            <span v-for="transport in currentTrip.sequences.filter((v) => v.stops)">
+              <b>{{ transport.type }}</b> ({{ transport.stops.length }} arrêts)
+            </span>
+          </div>
+          <div>
+            Arrivée à <b>{{ currentTrip.to.text }}</b>
+          </div>
         </div>
-        <ion-list lines="none">
-          <ion-reorder-group :disabled="!reorder" @ionItemReorder="reorderPhoto(sequence, $event)">
-            <ion-item v-for="(photo, j) in sequence.photos" :key="photo">
-              <div style="width: 100%; display: flex; gap: 8px; padding: 4px" @click="$router.push({ query: { step: 4, sequence: i, photo: j } })">
-                <img style="max-height: 40px; margin: auto" :src="`/img/${photo.type}.svg`" />
-                <div style="flex: 1; margin: auto">{{ photo.text }}</div>
-                <ion-img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" @click.stop="$router.push({ query: { step: 5, sequence: i, photo: j } })" />
-              </div>
-              <ion-reorder slot="end"></ion-reorder>
-              <ion-icon :id="`action-${i}-${j}`" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j } })" :icon="ellipsisVertical"></ion-icon>
-              <ion-action-sheet mode="ios" :trigger="`action-${i}-${j}`" :buttons="actions"></ion-action-sheet>
-            </ion-item>
-          </ion-reorder-group>
-        </ion-list>
-        <ion-button style="margin: 10px 20px" expand="block" @click="addPhoto(i, sequence.photos.length)">Ajouter une étape</ion-button>
         <div style="padding: 20px; border-bottom: 1px solid #00000040" v-if="i !== currentTrip.sequences.length - 1"></div>
-      </ion-list>
-
-      <div v-if="currentStep === 4">
-        Choissisez une action:
-        <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 20px">
-          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(i)" v-for="i in 5" v-if="currentSequence.transport.startsWith(`Je marche`)">
-            <div>{{ texts[i - 1].replace("[tram/bus]", currentSequence.type) }}</div>
-            <img style="margin-left: auto" :src="`/img/${i}.svg`" />
+        <ion-list lines="none" v-for="(sequence, i) in currentTrip.sequences">
+          <ion-item style="font-weight: bold; margin: 20px">{{ sequence.transport }}</ion-item>
+          <div style="margin: -15px 20px 15px" v-if="sequence.stops">
+            <div style="font-weight: bold">{{ sequence.stops.length }} arrêts</div>
+            <div v-for="stop in sequence.stops">{{ stop.text }}</div>
           </div>
-          <div
-            style="display: flex; align-items: center; gap: 8px"
-            :style="i === 3 && currentSequence.type.startsWith(`Bus`) && 'display: none'"
-            @click="changeType(i)"
-            v-for="i in 5"
-            v-if="currentSequence.transport.startsWith(`J'attend`)"
-          >
-            <div>{{ texts[i + 4].replace("[tram/bus]", currentSequence.type) }}</div>
-            <img :src="`/img/${i + 5}.svg`" />
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(11)" v-if="currentSequence.transport.startsWith(`Je monte`)">
-            <div>{{ texts[10].replace("[tram/bus]", currentSequence.type) }}</div>
-            <img :src="`/img/11.svg`" />
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(3 + 4)" v-if="currentSequence.transport.startsWith(`Je monte`) && currentSequence.type.startsWith(`Bus`)">
-            <div>{{ texts[3 + 4].replace("[tram/bus]", currentSequence.type) }}</div>
-            <img :src="`/img/${3 + 5}.svg`" />
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(12)" v-if="currentSequence.transport.startsWith(`Je monte`)">
-            <div>{{ texts[11].replace("[tram/bus]", currentSequence.type) }}</div>
-            <img :src="`/img/12.svg`" />
-          </div>
-        </div>
-        <ion-button style="margin: 10px 20px" expand="block" @click="$router.push({ query: { ...$route.query, step: 5 } })">Confirmer</ion-button>
-        Souhaitez vous renommer l'action ?
-        <ion-textarea style="flex: 1; margin: auto" fill="solid" :auto-grow="true" v-model="currentPhoto.text"></ion-textarea>
-        <ion-button style="margin: 10px 20px" expand="block" @click="$router.push({ query: { ...$route.query, step: 5 } })">Confirmer</ion-button>
+          <ion-list lines="none">
+            <ion-reorder-group :disabled="!reorder" @ionItemReorder="reorderPhoto(sequence, $event)">
+              <ion-item v-for="(photo, j) in sequence.photos" :key="photo">
+                <div style="width: 100%; display: flex; gap: 8px; padding: 4px" @click="$router.push({ query: { step: 5, sequence: i, photo: j } })">
+                  <img style="max-height: 40px; margin: auto" :src="`/img/${photo.type}.svg`" />
+                  <div style="flex: 1; margin: auto">{{ photo.text }}</div>
+                  <ion-img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" @click.stop="$router.push({ query: { step: 4, sequence: i, photo: j } })" />
+                </div>
+                <ion-reorder slot="end"></ion-reorder>
+                <ion-icon :id="`action-${i}-${j}`" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j } })" :icon="ellipsisVertical"></ion-icon>
+                <ion-action-sheet mode="ios" :trigger="`action-${i}-${j}`" :buttons="actions"></ion-action-sheet>
+              </ion-item>
+            </ion-reorder-group>
+          </ion-list>
+          <ion-button style="margin: 10px 20px" expand="block" @click="addPhoto(i, sequence.photos.length)">Ajouter une étape</ion-button>
+          <div style="padding: 20px; border-bottom: 1px solid #00000040" v-if="i !== currentTrip.sequences.length - 1"></div>
+        </ion-list>
       </div>
 
-      <template v-if="currentStep === 5">
+      <template v-if="currentStep === 4">
         <template v-for="photoXXX in [currentSequence.photos[+$route.query.photo]]">
           <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden">
-            <div style="position: relative; display: flex; height: 80%" @click="clickPhoto(photoXXX, state.refGallery)">
+            <div style="position: relative; display: flex; height: 80%" @click="clickPhoto()">
               <template v-if="!photo">
-                <button class="DoneButton" style="position: absolute;left: 0;" @click.stop="clickPhoto(photoXXX, state.refGallery, true)" v-if="$state.photos[photoXXX.id]">Changer</button>
+                <button class="DoneButton" style="position: absolute; left: 0" @click.stop="clickPhoto(true)" v-if="$state.photos[photoXXX.id]">Changer</button>
                 <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[photoXXX.id] || '/img/gallery.svg'" />
               </template>
               <tldraw-annotator :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" @click.stop v-else />
@@ -107,6 +89,42 @@
           <input type="file" accept="image/*" capture="environment" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
         </template>
       </template>
+
+      <div v-if="currentStep === 5">
+        Choissisez une action:
+        <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 20px">
+          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(i)" v-for="i in 5" v-if="currentSequence.transport.startsWith(`Je marche`)">
+            <div>{{ texts[i - 1].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img style="margin-left: auto" :src="`/img/${i}.svg`" />
+          </div>
+          <div
+            style="display: flex; align-items: center; gap: 8px"
+            :style="i === 3 && currentSequence.type.startsWith(`Bus`) && 'display: none'"
+            @click="changeType(i + 5)"
+            v-for="i in 5"
+            v-if="currentSequence.transport.startsWith(`J'attend`)"
+          >
+            <div>{{ texts[i + 4].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img :src="`/img/${i + 5}.svg`" />
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(11)" v-if="currentSequence.transport.startsWith(`Je monte`)">
+            <div>{{ texts[10].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img :src="`/img/11.svg`" />
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(3 + 5)" v-if="currentSequence.transport.startsWith(`Je monte`) && currentSequence.type.startsWith(`Bus`)">
+            <div>{{ texts[3 + 4].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img :src="`/img/${3 + 5}.svg`" />
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px" @click="changeType(12)" v-if="currentSequence.transport.startsWith(`Je monte`)">
+            <div>{{ texts[11].replace("[tram/bus]", currentSequence.type) }}</div>
+            <img :src="`/img/12.svg`" />
+          </div>
+        </div>
+        <ion-button style="margin: 10px 20px" expand="block" @click="$router.push({ query: { ...$route.query, step: 3 } })">Confirmer</ion-button>
+        Souhaitez vous renommer l'action ?
+        <ion-textarea style="flex: 1; margin: auto" fill="solid" :auto-grow="true" v-model="currentPhoto.text"></ion-textarea>
+        <ion-button style="margin: 10px 20px" expand="block" @click="$router.push({ query: { ...$route.query, step: 3 } })">Confirmer</ion-button>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -135,8 +153,8 @@ const actions = [
   { text: "Prévisualiser", handler: () => $router.push(`/travel/${$route.params.id}?step=${sumStep(+$route.query.sequence, +$route.query.photo, true)}`) },
   { text: "Ajouter avant", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo) },
   { text: "Ajouter après", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo + 1) },
-  { text: "Éditer le titre", handler: () => $router.push({ query: { ...$route.query, step: 4 } }) },
-  { text: "Éditer la photo", handler: () => $router.push({ query: { ...$route.query, step: 5 } }) },
+  { text: "Éditer le titre", handler: () => $router.push({ query: { ...$route.query, step: 5 } }) },
+  { text: "Éditer la photo", handler: () => $router.push({ query: { ...$route.query, step: 4 } }) },
   { text: "Déplacer", handler: () => (reorder.value = !reorder.value) },
   { text: "Supprimer", role: "destructive", handler: () => deletePhoto(currentSequence.value, +$route.query.photo) },
   { text: "Annuler", role: "cancel" },
@@ -198,10 +216,11 @@ function addPhoto(sequenceIndex, photoIndex) {
   const photo = { type, text: texts[type - 1].replace("[tram/bus]", sequence.type) }
   sequence.photos.splice(photoIndex, 0, photo)
   $router.push({ query: { step: 4, sequence: sequenceIndex, photo: photoIndex } })
+  setTimeout(clickPhoto, 50)
 }
 function deletePhoto(sequence, index) {
   // if (!confirm("Voulez-vous vraiment supprimer cette photo ?")) return
-  delete $state.photos[sequence.photos[index].id]
+  idb.del(sequence.photos[index].id)
   sequence.photos.splice(index, 1)
 }
 function changeType(type) {
@@ -211,11 +230,11 @@ function changeType(type) {
 }
 // Step 4: Add or Edit title
 // Step 5: Add or Edit the photo + annotations
-function clickPhoto(p, input, change) {
+function clickPhoto(change, p = currentPhoto.value, ref = "refGallery") {
   window.currentPhoto = p
   state.currentPhoto = p
-  if (p.id && !change) photo.value = p.id
-  else input.click()
+  if (p?.id && !change) photo.value = p.id
+  else state[ref].click()
 }
 function inputPhoto(event) {
   const file = event.target.files[0]

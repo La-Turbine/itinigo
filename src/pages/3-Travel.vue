@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @pointerdown="back" @click.stop></ion-back-button>
+          <ion-back-button default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
         </ion-buttons>
         <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from?.text ?? "") }} - {{ homework(currentTrip.to?.text ?? "") }}</div>
       </ion-toolbar>
@@ -203,7 +203,11 @@ function adjustFontSize(el, size = +getComputedStyle(el).fontSize) {
   while (el.scrollHeight > el.offsetHeight || el.scrollWidth > el.offsetWidth) el.style.fontSize = `${--size}px`
 }
 function back() {
-  if ($state.mode === "helper") return $router.push(`/trip/${$route.params.id}?step=3`)
+  if ($state.mode === "helper") {
+    const url = `/trip/${$route.params.id}?step=3`
+    $router.push(`/`)
+    return setTimeout(() => $router.push(url), 100)
+  }
   if (!confirm("Êtes-vous sûr de vouloir quitter le guidage ?")) return
   $router.push("/")
 }
