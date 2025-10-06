@@ -6,6 +6,10 @@
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
         <ion-title>Trajet {{ $route.params.id }}</ion-title>
+        <ion-buttons style="zoom: 1.5" slot="end" v-if="currentStep > 3">
+          <ion-icon id="actions" :icon="ellipsisVertical"></ion-icon>
+          <ion-action-sheet mode="ios" trigger="actions" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -73,21 +77,32 @@
       </div>
 
       <template v-if="currentStep === 4">
-        <template v-for="photoXXX in [currentSequence.photos[+$route.query.photo]]">
-          <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden">
-            <div style="position: relative; display: flex; height: 80%" @click="clickPhoto()">
-              <template v-if="!photo">
-                <button class="DoneButton" style="position: absolute; left: 0" @click.stop="clickPhoto(true)" v-if="$state.photos[photoXXX.id]">Changer</button>
-                <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[photoXXX.id] || '/img/gallery.svg'" />
-              </template>
-              <tldraw-annotator :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" @click.stop v-else />
-            </div>
-            <div style="display: flex; height: 20%; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2)"></div>
+        <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden">
+          <div style="position: relative; display: flex; height: 80%" @click="clickPhoto()">
+            <template v-if="!photo">
+              <button class="DoneButton" style="position: absolute; left: 0" @click.stop="clickPhoto(true)" v-if="$state.photos[currentPhoto.id]">Changer</button>
+              <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[currentPhoto.id] || '/img/gallery.svg'" />
+            </template>
+            <tldraw-annotator :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" v-else />
           </div>
-          <!-- <input type="file" accept="image/*;capture" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" /> -->
-          <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
-          <input type="file" accept="image/*" capture="environment" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
-        </template>
+          <div style="display: flex; height: 20%; gap: 10px; padding: 10px; background: #f6f7f7; border-top: 1px solid rgba(0, 0, 0, 0.2); overflow: auto">
+            <template v-for="(sequence, i) in currentTrip.sequences">
+              <div
+                style="padding: 10px; border: 1px solid rgba(0, 0, 0, 0.2); min-width: 60vw; display: flex"
+                v-for="(photo, j) in sequence.photos"
+                @click.stop="$router.push({ query: { step: 4, sequence: i, photo: j } })"
+              >
+                <ion-img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" />
+                <div style="flex: 1; margin: auto; padding-left: 8px">{{ photo.text }}</div>
+                <ion-icon :id="`action-${i}-${j}`" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j } })" :icon="ellipsisVertical"></ion-icon>
+                <ion-action-sheet mode="ios" :trigger="`action-${i}-${j}`" :buttons="actions"></ion-action-sheet>
+              </div>
+            </template>
+          </div>
+        </div>
+        <!-- <input type="file" accept="image/*;capture" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" /> -->
+        <input type="file" accept="image/*" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
+        <input type="file" accept="image/*" capture="environment" style="display: none" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
       </template>
 
       <div v-if="currentStep === 5">
