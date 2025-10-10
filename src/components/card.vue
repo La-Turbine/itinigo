@@ -1,10 +1,5 @@
 <script setup lang="ts">
 defineProps<{ trip: any }>()
-function homework(place: string) {
-  if (place.toLowerCase() === $state.home?.toLowerCase()) return "🏠 Maison"
-  if (place.toLowerCase() === $state.work?.toLowerCase()) return "🏢 Travail"
-  return place
-}
 </script>
 
 <template>

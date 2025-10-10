@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
         </ion-buttons>
-        <div style="font-size: 80%; font-weight: 500">{{ homework(currentTrip.from?.text ?? "") }} - {{ homework(currentTrip.to?.text ?? "") }}</div>
+        <div style="font-size: 80%; font-weight: 500; white-space: pre-line; text-align: center">{{ triptitle(currentTrip) }}</div>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -169,11 +169,6 @@ function progressBetweenStops(currentPos, stops) {
   } catch (e) {
     return { number: 0, percentage: 0, distance: 0 }
   }
-}
-function homework(place) {
-  if (place.toLowerCase() === $state.home?.toLowerCase()) return "🏠 Maison"
-  if (place.toLowerCase() === $state.work?.toLowerCase()) return "🏢 Travail"
-  return place
 }
 const touchStartX = ref(0)
 const translateX = ref(0)

@@ -17,7 +17,7 @@ watch(
     const type = url.match(/^data:(.*?);base64/)?.[1] || ""
     if (!type) {
       const snapshot = JSON.parse(url)
-      return photo.value = snapshot
+      return (photo.value = snapshot)
     }
     const image = new Image()
     image.onload = () => {

@@ -10,7 +10,6 @@ Lot 1: Août / Septembre > Réorganisation de l'app "Itinigo"
 - [ ] Fix: Suppression d'une photo (puis d'une autre)
 - [ ] Feat: Ajout de la navigation en dessous d'une photo
 
-
 Lot 2: Octobre / Novembre > Finission + Feedback + Design
 Lot 3: Décembre / Janvier > BugFix + Amélioration
 

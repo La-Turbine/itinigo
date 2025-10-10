@@ -78,6 +78,18 @@ async function initApp() {
   window.$state = app.config.globalProperties.$state = $state
   const $position = reactive({})
   window.$position = app.config.globalProperties.$position = $position
+  // UTILITIES
+  function homework(place: string) {
+    if (place.toLowerCase() === $state.home?.toLowerCase()) return "🏠 Maison"
+    if (place.toLowerCase() === $state.work?.toLowerCase()) return "🏢 Travail"
+    return place
+  }
+  function triptitle(trip: any) {
+    return `${homework(trip.from?.text ?? "")}\n${homework(trip.to?.text ?? "")}`
+  }
+  window.homework = app.config.globalProperties.homework = homework
+  window.triptitle = app.config.globalProperties.triptitle = triptitle
+  // GEOLOCATION
   retryPosition()
   function retryPosition() {
     watchPosition()
