@@ -85,10 +85,14 @@
 
       <template v-if="currentStep === 4">
         <div style="display: flex; flex-direction: column; height: 100%; overflow: hidden">
-          <div style="position: relative; display: flex; height: 80%" @click="clickPhoto()">
+          <div style="position: relative; display: flex; height: 80%" @click="clickPhoto()" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
             <template v-if="!photo">
               <button class="DoneButton" style="position: absolute; left: 0" @click.stop="clickPhoto(true)" v-if="$state.photos[currentPhoto.id]">Changer</button>
-              <img style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none" :src="$state.photos[currentPhoto.id] || '/img/gallery.svg'" />
+              <img
+                style="max-width: 100%; max-height: 100%; object-fit: cover; margin: auto; user-select: none; pointer-events: none"
+                :src="$state.photos[currentPhoto.id] || '/img/gallery.svg'"
+                :style="cardStyle"
+              />
             </template>
             <tldraw-annotator :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" v-else />
           </div>
@@ -96,6 +100,9 @@
             <template v-for="(sequence, i) in currentTrip.sequences">
               <div
                 style="padding: 10px; border: 1px solid rgba(0, 0, 0, 0.2); min-width: 60vw; display: flex"
+                :style="i === +$route.query.sequence && j === +$route.query.photo ? 'border-color: #3880ff;background: #3880ff22' : ''"
+                :data-sequence="i"
+                :data-photo="j"
                 v-for="(photo, j) in sequence.photos"
                 @click.stop="$router.push({ query: { step: 4, sequence: i, photo: j } })"
               >
@@ -154,7 +161,7 @@
 
 <script setup>
 import { ellipsisVertical, eye } from "ionicons/icons"
-import { ref, reactive, computed } from "vue"
+import { ref, reactive, computed, watch } from "vue"
 // https://api.ppp38v2.cityway.fr/search/address?keywords=40+rue&maxitems=10&pointtypes=&categories=&LocalityIds=&OperatorIds=
 // https://api.ppp38v2.cityway.fr/journeyplanner/hubs/plantrips?KeywordDep=40+RUE+ABB%C3%89+GR%C3%89GOIRE+-+38000+GRENOBLE+Adresse&PointDep=152084_3_40&NumDep=40&KeywordArr=HOTEL+DE+VILLE+-+38000+GRENOBLE+Arr%C3%AAt&PointArr=2002289_4&KeywordVia=&PointVia=&NumVia=&DurationVia=30&Date=28%2F07%2F2024&TypeDate=68&Hour=13&Minute=45&Submit=True&TypeTrip=PlanTrip&Algorithm=Fastest&WalkDistance=2000&WalkSpeed=4&Modes=Bus&Modes=Coach&Modes=Metro&Modes=Tram&Modes=Tod&Modes=Tgv&Modes=Ter&Modes=Train&Modes=Plane&Partners=14&Partners=28&Partners=24&Partners=30&Partners=15&Partners=5&Partners=2&Partners=22&Partners=18&Partners=29&Partners=6&Partners=8&Partners=31&Partners=3&Partners=13&Partners=12&Partners=26&Partners=27&Partners=7&Partners=17&BikeDistance=10&BikeSecure=2&BikeLeave=0&BikeSpeed=15&CarDistance=100&CarLeave=0
 // https://www.itinisere.fr/fr/itineraires/4/JourneyPlanner?KeywordDep=40+RUE+ABB%C3%89+GR%C3%89GOIRE+-+38000+GRENOBLE+Adresse&PointDep=152084_3_40&NumDep=40&KeywordArr=HOTEL+DE+VILLE+-+38000+GRENOBLE+Arr%C3%AAt&PointArr=2002289_4&KeywordVia=&PointVia=&NumVia=&DurationVia=30&Date=28%2F07%2F2024&TypeDate=68&Hour=13&Minute=45&Submit=True&TypeTrip=PlanTrip&Algorithm=Fastest&WalkDistance=2000&WalkSpeed=4&Modes=Bus&Modes=Coach&Modes=Metro&Modes=Tram&Modes=Tod&Modes=Tgv&Modes=Ter&Modes=Train&Modes=Plane&Partners=14&Partners=28&Partners=24&Partners=30&Partners=15&Partners=5&Partners=2&Partners=22&Partners=18&Partners=29&Partners=6&Partners=8&Partners=31&Partners=3&Partners=13&Partners=12&Partners=26&Partners=27&Partners=7&Partners=17&BikeDistance=10&BikeSecure=2&BikeLeave=0&BikeSpeed=15&CarDistance=100&CarLeave=0
@@ -392,5 +399,45 @@ function back() {
   if ($route.query.step === "3") return $router.push("/")
   if ($route.query.step === "4") return $router.push({ query: { step: 3 } })
   $router.go(-1)
+}
+//
+watch(
+  () => [$route.query.sequence, $route.query.photo],
+  () => {
+    setTimeout(() => {
+      const el = $(`[data-sequence="${$route.query.sequence}"][data-photo="${$route.query.photo}"]`)
+      el?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      })
+    }, 0)
+  }
+)
+// Swipe to change photo
+const touchStartX = ref(0)
+const translateX = ref(0)
+const cardStyle = ref({})
+function onTouchStart(e) {
+  touchStartX.value = e.touches[0].clientX
+}
+function onTouchMove(e) {
+  translateX.value = e.touches[0].clientX - touchStartX.value
+  cardStyle.value = { transform: `translateX(${translateX.value}px)` }
+}
+function onTouchEnd(e) {
+  cardStyle.value = {}
+  const touchEndX = e.changedTouches[0].clientX
+  const diffX = touchEndX - touchStartX.value
+  if (diffX > 100) {
+    if (+$route.query.sequence === 0 && +$route.query.photo === 0) return
+    if (+$route.query.photo === 0) return $router.push({ query: { step: 4, sequence: +$route.query.sequence - 1, photo: currentTrip.sequences[+$route.query.sequence - 1].photos.length - 1 } })
+    return $router.push({ query: { step: 4, sequence: +$route.query.sequence, photo: +$route.query.photo - 1 } })
+  }
+  if (diffX < -100) {
+    if (+$route.query.sequence === currentTrip.sequences.length - 1 && +$route.query.photo === currentTrip.sequences[+$route.query.sequence].photos.length - 1) return
+    if (+$route.query.photo === currentTrip.sequences[+$route.query.sequence].photos.length - 1) return $router.push({ query: { step: 4, sequence: +$route.query.sequence + 1, photo: 0 } })
+    return $router.push({ query: { step: 4, sequence: +$route.query.sequence, photo: +$route.query.photo + 1 } })
+  }
 }
 </script>
