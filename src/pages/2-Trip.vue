@@ -13,11 +13,12 @@
           <ion-icon style="margin-right: 4px" :icon="eye" @click="actions[0].handler()" v-if="!reorder"></ion-icon>
         </ion-buttons>
         <ion-buttons style="zoom: 1.5" slot="end" v-if="currentStep > 3">
-          <ion-icon id="actions" :icon="ellipsisVertical"></ion-icon>
-          <ion-action-sheet mode="ios" trigger="actions" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
+          <ion-icon id="actionsTop" :icon="ellipsisVertical"></ion-icon>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
+    <ion-action-sheet mode="ios" trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
+    <ion-action-sheet mode="ios" :isOpen="$route.query.action" @didDismiss="$router.replace({ query: { ...$route.query, action: undefined } })" :buttons="actions"></ion-action-sheet>
     <ion-content>
       <ion-list v-if="currentStep < 3">
         <ion-item>
@@ -73,8 +74,7 @@
                   <ion-img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" />
                 </div>
                 <ion-reorder slot="end"></ion-reorder>
-                <ion-icon :id="`action-${i}-${j}`" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j } })" :icon="ellipsisVertical" v-show="!reorder"></ion-icon>
-                <ion-action-sheet mode="ios" :trigger="`action-${i}-${j}`" :buttons="actions"></ion-action-sheet>
+                <ion-icon id="actions" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j, action: 1 } })" :icon="ellipsisVertical" v-show="!reorder"></ion-icon>
               </ion-item>
             </ion-reorder-group>
           </ion-list>
@@ -109,8 +109,7 @@
                 <ion-img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" />
                 <div style="flex: 1; margin: auto; padding-left: 8px" v-if="photo.text">{{ photo.text }}</div>
                 <ion-button style="margin: auto auto auto 0; padding-left: 8px" @click.stop="$router.push({ query: { step: 5, sequence: i, photo: j } })" v-else>Nommer l'action</ion-button>
-                <ion-icon :id="`action-${i}-${j}`" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j } })" :icon="ellipsisVertical"></ion-icon>
-                <ion-action-sheet mode="ios" :trigger="`action-${i}-${j}`" :buttons="actions"></ion-action-sheet>
+                <ion-icon id="actions" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j } })" :icon="ellipsisVertical"></ion-icon>
               </div>
             </template>
           </div>
@@ -430,14 +429,30 @@ function onTouchEnd(e) {
   const touchEndX = e.changedTouches[0].clientX
   const diffX = touchEndX - touchStartX.value
   if (diffX > 100) {
-    if (+$route.query.sequence === 0 && +$route.query.photo === 0) return
-    if (+$route.query.photo === 0) return $router.push({ query: { step: 4, sequence: +$route.query.sequence - 1, photo: currentTrip.sequences[+$route.query.sequence - 1].photos.length - 1 } })
-    return $router.push({ query: { step: 4, sequence: +$route.query.sequence, photo: +$route.query.photo - 1 } })
+    let seq = +$route.query.sequence
+    let pho = +$route.query.photo
+    if (pho === 0) {
+      while (seq > 0) {
+        seq--
+        pho = currentTrip.sequences[seq].photos.length
+        if (pho > 0) break
+      }
+      if (seq === 0 && pho === 0) return
+    }
+    return $router.push({ query: { step: 4, sequence: seq, photo: pho - 1 } })
   }
   if (diffX < -100) {
-    if (+$route.query.sequence === currentTrip.sequences.length - 1 && +$route.query.photo === currentTrip.sequences[+$route.query.sequence].photos.length - 1) return
-    if (+$route.query.photo === currentTrip.sequences[+$route.query.sequence].photos.length - 1) return $router.push({ query: { step: 4, sequence: +$route.query.sequence + 1, photo: 0 } })
-    return $router.push({ query: { step: 4, sequence: +$route.query.sequence, photo: +$route.query.photo + 1 } })
+    let seq = +$route.query.sequence
+    let pho = +$route.query.photo
+    if (pho === currentTrip.sequences[seq].photos.length - 1) {
+      while (seq < currentTrip.sequences.length - 1) {
+        seq++
+        pho = -1
+        if (currentTrip.sequences[seq].photos.length > 0) break
+      }
+      if (seq === currentTrip.sequences.length - 1 && pho === -1) return
+    }
+    return $router.push({ query: { step: 4, sequence: seq, photo: pho + 1 } })
   }
 }
 </script>
