@@ -10,6 +10,7 @@ import "./tldraw"
 import TldrawAnnotator from "./tldraw/annotator.vue"
 import Card from "./components/card.vue"
 async function initApp() {
+  window.Ionic = { config: { mode: "ios" } }
   const app = createApp(App).use(IonicVue).use(router)
   app.component("TldrawAnnotator", TldrawAnnotator)
   app.component("Card", Card)

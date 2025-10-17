@@ -32,6 +32,16 @@ Composants:
 - FormAction
 - CardHelp
 - FormConfig
+
+Composants Ionic:
+- Router
+- Top Bar / Back Button
+- Forms (Label, Input, Autocomplete)
+- Lists, Reorder #NOCHANGE
+- Action Sheet (burger) #NOCHANGE
+- Alerts (TODO)
+- Toast (MAYBE)
+- Buttons (TOREMOVE)
 ```
 
 ## 2025
@@ -49,19 +59,12 @@ Lot 1: Août / Septembre > Réorganisation
 
 Lot 2: Octobre / Novembre > Design
 
-- [x] Tech: Déplacer sur [github](https://github.com/La-Turbine/Itinigo) + README + LICENCE
+- [x] Tech: Open-Source sur [github](https://github.com/La-Turbine/Itinigo) + README + LICENCE
 - [x] Tech: Re-setup Vercel + Domain itinigo.fr
 - [x] Fix: Burger sur edition d'une étape
 - [x] Fix: Annotation sur photo sans nom
-- [ ] Refactor: Tailwind + Uniform "iOS" Design
-  - Router
-  - Top Bar / Back Button
-  - Forms (Label, Input, Autocomplete)
-  - Lists, Reorder #NOCHANGE
-  - Action Sheet (burger) #NOCHANGE
-  - Alerts (TODO)
-  - Toast (MAYBE)
-  - Buttons (TOREMOVE)
+- [x] Refactor: Uniform "iOS" Design + Switch Bun + Update Latest
+- [ ] Refactor: Reorganisation en composants + Switch Tailwind / Icons
 - [ ] Feat: Recadrage d'une photo
 - [ ] Feat: Flux Appareil Photo
 - [ ] Design: Header
