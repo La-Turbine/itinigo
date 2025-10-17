@@ -7,7 +7,7 @@ import path from "path"
 import { defineConfig } from "vite"
 import { version } from "./package.json"
 import { execSync } from "child_process"
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from "@tailwindcss/vite"
 
 // NOTE: The hash is lagging one version behind
 const count = +execSync("git rev-list --count HEAD").toString().trim() + 1

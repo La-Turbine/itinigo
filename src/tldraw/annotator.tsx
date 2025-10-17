@@ -165,10 +165,10 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     return (
       <DefaultToolbar>
         <SelectToolbarItem />
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <ArrowToolbarItem />}
-        {/* {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <EllipseToolbarItem />} */}
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <OvalToolbarItem />}
-        {[4, 5].includes(currentPhoto.type) && <TriangleToolbarItem />}
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <ArrowToolbarItem />}
+        {/* {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <EllipseToolbarItem />} */}
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(currentPhoto.type) && <OvalToolbarItem />}
+        {[0, 4, 5].includes(currentPhoto.type) && <TriangleToolbarItem />}
       </DefaultToolbar>
     )
   }

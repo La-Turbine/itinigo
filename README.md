@@ -50,11 +50,9 @@ Lot 1: Août / Septembre > Réorganisation
 Lot 2: Octobre / Novembre > Design
 
 - [x] Tech: Déplacer sur [github](https://github.com/La-Turbine/Itinigo) + README + LICENCE
-- [-] Tech: Github board
-- [x] Tech: Re-setup Vercel
-- [x] Tech: Domain itinigo.fr
-- [ ] Fix: Annotation sur photo sans nom
-- [ ] Fix: Burger sur edition d'une étape
+- [x] Tech: Re-setup Vercel + Domain itinigo.fr
+- [x] Fix: Burger sur edition d'une étape
+- [x] Fix: Annotation sur photo sans nom
 - [ ] Refactor: Tailwind + Uniform "iOS" Design
   - Router
   - Top Bar / Back Button

@@ -14,10 +14,10 @@
         </ion-buttons>
         <ion-buttons style="zoom: 1.5" slot="end" v-if="currentStep > 3">
           <ion-icon id="actionsTop" :icon="ellipsisVertical"></ion-icon>
+          <ion-action-sheet mode="ios" trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-action-sheet mode="ios" trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
     <ion-action-sheet mode="ios" :isOpen="$route.query.action" @didDismiss="$router.replace({ query: { ...$route.query, action: undefined } })" :buttons="actions"></ion-action-sheet>
     <ion-content>
       <ion-list v-if="currentStep < 3">
@@ -57,7 +57,7 @@
             Arrivée à <b>{{ currentTrip.to.text }}</b>
           </div>
         </div>
-        <div style="padding: 20px; border-bottom: 1px solid #00000040" v-if="i !== currentTrip.sequences.length - 1"></div>
+        <div style="padding: 20px; border-bottom: 1px solid #00000040"></div>
         <ion-list lines="none" v-for="(sequence, i) in currentTrip.sequences">
           <ion-item style="font-weight: bold; margin: 20px">{{ sequence.transport }}</ion-item>
           <div style="margin: -15px 20px 15px" v-if="sequence.stops">
@@ -74,7 +74,7 @@
                   <ion-img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" />
                 </div>
                 <ion-reorder slot="end"></ion-reorder>
-                <ion-icon id="actions" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j, action: 1 } })" :icon="ellipsisVertical" v-show="!reorder"></ion-icon>
+                <ion-icon @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j, action: 1 } })" :icon="ellipsisVertical" v-show="!reorder"></ion-icon>
               </ion-item>
             </ion-reorder-group>
           </ion-list>
@@ -109,7 +109,7 @@
                 <ion-img :src="$state.photos[photo.id] || '/img/gallery.svg'" style="max-width: 115px; height: 115px" />
                 <div style="flex: 1; margin: auto; padding-left: 8px" v-if="photo.text">{{ photo.text }}</div>
                 <ion-button style="margin: auto auto auto 0; padding-left: 8px" @click.stop="$router.push({ query: { step: 5, sequence: i, photo: j } })" v-else>Nommer l'action</ion-button>
-                <ion-icon id="actions" @pointerdown="$router.replace({ query: { ...$route.query, sequence: i, photo: j } })" :icon="ellipsisVertical"></ion-icon>
+                <ion-icon @click.stop="$router.replace({ query: { ...$route.query, sequence: i, photo: j, action: 1 } })" :icon="ellipsisVertical"></ion-icon>
               </div>
             </template>
           </div>
@@ -182,7 +182,7 @@ const actions = [
   { text: "Prévisualiser", handler: () => $router.push(`/travel/${$route.params.id}?step=${sumStep(+$route.query.sequence, +$route.query.photo, true) || 1}`) },
   { text: "Ajouter avant", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo) },
   { text: "Ajouter après", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo + 1) },
-  { text: "Éditer le titre", handler: () => $router.push({ query: { ...$route.query, step: 5 } }) },
+  { text: "Éditer l'action", handler: () => $router.push({ query: { ...$route.query, step: 5 } }) },
   { text: "Éditer la photo", handler: () => $router.push({ query: { ...$route.query, step: 4 } }) },
   { text: "Déplacer", handler: () => (reorder.value = !reorder.value) },
   { text: "Supprimer", role: "destructive", handler: () => deletePhoto(currentSequence.value, +$route.query.photo) },
@@ -252,6 +252,7 @@ function deletePhoto(sequence, index) {
   // if (!confirm("Voulez-vous vraiment supprimer cette photo ?")) return
   idb.del(sequence.photos[index].id)
   sequence.photos.splice(index, 1)
+  prevStep()
 }
 function changeType(type) {
   currentPhoto.value.type = type
@@ -417,6 +418,32 @@ watch(
 const touchStartX = ref(0)
 const translateX = ref(0)
 const cardStyle = ref({})
+function prevStep() {
+  let seq = +$route.query.sequence
+  let pho = +$route.query.photo
+  if (pho === 0) {
+    while (seq > 0) {
+      seq--
+      pho = currentTrip.sequences[seq].photos.length
+      if (pho > 0) break
+    }
+    if (seq === 0 && pho === 0) return
+  }
+  return $router.push({ query: { step: 4, sequence: seq, photo: pho - 1 } })
+}
+function nextStep() {
+  let seq = +$route.query.sequence
+  let pho = +$route.query.photo
+  if (pho === currentTrip.sequences[seq].photos.length - 1) {
+    while (seq < currentTrip.sequences.length - 1) {
+      seq++
+      pho = -1
+      if (currentTrip.sequences[seq].photos.length > 0) break
+    }
+    if (seq === currentTrip.sequences.length - 1 && pho === -1) return
+  }
+  return $router.push({ query: { step: 4, sequence: seq, photo: pho + 1 } })
+}
 function onTouchStart(e) {
   touchStartX.value = e.touches[0].clientX
 }
@@ -428,31 +455,7 @@ function onTouchEnd(e) {
   cardStyle.value = {}
   const touchEndX = e.changedTouches[0].clientX
   const diffX = touchEndX - touchStartX.value
-  if (diffX > 100) {
-    let seq = +$route.query.sequence
-    let pho = +$route.query.photo
-    if (pho === 0) {
-      while (seq > 0) {
-        seq--
-        pho = currentTrip.sequences[seq].photos.length
-        if (pho > 0) break
-      }
-      if (seq === 0 && pho === 0) return
-    }
-    return $router.push({ query: { step: 4, sequence: seq, photo: pho - 1 } })
-  }
-  if (diffX < -100) {
-    let seq = +$route.query.sequence
-    let pho = +$route.query.photo
-    if (pho === currentTrip.sequences[seq].photos.length - 1) {
-      while (seq < currentTrip.sequences.length - 1) {
-        seq++
-        pho = -1
-        if (currentTrip.sequences[seq].photos.length > 0) break
-      }
-      if (seq === currentTrip.sequences.length - 1 && pho === -1) return
-    }
-    return $router.push({ query: { step: 4, sequence: seq, photo: pho + 1 } })
-  }
+  if (diffX > 100) return prevStep()
+  if (diffX < -100) return nextStep()
 }
 </script>
