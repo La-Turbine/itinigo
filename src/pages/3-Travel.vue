@@ -12,7 +12,7 @@
       <div style="display: flex; flex-direction: column; justify-content: space-around; padding: 20px; height: 100%; overflow: hidden" v-if="!current">
         <div>
           <div style="font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 20px">Mon itinéraire</div>
-          <card style="margin: 0" :trip="currentTrip" />
+          <card-trip style="margin: 0" :trip="currentTrip" />
         </div>
         <div>
           <div style="font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 20px">Je vérifie</div>

@@ -8,12 +8,12 @@ import { reactive, watch } from "vue"
 import { idb } from "./idb"
 import "./tldraw"
 import TldrawAnnotator from "./tldraw/annotator.vue"
-import Card from "./components/card.vue"
+import CardTrip from "./components/cardTrip.vue"
 async function initApp() {
   window.Ionic = { config: { mode: "ios" } }
   const app = createApp(App).use(IonicVue).use(router)
   app.component("TldrawAnnotator", TldrawAnnotator)
-  app.component("Card", Card)
+  app.component("CardTrip", CardTrip)
   Object.entries(Ion).forEach(([key, value]) => {
     if (!key.startsWith("Ion")) return
     app.component(key, value)
@@ -62,8 +62,8 @@ async function initApp() {
   window.sms = async (message, number) => {
     if (!number) return alert("Please enter a valid phone number")
     if (!message) return alert("Please enter a message")
-    const TWILIO_ACCOUNT_SID = ""
-    const TWILIO_AUTH_TOKEN = ""
+    const TWILIO_ACCOUNT_SID = import.meta.env.VITE_TWILIO_ACCOUNT_SID || ""
+    const TWILIO_AUTH_TOKEN = import.meta.env.VITE_TWILIO_AUTH_TOKEN || ""
     const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`, {
       method: "POST",
       headers: {

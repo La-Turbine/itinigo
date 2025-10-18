@@ -14,11 +14,11 @@
         </ion-buttons>
         <ion-buttons style="zoom: 1.5" slot="end" v-if="currentStep > 3">
           <ion-icon id="actionsTop" :icon="ellipsisVertical"></ion-icon>
-          <ion-action-sheet mode="ios" trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
+          <ion-action-sheet trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-action-sheet mode="ios" :isOpen="$route.query.action" @didDismiss="$router.replace({ query: { ...$route.query, action: undefined } })" :buttons="actions"></ion-action-sheet>
+    <ion-action-sheet :isOpen="$route.query.action" @didDismiss="$router.replace({ query: { ...$route.query, action: undefined } })" :buttons="actions"></ion-action-sheet>
     <ion-content>
       <ion-list v-if="currentStep < 3">
         <ion-item>

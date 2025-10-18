@@ -2,13 +2,14 @@
 
 Projet Itinigo : accompagner la mobilité en TC des personnes en situation de handicap mental, cognitif ou psychique
 
-## Nomenclature
+## Structure
 
 ```
-Personas:
+# Personas:
 - Utilisateur: User
 - Accompagnant: Helper
 
+# Pages:
 Page 1 - Trips: Liste des trajets
 Page 2 - Trip: Création d'un trajet
   - Step 1 - Départ / Arrivée / Date / Heure
@@ -20,28 +21,72 @@ Page 3 - Travel: Visualisation d'un trajet
 Page 4 - Help
 Page 5 - Config
 
-Composants:
-- ListTrip
-- CardTrip
-- FormTrip
-- CardItinerary #NOCHANGE
-- ListStep
-- CardStep
-- Annotator
-- Timeline
-- FormAction
-- CardHelp
-- FormConfig
+# Composants:
+- ListTrip (Page 1)
+- ListStep (Step 3)
+- CardTrip (Page 1)
+- CardItinerary (Step 2) #NOCHANGE
+- CardStep (Step 3+4)
+- CardHelp (Page 4)
+- FormTrip (Step 1+2)
+- FormAction (Step 5)
+- FormConfig (Page 5)
+- Timeline (Step 4)
+- Annotator (Step 4) #HARDCHANGE
 
-Composants Ionic:
-- Router
+# Composants Ionic:
 - Top Bar / Back Button
 - Forms (Label, Input, Autocomplete)
 - Lists, Reorder #NOCHANGE
 - Action Sheet (burger) #NOCHANGE
 - Alerts (TODO)
 - Toast (MAYBE)
-- Buttons (TOREMOVE)
+- Buttons, Icons (TOREMOVE)
+
+# Functions:
+## Utilities
+- `homework(place)` - Returns formatted place name (home/work emoji)
+- `triptitle(trip)` - Returns formatted trip title with from/to locations
+- `retryPosition()` - Retries position watching with interval
+- `watchPosition()` - Watches user's geolocation
+- `notify(message, title?)` - Shows notification
+- `push(message, title)` - Sends push notification via service worker
+- `sms(message, number)` - Sends SMS via Twilio API
+- swipe
+- next / back
+## 1-Trips.vue
+- `addTrip()` - Adds a new trip
+- `deleteTrip(index)` - Deletes a trip from the list
+- `changeMode()` - Toggles between helper/user mode
+## 2-Trip.vue
+- `onSearch(event)` - Searches for addresses from API
+- `onSelect(item)` - Selects an address item
+- `onFocus(direction)` - Sets focus on from/to input
+- `onBlur(direction)` - Removes focus from input
+- `addPhoto(sequenceIndex, photoIndex)` - Adds a new photo to a sequence
+- `deletePhoto(sequence, index)` - Deletes a photo from sequence
+- `takePhoto()` - Captures photo from stream
+- `changeType(type)` - Changes photo action type
+- `reorderPhoto(sequence, event)` - Reorders photos in a sequence
+- `annotatePhoto({ blob, snapshot })` - Handles annotated photo
+## 3-Travel.vue
+- `gogo()` - Starts the trip guidance
+- `adjustFontSize(el, size?)` - Adjusts element font size
+- `progressBetweenStops(currentPos, stops)` - Calculates progress between stops
+- `haversineDistance(point1, point2)` - Calculates distance between two coordinates
+- `confetti()` - Triggers confetti animation on trip completion
+## 4-Help.vue
+- `help()` - Shows help card
+- `map()` - Opens Google Maps with destination
+- `call()` - Initiates call to contact
+## 5-Config.vue
+- `requestInstall()` - Requests PWA installation
+- `requestNotification()` - Requests notification permission
+- `requestLocalisation()` - Requests geolocation permission
+- `onExport()` - Exports app data as JSON
+- `onImport()` - Imports app data from JSON file
+- `reset()` - Resets the entire application
+- `downloadManual()` - Downloads manual PDF
 ```
 
 ## 2025
@@ -64,29 +109,33 @@ Lot 2: Octobre / Novembre > Design
 - [x] Fix: Burger sur edition d'une étape
 - [x] Fix: Annotation sur photo sans nom
 - [x] Refactor: Uniform "iOS" Design + Switch Bun + Update Latest
-- [ ] Refactor: Reorganisation en composants + Switch Tailwind / Icons
+- [ ] Refactor: Rework en composants + Switch Tailwind / Icons
+  - [ ] 10 components: ListTrip ListStep CardTrip CardItinerary CardStep CardHelp FormTrip FormAction FormConfig Timeline
+- [ ] Refactor: Rework des fonctions
+  - [ ] create a swipe bind function to replace onTouchStart/Move/End
+  - [ ] create a takePhoto with camera stream instead of input/clickPhoto
+  - [ ] uniformize next / back functions across pages
 - [ ] Feat: Recadrage d'une photo
 - [ ] Feat: Flux Appareil Photo
-- [ ] Design: Header
-- [ ] Design: Trips - ListTrip
-- [ ] Design: Trips - CardTrip ( ⋮ delete, reorder)
-- [ ] Design: Trips - FormTrip (autocomplete, noir sur blanc)
-- [ ] Design: Trip - ListStep (header, sequences)
-- [ ] Design: Trip - CardStep
-- [ ] Design: Trip - Timeline ( + before/after)
-- [ ] Design: Travel - Notification
+- [ ] Design: ListTrip + CardTrip ( ⋮ delete, reorder)
+- [ ] Design: FormTrip (autocomplete, noir sur blanc)
+- [ ] Design: CardStep
+- [ ] Design: Timeline ( + before/after, > validate at the end)
+- [ ] Design: Notification
+
+Lot 3: Novembre / Décembre > Finitions + Améliorations
+
+- [ ] Design: Feedback + Finishing Touches
 - [ ] Design: Travel - RAS?
 - [ ] Design: Help - RAS?
 - [ ] Design: Config - RAS!
 
-Lot 3: Novembre / Décembre > Finitions + Améliorations
-
-TODO:
+## ICEBOX / BACKLOG
 
 - [ ] 5j Reorganiser (merger 4 pages en 2, rajouter 3 pages, créer 5 composants)
 - [ ] 3j Ré-annoter / Recadrer / Changer
 - [ ] 5j Feedback / Design
-- [ ] 1j Passation du Code / Hébergement / Domain / Open Source
+- [x] 1j Passation du Code / Hébergement / Domain / Open Source
 - [ ] 1j Correspondance multiple (ajouter une étape)
 - [ ] 1j Notification si application en background (notification sonore, à définir)
 - [ ] 2j Geolocalisation des photos, notification si l'utilisateur s'éloigne

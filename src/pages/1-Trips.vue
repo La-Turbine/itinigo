@@ -16,7 +16,7 @@
           <ion-button style="position: absolute; top: -14px; right: -2px; width: 20px; height: 20px" color="danger" @click="deleteTrip(i)" v-if="$state.mode === 'helper'">
             <ion-icon slot="icon-only" :icon="trash"></ion-icon>
           </ion-button>
-          <card style="margin: 20px" :trip="trip" @click="$router.push($state.mode === 'helper' ? `/trip/${i + 1}?step=3` : `/travel/${i + 1}`)" />
+          <card-trip style="margin: 20px" :trip="trip" @click="$router.push($state.mode === 'helper' ? `/trip/${i + 1}?step=3` : `/travel/${i + 1}`)" />
         </div>
         <ion-button style="margin: 10px 20px" expand="block" @click="addTrip" v-if="$state.mode === 'helper'">Ajouter un trajet</ion-button>
         <ion-button style="margin: 10px 20px" expand="block" fill="outline" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">CONFIG</ion-button>
