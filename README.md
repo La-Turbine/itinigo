@@ -108,10 +108,9 @@ Lot 2: Octobre / Novembre > Design
 - [x] Tech: Re-setup Vercel + Domain itinigo.fr
 - [x] Fix: Burger sur edition d'une étape
 - [x] Fix: Annotation sur photo sans nom
-- [x] Refactor: Uniform "iOS" Design + Switch Bun + Update Latest
-- [ ] Refactor: Rework en composants + Switch Tailwind / Icons
-  - [ ] 10 components: ListTrip ListStep CardTrip CardItinerary CardStep CardHelp FormTrip FormAction FormConfig Timeline
-- [ ] Refactor: Rework des fonctions
+- [x] Refactor: Uniform "iOS" Design + Switch Bun + Update Latest + Switch Tailwind / Icons
+- [ ] Refactor: Rework en composants + Rework des fonctions
+  - [ ] 8 components: ListStep CardItinerary CardStep CardHelp FormTrip FormAction FormConfig Timeline
   - [ ] create a swipe bind function to replace onTouchStart/Move/End
   - [ ] create a takePhoto with camera stream instead of input/clickPhoto
   - [ ] uniformize next / back functions across pages

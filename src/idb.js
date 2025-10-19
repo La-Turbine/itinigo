@@ -17,7 +17,7 @@ export const idb = {
             transaction.oncomplete = () => resolve(request)
             transaction.onabort = transaction.onerror = () => reject(transaction.error)
             const request = fn(transaction.objectStore("kv"))
-          })
+          }),
       )
       .then((req) => req.result)
   },
@@ -44,7 +44,7 @@ export const idb = {
           if (!this.result) return
           keys.push(this.result.key)
           this.result.continue()
-        })
+        }),
     ).then(() => keys)
   },
 }

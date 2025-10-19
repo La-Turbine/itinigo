@@ -105,7 +105,7 @@ async function requestLocalisation() {
   if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))
   navigator.geolocation.getCurrentPosition(
     (position) => console.log(position),
-    (err) => console.log(err)
+    (err) => console.log(err),
   )
 }
 async function onExport() {

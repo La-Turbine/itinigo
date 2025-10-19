@@ -412,7 +412,7 @@ watch(
         inline: "start",
       })
     }, 0)
-  }
+  },
 )
 // Swipe to change photo
 const touchStartX = ref(0)

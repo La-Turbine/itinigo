@@ -127,14 +127,14 @@ watch(
         if (current.value.type.startsWith("Bus")) return notify("Appuyez sur le bouton pour demander l'arrêt.\nPréparez-vous à descendre au prochain arrêt", "Appuyez sur le bouton")
         return notify("Préparez-vous à descendre quand les portes s'ouvriront.", "Préparez-vous à descendre")
       },
-      { once: true }
+      { once: true },
     )
     watch(
       () => progress.value.percentage < 0.85,
       () => $router.push({ query: { step: currentStep.value + 1 } }),
-      { once: true }
+      { once: true },
     )
-  }
+  },
 )
 async function confetti() {
   const confetti = await import("https://esm.sh/canvas-confetti")

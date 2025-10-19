@@ -7,7 +7,7 @@ self.addEventListener("notificationclick", (event) => {
         if ("focus" in client) return client.focus()
       }
       return clients.openWindow("/")
-    })
+    }),
   )
 })
 self.addEventListener("sync", (event) => {

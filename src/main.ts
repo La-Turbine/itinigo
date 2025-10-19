@@ -8,12 +8,14 @@ import { reactive, watch } from "vue"
 import { idb } from "./idb"
 import "./tldraw"
 import TldrawAnnotator from "./tldraw/annotator.vue"
-import CardTrip from "./components/cardTrip.vue"
+import CardTrip from "./components/CardTrip.vue"
+import ListTrip from "./components/ListTrip.vue"
 async function initApp() {
   window.Ionic = { config: { mode: "ios" } }
   const app = createApp(App).use(IonicVue).use(router)
   app.component("TldrawAnnotator", TldrawAnnotator)
   app.component("CardTrip", CardTrip)
+  app.component("ListTrip", ListTrip)
   Object.entries(Ion).forEach(([key, value]) => {
     if (!key.startsWith("Ion")) return
     app.component(key, value)
@@ -30,7 +32,7 @@ async function initApp() {
       acc.photos[keys[i]] = val
       return acc
     },
-    { mode: "user", trips: [], photos: {} }
+    { mode: "user", trips: [], photos: {} },
   )
   const $state = reactive(db)
   $state.photos.BUSIN = "/img/BUSIN.png"
@@ -105,7 +107,7 @@ async function initApp() {
         enableHighAccuracy: true, // Use GPS if available
         timeout: 1000, // Maximum time to wait for a response (in ms)
         maximumAge: 0, // Don't use cached position
-      }
+      },
     )
   }
   app.config.globalProperties.window = window

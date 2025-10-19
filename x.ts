@@ -6,25 +6,31 @@ const text = await $`git log --pretty=format:'%ai' --shortstat`.text()
 // 1st line: cast to Date
 // 2nd line: extract the numbers
 // 3rd line: ignore
-const chunks = text.split("\n").reduce((acc, line, i) => {
-  const index = Math.floor(i / 3)
-  acc[index] = acc[index] || []
-  if (i % 3 === 0) acc[index].push(new Date(line))
-  if (i % 3 === 1) acc[index].push(line.match(/\d+/g).map(Number))
-  // if (i % 3 === 2) acc[index].push(line)
-  return acc
-}, [] as [Date, number[]][])
+const chunks = text.split("\n").reduce(
+  (acc, line, i) => {
+    const index = Math.floor(i / 3)
+    acc[index] = acc[index] || []
+    if (i % 3 === 0) acc[index].push(new Date(line))
+    if (i % 3 === 1) acc[index].push(line.match(/\d+/g).map(Number))
+    // if (i % 3 === 2) acc[index].push(line)
+    return acc
+  },
+  [] as [Date, number[]][],
+)
 
 // Group by day
-const groups = chunks.reduce((acc, [date, [files, insertions, deletions]]) => {
-  const key = date.toISOString().slice(0, 10) + " " + (date.getDay() || 7)
-  acc[key] = acc[key] || { commits: 0, files: 0, insertions: 0, deletions: 0 }
-  acc[key].commits++
-  acc[key].files += files
-  acc[key].insertions += insertions ?? 0
-  acc[key].deletions += deletions ?? 0
-  return acc
-}, {} as Record<string, { files: number; insertions: number; deletions: number }>)
+const groups = chunks.reduce(
+  (acc, [date, [files, insertions, deletions]]) => {
+    const key = date.toISOString().slice(0, 10) + " " + (date.getDay() || 7)
+    acc[key] = acc[key] || { commits: 0, files: 0, insertions: 0, deletions: 0 }
+    acc[key].commits++
+    acc[key].files += files
+    acc[key].insertions += insertions ?? 0
+    acc[key].deletions += deletions ?? 0
+    return acc
+  },
+  {} as Record<string, { files: number; insertions: number; deletions: number }>,
+)
 
 // {
 //   "2024": {

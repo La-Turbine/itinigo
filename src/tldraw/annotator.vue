@@ -25,7 +25,7 @@ watch(
     }
     image.src = url
   },
-  { immediate: true }
+  { immediate: true },
 )
 const html = computed(() => {
   if (!photo.value) return ""
