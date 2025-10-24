@@ -5,6 +5,7 @@ import router from "./router"
 import { IonicVue } from "@ionic/vue"
 import * as Ion from "@ionic/vue"
 import { reactive, watch } from "vue"
+// @ts-ignore
 import { idb } from "./idb"
 import "./tldraw"
 import TldrawAnnotator from "./tldraw/annotator.vue"
@@ -25,9 +26,9 @@ async function initApp() {
     router.push("/")
   }
   const keys = await idb.keys()
-  const values = await Promise.all(keys.map((key) => idb.get(key)))
+  const values = await Promise.all(keys.map((key: string) => idb.get(key)))
   const db = values.reduce(
-    (acc, val, i) => {
+    (acc: any, val: any, i: number) => {
       if (i === 0) return JSON.parse(val)
       acc.photos[keys[i]] = val
       return acc
@@ -42,14 +43,14 @@ async function initApp() {
   watch($state, (next) => idb.set("$state", JSON.stringify({ ...next, photos: {} })), { flush: "pre", deep: true })
   await router.isReady()
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
-  window.$$ = (selector: string, context = document as any) => [...context.querySelectorAll(selector)]
+  window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
   window.notify = async function (message, title) {
     try {
-      await push(message, title)
+      await window.push(message, title)
     } catch (e) {}
     alert(message)
   }
-  window.push = async (message, title) => {
+  window.push = async (message: string, title?: string) => {
     title = title || message
     const notification = {
       body: message,
@@ -61,7 +62,7 @@ async function initApp() {
     if (registration?.showNotification) return registration.showNotification(title, notification)
     return new Notification(title, notification)
   }
-  window.sms = async (message, number) => {
+  window.sms = async (message: string, number: string) => {
     if (!number) return alert("Please enter a valid phone number")
     if (!message) return alert("Please enter a message")
     const TWILIO_ACCOUNT_SID = import.meta.env.VITE_TWILIO_ACCOUNT_SID || ""
@@ -79,7 +80,7 @@ async function initApp() {
   }
   window.idb = app.config.globalProperties.idb = idb
   window.$state = app.config.globalProperties.$state = $state
-  const $position = reactive({})
+  const $position = reactive<{ value?: GeolocationPosition | object }>({ value: undefined })
   window.$position = app.config.globalProperties.$position = $position
   // UTILITIES
   function homework(place: string) {
@@ -99,7 +100,7 @@ async function initApp() {
     setInterval(watchPosition, 10000)
   }
   function watchPosition() {
-    if ($position.value?.timestamp) return
+    if ($position.value && "timestamp" in $position.value) return
     navigator.geolocation.watchPosition(
       (position) => ($position.value = position),
       (error) => ($position.value = {}),
@@ -134,15 +135,24 @@ declare module "vue" {
   interface ComponentCustomProperties {
     idb: any
     $state: any
+    $position: any
+    homework: (place: string) => string
+    triptitle: (trip: any) => string
   }
 }
 declare global {
   interface Window {
+    Ionic: { config: { mode: string } }
     $: (selector: string, context?: HTMLElement) => HTMLElement | null
     $$: (selector: string, context?: HTMLElement) => HTMLElement[]
     notify: (message: string, title?: string) => Promise<void>
+    push: (message: string, title?: string) => Promise<void | Notification>
+    sms: (message: string, number: string) => Promise<any>
     idb: any
     $state: any
+    $position: any
+    homework: (place: string) => string
+    triptitle: (trip: any) => string
     $router: any
     $route: any
   }

@@ -8,7 +8,7 @@ const props = defineProps<{ url: string }>()
 const emits = defineEmits(["done"])
 const tldraw = ref(null as HTMLDivElement | null)
 const container = ref({ width: window.innerWidth, height: window.innerHeight })
-const photo = ref(null)
+const photo = ref<{ src: string; width: number; height: number; type: string } | null>(null)
 watch(
   props,
   () => {
@@ -50,5 +50,6 @@ until(() => {
   container.value = { width: tldraw.value.clientWidth, height: tldraw.value.clientHeight }
   return true
 })
+// @ts-ignore
 window.onDone = (e) => emits("done", e)
 </script>

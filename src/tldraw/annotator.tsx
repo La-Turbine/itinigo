@@ -1,3 +1,4 @@
+// @ts-nocheck
 // https://examples.tldraw.com/image-annotator/full
 // https://examples.tldraw.com/image-component
 // https://examples.tldraw.com/custom-menus

@@ -109,7 +109,7 @@ Lot 2: Octobre / Novembre > Design
 - [x] Fix: Burger sur edition d'une étape
 - [x] Fix: Annotation sur photo sans nom
 - [x] Refactor: Uniform "iOS" Design + Switch Bun + Update Latest + Switch Tailwind / Icons
-- [ ] Refactor: Rework en composants + Rework des fonctions
+- [ ] Refactor: Rework en composants + Rework des fonctions + Fix Typescript
   - [ ] 8 components: ListStep CardItinerary CardStep CardHelp FormTrip FormAction FormConfig Timeline
   - [ ] create a swipe bind function to replace onTouchStart/Move/End
   - [ ] create a takePhoto with camera stream instead of input/clickPhoto
@@ -139,6 +139,7 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [ ] 1j Notification si application en background (notification sonore, à définir)
 - [ ] 2j Geolocalisation des photos, notification si l'utilisateur s'éloigne
 - [ ] 1j Analyse API cityway
+- Optimisation de la taille des images/trajets (https://www.youtube.com/watch?v=O8uazkirvVo)
 - Utile ? Export PDF
 - Utile ? Mode offline amélioré
 - Utile ? ne pas pouvoir mettre du texte dans une flèche
