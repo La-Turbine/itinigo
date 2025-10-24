@@ -9,39 +9,39 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <div style="display: flex; flex-direction: column; gap: 20px; padding: 20px">
+      <div class="flex flex-col gap-5 p-5">
         <template v-if="$route.query.mode === 'card'">
-          <div style="font-size: 2rem; text-align: center; text-wrap: balance">Bonjour 👋,</div>
-          <div style="font-size: 1.25rem; text-align: center; text-wrap: balance">Je m’appelle {{ $state.name }} et j’ai besoin de votre aide pour retrouver le fil de mon trajet.</div>
-          <div style="font-size: 1.25rem; text-align: center; text-wrap: balance">{{ $state.instruction || "Je comprends tout ce que vous dites si vous me parlez lentement." }}</div>
-          <div style="font-size: 1.25rem; font-weight: 600; text-align: center; text-wrap: balance">Pourriez-vous m’aider à rejoindre ma destination s’il vous plait ?</div>
-          <div style="font-size: 1.25rem; font-weight: 600; text-align: center; text-wrap: balance">Merci beaucoup.</div>
-          <hr style="border-top: 1px solid rgba(0, 0, 0, 0.5); width: 50%" />
-          <div style="font-size: 1.25rem; font-weight: 600">Mon Itinéraire</div>
-          <div style="font-size: 1.25rem">
-            <div style="font-weight: 600">Arrêt de départ :</div>
+          <div class="text-[2rem] text-center text-balance">Bonjour 👋,</div>
+          <div class="text-[1.25rem] text-center text-balance">Je m'appelle {{ $state.name }} et j'ai besoin de votre aide pour retrouver le fil de mon trajet.</div>
+          <div class="text-[1.25rem] text-center text-balance">{{ $state.instruction || "Je comprends tout ce que vous dites si vous me parlez lentement." }}</div>
+          <div class="text-[1.25rem] font-semibold text-center text-balance">Pourriez-vous m'aider à rejoindre ma destination s'il vous plait ?</div>
+          <div class="text-[1.25rem] font-semibold text-center text-balance">Merci beaucoup.</div>
+          <hr class="border-t border-black/50 w-1/2" />
+          <div class="text-[1.25rem] font-semibold">Mon Itinéraire</div>
+          <div class="text-[1.25rem]">
+            <div class="font-semibold">Arrêt de départ :</div>
             <div>{{ first.stops[0].text }}, {{ first.type }}</div>
           </div>
-          <div style="font-size: 1.25rem">
-            <div style="font-weight: 600">Arrêt d’arrivée :</div>
+          <div class="text-[1.25rem]">
+            <div class="font-semibold">Arrêt d'arrivée :</div>
             <div>{{ last.stops.at(-1).text }}, {{ last.type }}</div>
           </div>
-          <div style="font-size: 1.25rem">
-            <div style="font-weight: 600">Je souhaite me rendre ici :</div>
+          <div class="text-[1.25rem]">
+            <div class="font-semibold">Je souhaite me rendre ici :</div>
             <div>{{ travel.to.text }}</div>
           </div>
-          <hr style="border-top: 1px solid rgba(0, 0, 0, 0.5); width: 50%" />
-          <div style="display: flex; gap: 10px; padding: 10px">
+          <hr class="border-t border-black/50 w-1/2" />
+          <div class="flex gap-2.5 p-2.5">
             <ion-button fill="outline" @click="$router.go(-2)">Retour à mon trajet</ion-button>
           </div>
         </template>
         <template v-if="!$route.query.mode">
-          <div style="display: flex; max-width: 28rem; padding: 20px; background-color: white; border-radius: 0.5rem; border: 1px solid rgba(0, 0, 0, 0.15); gap: 20px" @click="help">
-            <div style="font-size: 50px">✋</div>
-            <div style="margin: auto 0; font-weight: 500; text-wrap: balance">J’affiche ma carte d’aide pour la montrer à quelqu’un autour de moi</div>
+          <div class="flex max-w-[28rem] p-5 bg-white rounded-lg border border-black/15 gap-5" @click="help">
+            <div class="text-[50px]">✋</div>
+            <div class="my-auto font-medium text-balance">J'affiche ma carte d'aide pour la montrer à quelqu'un autour de moi</div>
           </div>
-          <div style="display: flex; max-width: 28rem; padding: 20px; background-color: white; border-radius: 0.5rem; border: 1px solid rgba(0, 0, 0, 0.15); gap: 20px" @click="map">
-            <div style="width: 85px">
+          <div class="flex max-w-[28rem] p-5 bg-white rounded-lg border border-black/15 gap-5" @click="map">
+            <div class="w-[85px]">
               <!-- prettier-ignore -->
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 150 150">
                 <path fill="#1a73e8" d="M89.77,10.4c-4.4-1.39-9.08-2.15-13.94-2.15c-14.18,0-26.87,6.41-35.33,16.48l21.8,18.34L89.77,10.4z"/>
@@ -51,18 +51,14 @@
                 <path fill="#34a853" d="M88.63,117.37c15.39-24.07,33.34-35,33.34-62.98c0-7.67-1.88-14.9-5.19-21.26l-61.55,73.18   c2.61,3.42,5.24,7.06,7.81,11.07c9.36,14.46,6.76,23.13,12.8,23.13C81.86,140.51,79.27,131.83,88.63,117.37"/>
               </svg>
             </div>
-            <div style="margin: auto 0; font-weight: 500; text-wrap: balance">Je continue mon trajet à pied avec Google maps.</div>
+            <div class="my-auto font-medium text-balance">Je continue mon trajet à pied avec Google maps.</div>
           </div>
-          <div
-            style="display: flex; max-width: 28rem; padding: 20px; background-color: white; border-radius: 0.5rem; border: 1px solid rgba(0, 0, 0, 0.15); gap: 20px"
-            @click="call"
-            v-if="$state.phone"
-          >
-            <div style="font-size: 50px">📞</div>
-            <div style="margin: auto 0; font-weight: 500; text-wrap: balance">J’appelle un proche</div>
+          <div class="flex max-w-[28rem] p-5 bg-white rounded-lg border border-black/15 gap-5" @click="call" v-if="$state.phone">
+            <div class="text-[50px]">📞</div>
+            <div class="my-auto font-medium text-balance">J'appelle un proche</div>
           </div>
-          <hr style="border-top: 1px solid rgba(0, 0, 0, 0.5); width: 50%" />
-          <div style="display: flex; gap: 10px; padding: 10px">
+          <hr class="border-t border-black/50 w-1/2" />
+          <div class="flex gap-2.5 p-2.5">
             <ion-button fill="outline" @click="$router.back()">Retour à mon trajet</ion-button>
           </div>
         </template>

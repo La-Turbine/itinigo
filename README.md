@@ -25,14 +25,18 @@ Page 5 - Config
 - ListTrip (Page 1)
 - ListStep (Step 3)
 - CardTrip (Page 1)
-- CardItinerary (Step 2) #NOCHANGE
 - CardStep (Step 3+4)
-- CardHelp (Page 4)
 - FormTrip (Step 1+2)
 - FormAction (Step 5)
-- FormConfig (Page 5)
 - Timeline (Step 4)
 - Annotator (Step 4) #HARDCHANGE
+
+# Composants potentiels:
+- CardItinerary (Step 2) #NOCHANGE
+- Travel (Page 3)
+- CardHelp (Page 4)
+- FormConfig (Page 5)
+- TopBar
 
 # Composants Ionic:
 - Top Bar / Back Button

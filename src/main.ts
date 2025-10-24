@@ -9,14 +9,24 @@ import { reactive, watch } from "vue"
 import { idb } from "./idb"
 import "./tldraw"
 import TldrawAnnotator from "./tldraw/annotator.vue"
-import CardTrip from "./components/CardTrip.vue"
 import ListTrip from "./components/ListTrip.vue"
+import ListStep from "./components/ListStep.vue"
+import CardTrip from "./components/CardTrip.vue"
+import CardStep from "./components/CardStep.vue"
+import FormTrip from "./components/FormTrip.vue"
+import FormAction from "./components/FormAction.vue"
+import Timeline from "./components/Timeline.vue"
 async function initApp() {
   window.Ionic = { config: { mode: "ios" } }
   const app = createApp(App).use(IonicVue).use(router)
   app.component("TldrawAnnotator", TldrawAnnotator)
-  app.component("CardTrip", CardTrip)
   app.component("ListTrip", ListTrip)
+  app.component("ListStep", ListStep)
+  app.component("CardTrip", CardTrip)
+  app.component("CardStep", CardStep)
+  app.component("FormTrip", FormTrip)
+  app.component("FormAction", FormAction)
+  app.component("Timeline", Timeline)
   Object.entries(Ion).forEach(([key, value]) => {
     if (!key.startsWith("Ion")) return
     app.component(key, value)
@@ -143,17 +153,29 @@ declare module "vue" {
 declare global {
   interface Window {
     Ionic: { config: { mode: string } }
-    $: (selector: string, context?: HTMLElement) => HTMLElement | null
-    $$: (selector: string, context?: HTMLElement) => HTMLElement[]
+    $: (selector: string, context?: HTMLElement | Document) => HTMLElement | null
+    $$: (selector: string, context?: HTMLElement | Document) => HTMLElement[]
     notify: (message: string, title?: string) => Promise<void>
     push: (message: string, title?: string) => Promise<void | Notification>
     sms: (message: string, number: string) => Promise<any>
     idb: any
+    $router: any
+    $route: any
     $state: any
     $position: any
     homework: (place: string) => string
     triptitle: (trip: any) => string
-    $router: any
-    $route: any
   }
+  var $: (selector: string, context?: HTMLElement | Document) => HTMLElement | null
+  var $$: (selector: string, context?: HTMLElement | Document) => HTMLElement[]
+  var notify: (message: string, title?: string) => Promise<void>
+  var push: (message: string, title?: string) => Promise<void | Notification>
+  var sms: (message: string, number: string) => Promise<any>
+  var idb: any
+  var $router: any
+  var $route: any
+  var $state: any
+  var $position: any
+  var homework: (place: string) => string
+  var triptitle: (trip: any) => string
 }

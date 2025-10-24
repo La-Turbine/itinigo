@@ -12,7 +12,7 @@
       <ion-item button @click="downloadManual">
         <ion-label>MODE D'EMPLOI</ion-label>
       </ion-item>
-      <div style="height: 40px"></div>
+      <div class="h-10"></div>
       <ion-item>
         <ion-input v-model="$state.name" label="👋 Prénom" placeholder="Bruno"></ion-input>
       </ion-item>
@@ -21,7 +21,7 @@
       </ion-item>
       <ion-item>
         <ion-textarea
-          style="font-size: 80%"
+          class="text-[80%]"
           rows="3"
           :auto-grow="true"
           v-model="$state.instruction"
@@ -44,11 +44,11 @@
       <ion-item button @click="requestLocalisation">
         <ion-label>LOCALISATION - {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
       </ion-item>
-      <div style="height: 40px"></div>
+      <div class="h-10"></div>
       <ion-item button @click="window.location.reload()">
         <ion-label>
           VERSION:
-          <b style="font-size: 125%">{{ version.split(".")[0] }}</b>
+          <b class="text-[125%]">{{ version.split(".")[0] }}</b>
           // {{ os }} // {{ browser }}
         </ion-label>
       </ion-item>

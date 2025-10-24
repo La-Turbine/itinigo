@@ -13,10 +13,13 @@
   </ion-list>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue"
 const reorder = ref(false)
-function deleteTrip(index) {
+function reorderTrip(event: any) {
+  console.log("Reorder event:", event)
+}
+function deleteTrip(index: number) {
   if (!confirm("Voulez-vous vraiment supprimer ce trajet ?")) return
   $state.trips.splice(index, 1)
 }

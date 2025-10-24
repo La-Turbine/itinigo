@@ -1,7 +1,3 @@
-<script setup lang="ts">
-defineProps<{ trip: any }>()
-</script>
-
 <template>
   <div class="flex w-full min-h-[70px] p-2.5 bg-gray-100 rounded-lg border border-black/15" v-if="trip">
     <div class="w-2/5 m-auto font-medium text-center text-balance">{{ homework(trip.from?.text ?? "") }}</div>
@@ -12,3 +8,7 @@ defineProps<{ trip: any }>()
     <div class="w-2/5 m-auto font-medium text-center text-balance">{{ homework(trip.to?.text ?? "") }}</div>
   </div>
 </template>
+
+<script setup lang="ts">
+defineProps<{ trip: any }>()
+</script>
