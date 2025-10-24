@@ -14,8 +14,8 @@ import ListStep from "./components/ListStep.vue"
 import CardTrip from "./components/CardTrip.vue"
 import CardStep from "./components/CardStep.vue"
 import FormTrip from "./components/FormTrip.vue"
+import FormPhoto from "./components/FormPhoto.vue"
 import FormAction from "./components/FormAction.vue"
-import Timeline from "./components/Timeline.vue"
 async function initApp() {
   window.Ionic = { config: { mode: "ios" } }
   const app = createApp(App).use(IonicVue).use(router)
@@ -25,8 +25,8 @@ async function initApp() {
   app.component("CardTrip", CardTrip)
   app.component("CardStep", CardStep)
   app.component("FormTrip", FormTrip)
+  app.component("FormPhoto", FormPhoto)
   app.component("FormAction", FormAction)
-  app.component("Timeline", Timeline)
   Object.entries(Ion).forEach(([key, value]) => {
     if (!key.startsWith("Ion")) return
     app.component(key, value)
@@ -35,6 +35,7 @@ async function initApp() {
     console.error(err, info)
     router.push("/")
   }
+  // GLOBAL STATE
   const keys = await idb.keys()
   const values = await Promise.all(keys.map((key: string) => idb.get(key)))
   const db = values.reduce(
@@ -52,6 +53,7 @@ async function initApp() {
   $state.photos.TRAMOUT = "/img/TRAMOUT.png"
   watch($state, (next) => idb.set("$state", JSON.stringify({ ...next, photos: {} })), { flush: "pre", deep: true })
   await router.isReady()
+  // GLOBAL HELPERS
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
   window.notify = async function (message, title) {

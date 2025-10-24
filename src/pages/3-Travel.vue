@@ -49,10 +49,10 @@
       </div>
       <!-- https://play.tailwindcss.com/90GckuhEBW -->
       <div class="h-full w-screen overflow-x-auto overflow-y-hidden" v-else>
-        <div class="relative flex min-w-fit items-center justify-between m-16">
+        <div class="relative top-20 flex min-w-fit items-center justify-between m-16">
           <div
-            class="z-10 mx-16 h-4 w-4 flex items-center justify-center rounded-full bg-white"
-            :class="[i === 0 && 'ml-0', i === current.stops.length - 1 && 'mr-0', i <= progress.number ? 'bg-blue-600' : 'border-2 border-black']"
+            class="z-10 mx-16 h-4 w-4 flex items-center justify-center rounded-full"
+            :class="[i === 0 && 'ml-0', i === current.stops.length - 1 && 'mr-0', i <= progress.number ? 'bg-blue-600' : 'bg-white border-2 border-black']"
             v-for="(stop, i) in current.stops"
             ref="stops"
           >

@@ -27,8 +27,8 @@ Page 5 - Config
 - CardTrip (Page 1)
 - CardStep (Step 3+4)
 - FormTrip (Step 1+2)
+- FormPhoto (Step 4) = PhotoStream + Timeline
 - FormAction (Step 5)
-- Timeline (Step 4)
 - Annotator (Step 4) #HARDCHANGE
 
 # Composants potentiels:
