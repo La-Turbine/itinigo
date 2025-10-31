@@ -114,7 +114,7 @@ Lot 2: Octobre / Novembre > Design
 - [x] Fix: Annotation sur photo sans nom
 - [x] Refactor: Uniform "iOS" Design + Switch Bun + Update Latest + Switch Tailwind / Icons
 - [x] Refactor: Rework en composants + Rework des fonctions + Fix Typescript + Cleanup Code
-- [ ] Feat: Recadrage d'une photo
+- [x] Feat: Recadrage d'une photo
 - [ ] Feat: Flux Appareil Photo
 - [ ] Design: ListTrip + CardTrip ( ⋮ delete, reorder)
 - [ ] Design: FormTrip (autocomplete, noir sur blanc)

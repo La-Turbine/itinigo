@@ -62,6 +62,7 @@ function inputPhoto(event) {
   reader.readAsDataURL(file)
 }
 async function annotatePhoto({ blob, snapshot }) {
+  if (!blob) return setTimeout(() => (photo.value = null), 0)
   const reader = new FileReader()
   reader.readAsDataURL(blob)
   reader.onload = async () => {

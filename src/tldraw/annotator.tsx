@@ -175,17 +175,28 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
   }
   function DoneButton({ onClick }: { onClick(result: Blob): void }) {
     return (
-      <button
-        className="DoneButton"
-        onClick={async () => {
-          // const bounds = editor.getViewportPageBounds()
-          const blob = await exportToBlob({ editor, format: "jpeg", opts: { padding: 0 } })
-          const snapshot = getSnapshot(editor.store)
-          onClick({ blob, snapshot })
-        }}
-      >
-        Terminer
-      </button>
+      <>
+        <button
+          className="DoneButton"
+          onClick={async () => {
+            const bounds = editor.getZoomLevel() > 1.05 && editor.getViewportPageBounds()
+            const blob = await exportToBlob({ editor, format: "jpeg", opts: { bounds, padding: 0 } })
+            const snapshot = getSnapshot(editor.store)
+            onClick({ blob, snapshot })
+          }}
+        >
+          Terminer
+        </button>
+        <button
+          className="DoneButton"
+          style={{ backgroundColor: "#f87171" }}
+          onClick={async () => {
+            onClick({})
+          }}
+        >
+          Annuler
+        </button>
+      </>
     )
   }
   const components: TLComponents = {
