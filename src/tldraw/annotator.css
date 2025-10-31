@@ -1,15 +1,16 @@
 .DoneButton {
   font: inherit;
-  background: var(--color-primary, #3182ed);
-  border: none;
-  color: var(--color-selected-contrast, white);
   font-size: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  font-weight: 500;
+  background: #3182ed;
+  border: none;
+  color: white;
   margin: 6px;
+  padding: 0.5rem 1rem;
+  border: 2px solid white;
+  border-radius: 6px;
+  z-index: 300;
   pointer-events: all;
-  z-index: var(--layer-panels);
-  border: 2px solid var(--color-background);
   cursor: pointer;
 }
 .DoneButton:hover {

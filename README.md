@@ -27,9 +27,10 @@ Page 5 - Config
 - CardTrip (Page 1)
 - CardStep (Step 3+4)
 - FormTrip (Step 1+2)
-- FormPhoto (Step 4) = PhotoStream + Timeline
+- FormPhoto (Step 4) = PhotoStream OU PhotoAnnotator + Timeline
 - FormAction (Step 5)
-- Annotator (Step 4) #HARDCHANGE
+- PhotoStream (Step 4)
+- PhotoAnnotator (Step 4) #HARDCHANGE
 
 # Composants potentiels:
 - CardItinerary (Step 2) #NOCHANGE
@@ -122,6 +123,7 @@ Lot 2: Octobre / Novembre > Design
 - [ ] Design: Timeline ( + before/after, > validate at the end)
 - [ ] Design: Notification
 
+- [ ] Fix: Swipe sur l'avant dernière photo
 - [ ] BONUS: create a takePhoto with camera stream instead of input/clickPhoto
 - [ ] BONUS: create a swipe bind function to replace onTouchStart/Move/End
 - [ ] BONUS: uniformize next / back functions across pages
@@ -136,13 +138,14 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 ## ICEBOX / BACKLOG
 
 - [x] 5j Reorganiser (merger 4 pages en 2, rajouter 3 pages, créer 5 composants)
-- [ ] 3j Ré-annoter / Recadrer / Changer
+- [x] 3j Ré-annoter / Recadrer / Changer
 - [ ] 5j Feedback / Design
 - [x] 1j Passation du Code / Hébergement / Domain / Open Source
 - [ ] 1j Correspondance multiple (ajouter une étape)
 - [ ] 1j Notification si application en background (notification sonore, à définir)
 - [ ] 2j Geolocalisation des photos, notification si l'utilisateur s'éloigne
 - [ ] 1j Analyse API cityway
+- Config > lister la taille actuelle des données
 - Optimisation de la taille des images/trajets (https://www.youtube.com/watch?v=O8uazkirvVo)
 - Utile ? Export PDF
 - Utile ? Mode offline amélioré

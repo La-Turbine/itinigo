@@ -8,7 +8,8 @@ import { reactive, watch } from "vue"
 // @ts-ignore
 import { idb } from "./idb"
 import "./tldraw"
-import TldrawAnnotator from "./tldraw/annotator.vue"
+import PhotoAnnotator from "./tldraw/annotator.vue"
+import PhotoStream from "./components/PhotoStream.vue"
 import ListTrip from "./components/ListTrip.vue"
 import ListStep from "./components/ListStep.vue"
 import CardTrip from "./components/CardTrip.vue"
@@ -19,7 +20,8 @@ import FormAction from "./components/FormAction.vue"
 async function initApp() {
   window.Ionic = { config: { mode: "ios" } }
   const app = createApp(App).use(IonicVue).use(router)
-  app.component("TldrawAnnotator", TldrawAnnotator)
+  app.component("PhotoAnnotator", PhotoAnnotator)
+  app.component("PhotoStream", PhotoStream)
   app.component("ListTrip", ListTrip)
   app.component("ListStep", ListStep)
   app.component("CardTrip", CardTrip)

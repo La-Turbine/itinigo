@@ -1,48 +1,60 @@
 <template>
   <template v-if="currentStep === 4">
     <div class="flex flex-col h-full overflow-hidden">
-      <div class="relative flex h-[80%]" @click="clickPhoto()" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-        <template v-if="!photo">
-          <button class="DoneButton absolute left-0" @click.stop="clickPhoto(true)" v-if="$state.photos[currentPhoto.id]">Changer</button>
-          <img class="max-w-full max-h-full object-cover m-auto select-none pointer-events-none" :src="$state.photos[currentPhoto.id] || '/img/gallery.svg'" :style="cardStyle" />
-        </template>
-        <tldraw-annotator :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" v-else />
+      <div class="relative flex h-[80%]" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
+        <button v-if="$state.photos[currentPhoto.id]" class="DoneButton absolute right-0" :class="change && 'bg-[#f87171]!'" @click.stop="clickGallery('change')">
+          {{ change ? "Annuler" : "Changer" }}
+        </button>
+        <photo-stream v-if="change || !$state.photos[currentPhoto.id]" ref="stream" />
+        <photo-annotator v-else-if="photo" :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" />
+        <img v-else class="max-w-full max-h-full object-cover m-auto select-none" :src="$state.photos[currentPhoto.id]" :style="cardStyle" @click="clickGallery()" />
       </div>
       <div class="flex h-[20%] gap-2.5 p-2.5 bg-gray-100 border-t border-black/20 overflow-auto">
-        <template v-for="(sequence, i) in currentTrip.sequences">
+        <template v-if="change || !$state.photos[currentPhoto.id]">
+          <button></button>
+          <div class="flex gap-4 m-auto">
+            <div class="h-20 w-20 ring-1 ring-gray-300 rounded-full border-6 border-white bg-gray-200 active:scale-95" @click="clickCapture()"></div>
+            <div class="h-20 w-20 ring-1 ring-gray-300 rounded-xl bg-gray-200 active:scale-95 flex" @click="input.click()"><div class="m-auto text-2xl bg-gray-600 i-lucide/image"></div></div>
+          </div>
+          <button></button>
+        </template>
+        <template v-else v-for="(sequence, i) in currentTrip.sequences">
           <card-step :i="i" :j="j" v-for="(photo, j) in sequence.photos" :key="photo" />
         </template>
       </div>
     </div>
-    <!-- <input type="file" accept="image/*;capture" class="hidden" @change="inputPhoto" :ref="(ref) => (state.refInput = ref)" /> -->
-    <input type="file" accept="image/*" class="hidden" @change="inputPhoto" :ref="(ref) => (state.refGallery = ref)" />
-    <input type="file" accept="image/*" capture="environment" class="hidden" @change="inputPhoto" :ref="(ref) => (state.refCamera = ref)" />
+    <input type="file" accept="image/*" class="hidden" @change="inputPhoto" ref="input" />
   </template>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue"
+import { ref, computed } from "vue"
 
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 1))
 const currentSequence = computed(() => currentTrip.value.sequences?.[+$route.query.sequence])
 const currentPhoto = computed(() => currentSequence.value?.photos[+$route.query.photo])
 
+const change = ref(false)
 const photo = ref(null)
-const state = reactive({
-  refGallery: null,
-  refCamera: null,
-  currentPhoto: null,
-})
+const input = ref(null)
+const stream = ref(null)
 
-function clickPhoto(change, p = currentPhoto.value, ref = "refGallery") {
-  window.currentPhoto = p
-  state.currentPhoto = p
-  if (p?.id && !change) photo.value = p.id
-  else state[ref].click()
+async function clickCapture() {
+  const blob = await stream.value.capturePhoto()
+  savePhoto(blob)
+}
+function clickGallery(mode) {
+  if (mode === "change") return (change.value = !change.value)
+  window.currentPhoto = currentPhoto.value
+  photo.value = currentPhoto.value.id
 }
 function inputPhoto(event) {
   const file = event.target.files[0]
+  savePhoto(file)
+}
+function savePhoto(blob) {
+  change.value = false
   const reader = new FileReader()
   reader.onload = async () => {
     function generateULID() {
@@ -52,16 +64,17 @@ function inputPhoto(event) {
       return `${time}${randomPart}`
     }
     const id = generateULID()
-    await idb.del(state.currentPhoto.id)
-    await idb.del(`${state.currentPhoto.id}:snapshot`)
+    await idb.del(currentPhoto.value.id)
+    await idb.del(`${currentPhoto.value.id}:snapshot`)
     await idb.set(id, reader.result)
-    state.currentPhoto.id = id
+    currentPhoto.value.id = id
     $state.photos[id] = reader.result
+    window.currentPhoto = currentPhoto.value
     photo.value = id
   }
-  reader.readAsDataURL(file)
+  reader.readAsDataURL(blob)
 }
-async function annotatePhoto({ blob, snapshot }) {
+function annotatePhoto({ blob, snapshot }) {
   if (!blob) return setTimeout(() => (photo.value = null), 0)
   const reader = new FileReader()
   reader.readAsDataURL(blob)
