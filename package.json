@@ -1,7 +1,7 @@
 {
   "name": "itinigo",
   "private": true,
-  "version": "124.0.0-51c5bbe",
+  "version": "125.0.0-904890f",
   "type": "module",
   "scripts": {
     "dev": "ionic serve --external",
@@ -14,41 +14,26 @@
     "icons": "npx @vite-pwa/assets-generator  --preset minimal-2023 public/favicon.svg"
   },
   "dependencies": {
-    "@capacitor/app": "7.1.0",
-    "@capacitor/core": "7.4.3",
-    "@capacitor/haptics": "7.0.2",
-    "@capacitor/keyboard": "7.0.3",
-    "@capacitor/status-bar": "7.0.3",
-    "@iconify/json": "^2.2.397",
-    "@ionic/vue": "8.7.7",
-    "@ionic/vue-router": "8.7.7",
+    "@ionic/vue-router": "8.7.8",
+    "@ionic/vue": "8.7.8",
     "@r2wc/react-to-web-component": "2.1.0",
-    "@tailwindcss/vite": "4.1.14",
-    "@vueuse/core": "13.9.0",
-    "ionicons": "8.0.13",
-    "tailwindcss": "4.1.14",
+    "@vueuse/core": "14.0.0",
     "tldraw": "3",
-    "vue": "3.5.22",
-    "vue-router": "4.6.3"
+    "vue-router": "4.6.3",
+    "vue": "3.5.22"
   },
   "devDependencies": {
-    "@capacitor/cli": "7.4.3",
+    "@iconify/json": "^2.2.397",
     "@ionic/cli": "7.2.1",
+    "@tailwindcss/vite": "4.1.16",
     "@vitejs/plugin-legacy": "7.2.1",
     "@vitejs/plugin-vue": "6.0.1",
-    "@vue/eslint-config-typescript": "14.6.0",
-    "@vue/test-utils": "2.4.6",
-    "cypress": "15.4.0",
-    "eslint": "9.37.0",
-    "eslint-plugin-vue": "10.5.1",
-    "jsdom": "27.0.0",
     "prettier": "3.6.2",
-    "terser": "5.44.0",
+    "tailwindcss": "4.1.16",
     "typescript": "5.9.3",
-    "vite": "7.1.10",
     "vite-plugin-pwa": "1.1.0",
-    "vitest": "3.2.4",
-    "vue-tsc": "3.1.1"
+    "vite": "7.1.12",
+    "vue-tsc": "3.1.2"
   },
   "prettier": {
     "printWidth": 200,

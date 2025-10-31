@@ -113,11 +113,7 @@ Lot 2: Octobre / Novembre > Design
 - [x] Fix: Burger sur edition d'une étape
 - [x] Fix: Annotation sur photo sans nom
 - [x] Refactor: Uniform "iOS" Design + Switch Bun + Update Latest + Switch Tailwind / Icons
-- [ ] Refactor: Rework en composants + Rework des fonctions + Fix Typescript
-  - [ ] 8 components: ListStep CardItinerary CardStep CardHelp FormTrip FormAction FormConfig Timeline
-  - [ ] create a swipe bind function to replace onTouchStart/Move/End
-  - [ ] create a takePhoto with camera stream instead of input/clickPhoto
-  - [ ] uniformize next / back functions across pages
+- [x] Refactor: Rework en composants + Rework des fonctions + Fix Typescript + Cleanup Code
 - [ ] Feat: Recadrage d'une photo
 - [ ] Feat: Flux Appareil Photo
 - [ ] Design: ListTrip + CardTrip ( ⋮ delete, reorder)
@@ -125,6 +121,10 @@ Lot 2: Octobre / Novembre > Design
 - [ ] Design: CardStep
 - [ ] Design: Timeline ( + before/after, > validate at the end)
 - [ ] Design: Notification
+
+- [ ] BONUS: create a takePhoto with camera stream instead of input/clickPhoto
+- [ ] BONUS: create a swipe bind function to replace onTouchStart/Move/End
+- [ ] BONUS: uniformize next / back functions across pages
 
 Lot 3: Novembre / Décembre > Finitions + Améliorations
 
@@ -135,7 +135,7 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 
 ## ICEBOX / BACKLOG
 
-- [ ] 5j Reorganiser (merger 4 pages en 2, rajouter 3 pages, créer 5 composants)
+- [x] 5j Reorganiser (merger 4 pages en 2, rajouter 3 pages, créer 5 composants)
 - [ ] 3j Ré-annoter / Recadrer / Changer
 - [ ] 5j Feedback / Design
 - [x] 1j Passation du Code / Hébergement / Domain / Open Source
