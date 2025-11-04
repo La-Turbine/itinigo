@@ -9,16 +9,16 @@
         <photo-annotator v-else-if="photo" :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" />
         <img v-else class="max-w-full max-h-full object-cover m-auto select-none" :src="$state.photos[currentPhoto.id]" :style="cardStyle" @click="clickGallery()" />
       </div>
+      <div class="fixed bottom-0 w-full z-10 flex h-[20%] p-6 bg-gray-100 border-t border-black/20 overflow-auto" v-if="change || !$state.photos[currentPhoto.id]">
+        <div class="h-10 w-10 bg-gray-600 i-ion/arrow-back my-auto" @click="prevStep"></div>
+        <div class="flex gap-4 m-auto">
+          <div class="h-20 w-20 ring-1 ring-gray-300 rounded-full border-6 border-white bg-gray-200 active:scale-95" @click="clickCapture()"></div>
+          <div class="h-20 w-20 ring-1 ring-gray-300 rounded-xl bg-gray-200 active:scale-95 flex" @click="input.click()"><div class="m-auto text-2xl bg-gray-600 i-lucide/image"></div></div>
+        </div>
+        <div class="h-10 w-10 bg-gray-600 i-ion/arrow-forward my-auto" @click="nextStep"></div>
+      </div>
       <div class="flex h-[20%] gap-2.5 p-2.5 bg-gray-100 border-t border-black/20 overflow-auto">
-        <template v-if="change || !$state.photos[currentPhoto.id]">
-          <button></button>
-          <div class="flex gap-4 m-auto">
-            <div class="h-20 w-20 ring-1 ring-gray-300 rounded-full border-6 border-white bg-gray-200 active:scale-95" @click="clickCapture()"></div>
-            <div class="h-20 w-20 ring-1 ring-gray-300 rounded-xl bg-gray-200 active:scale-95 flex" @click="input.click()"><div class="m-auto text-2xl bg-gray-600 i-lucide/image"></div></div>
-          </div>
-          <button></button>
-        </template>
-        <template v-else v-for="(sequence, i) in currentTrip.sequences">
+        <template v-for="(sequence, i) in currentTrip.sequences">
           <card-step :i="i" :j="j" v-for="(photo, j) in sequence.photos" :key="photo" />
         </template>
       </div>
