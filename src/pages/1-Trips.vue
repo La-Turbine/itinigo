@@ -15,8 +15,8 @@
 </template>
 
 <script setup>
-function changeMode() {
-  if ($state.mode === "user" && !confirm("Voulez-vous passer en mode édition ?")) return
+async function changeMode() {
+  if ($state.mode === "user" && !(await window.popup("Voulez-vous passer en mode édition ?", { ok: "Oui", ko: "Non" }))) return
   $state.mode = $state.mode === "helper" ? "user" : "helper"
 }
 </script>

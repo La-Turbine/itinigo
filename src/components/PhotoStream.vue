@@ -16,7 +16,11 @@ const startCamera = async () => {
   if (!videoRef.value) return
   try {
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment", width: { ideal: videoRef.value.clientWidth }, height: { ideal: videoRef.value.clientHeight } },
+      video: {
+        facingMode: "environment",
+        width: { ideal: 4096 },
+        height: { ideal: 3072 },
+      },
       audio: false,
     })
     videoRef.value.srcObject = stream
@@ -42,8 +46,29 @@ const capturePhoto = (): Promise<Blob | null> => {
     const video = videoRef.value
     const canvas = canvasRef.value
 
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
+    // Get the display aspect ratio
+    const displayAspectRatio = video.clientWidth / video.clientHeight
+    const videoAspectRatio = video.videoWidth / video.videoHeight
+
+    let sourceX = 0
+    let sourceY = 0
+    let sourceWidth = video.videoWidth
+    let sourceHeight = video.videoHeight
+
+    // Crop the video to match display aspect ratio (mimicking object-cover)
+    if (videoAspectRatio > displayAspectRatio) {
+      // Video is wider, crop sides
+      sourceWidth = video.videoHeight * displayAspectRatio
+      sourceX = (video.videoWidth - sourceWidth) / 2
+    } else {
+      // Video is taller, crop top/bottom
+      sourceHeight = video.videoWidth / displayAspectRatio
+      sourceY = (video.videoHeight - sourceHeight) / 2
+    }
+
+    // Set canvas to high resolution with correct aspect ratio
+    canvas.width = 4096
+    canvas.height = 4096 / displayAspectRatio
 
     const ctx = canvas.getContext("2d")
     if (!ctx) {
@@ -51,14 +76,15 @@ const capturePhoto = (): Promise<Blob | null> => {
       return
     }
 
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+    // Draw the cropped portion of the video onto the canvas
+    ctx.drawImage(video, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, canvas.width, canvas.height)
 
     canvas.toBlob(
       (blob) => {
         resolve(blob)
       },
       "image/jpeg",
-      0.95,
+      1.0,
     )
   })
 }

@@ -58,11 +58,22 @@ async function initApp() {
   // GLOBAL HELPERS
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
   window.$$ = (selector: string, context = document as any) => Array.from(context.querySelectorAll(selector))
+  window.popup = async function (message, options) {
+    const { title = "", ok = "OK", ko } = options || {}
+    const alert = await Ion.alertController.create({
+      header: title,
+      message: message,
+      buttons: [{ text: ok, role: "ok", cssClass: "alert-ok" }].concat(ko ? [{ text: ko, role: "cancel", cssClass: "alert-cancel" }] : []),
+    })
+    await alert.present()
+    const { role } = await alert.onDidDismiss()
+    return role === "ok"
+  }
   window.notify = async function (message, title) {
     try {
       await window.push(message, title)
     } catch (e) {}
-    alert(message)
+    await window.popup(message, { title })
   }
   window.push = async (message: string, title?: string) => {
     title = title || message
@@ -77,8 +88,8 @@ async function initApp() {
     return new Notification(title, notification)
   }
   window.sms = async (message: string, number: string) => {
-    if (!number) return alert("Please enter a valid phone number")
-    if (!message) return alert("Please enter a message")
+    if (!number) return window.popup("Please enter a valid phone number")
+    if (!message) return window.popup("Please enter a message")
     const TWILIO_ACCOUNT_SID = import.meta.env.VITE_TWILIO_ACCOUNT_SID || ""
     const TWILIO_AUTH_TOKEN = import.meta.env.VITE_TWILIO_AUTH_TOKEN || ""
     const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`, {
@@ -159,6 +170,7 @@ declare global {
     Ionic: { config: { mode: string } }
     $: (selector: string, context?: HTMLElement | Document) => HTMLElement | null
     $$: (selector: string, context?: HTMLElement | Document) => HTMLElement[]
+    popup: (message: string, options?: { title?: string; ok?: string; ko?: string; confirm?: boolean }) => Promise<boolean>
     notify: (message: string, title?: string) => Promise<void>
     push: (message: string, title?: string) => Promise<void | Notification>
     sms: (message: string, number: string) => Promise<any>
@@ -172,6 +184,7 @@ declare global {
   }
   var $: (selector: string, context?: HTMLElement | Document) => HTMLElement | null
   var $$: (selector: string, context?: HTMLElement | Document) => HTMLElement[]
+  var popup: (message: string, options?: { title?: string; ok?: string; ko?: string; confirm?: boolean }) => Promise<boolean>
   var notify: (message: string, title?: string) => Promise<void>
   var push: (message: string, title?: string) => Promise<void | Notification>
   var sms: (message: string, number: string) => Promise<any>

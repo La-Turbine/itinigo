@@ -193,17 +193,17 @@ function adjustFontSize(el, size = +getComputedStyle(el).fontSize) {
   el.style.fontSize = `${size}px`
   while (el.scrollHeight > el.offsetHeight || el.scrollWidth > el.offsetWidth) el.style.fontSize = `${--size}px`
 }
-function back() {
+async function back() {
   if ($state.mode === "helper") {
     const url = `/trip/${$route.params.id}?step=3`
     $router.push(`/`)
     return setTimeout(() => $router.push(url), 100)
   }
-  if (!confirm("Êtes-vous sûr de vouloir quitter le guidage ?")) return
+  if (!(await window.popup("Êtes-vous sûr de vouloir quitter le guidage ?", { ok: "Oui", ko: "Non" }))) return
   $router.push("/")
 }
-function gogo() {
-  if (!$position.value?.timestamp && !confirm("La geolocation n'est pas activé, voulez-vous commencer le guidage malgré tout ?")) return
+async function gogo() {
+  if (!$position.value?.timestamp && !(await window.popup("La geolocation n'est pas activé, voulez-vous commencer le guidage malgré tout ?", { ok: "Oui", ko: "Non" }))) return
   $router.push({ query: { step: 1 } })
 }
 </script>

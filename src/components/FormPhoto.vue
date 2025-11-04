@@ -112,12 +112,14 @@ function nextStep() {
   if (pho === currentTrip.value.sequences[seq].photos.length - 1) {
     while (seq < currentTrip.value.sequences.length - 1) {
       seq++
-      pho = -1
+      pho = 0
       if (currentTrip.value.sequences[seq].photos.length > 0) break
     }
-    if (seq === currentTrip.value.sequences.length - 1 && pho === -1) return
+    if (seq === currentTrip.value.sequences.length - 1 && pho === 0 && currentTrip.value.sequences[seq].photos.length === 0) return
+  } else {
+    pho++
   }
-  return $router.push({ query: { step: 4, sequence: seq, photo: pho + 1 } })
+  return $router.push({ query: { step: 4, sequence: seq, photo: pho } })
 }
 function onTouchStart(e) {
   touchStartX.value = e.touches[0].clientX

@@ -116,17 +116,15 @@ Lot 2: Octobre / Novembre > Design
 - [x] Refactor: Uniform "iOS" Design + Switch Bun + Update Latest + Switch Tailwind / Icons
 - [x] Refactor: Rework en composants + Rework des fonctions + Fix Typescript + Cleanup Code
 - [x] Feat: Recadrage d'une photo
-- [ ] Feat: Flux Appareil Photo
+- [x] Feat: Flux Appareil Photo
+- [x] Design: Notification
 - [ ] Design: ListTrip + CardTrip ( ⋮ delete, reorder)
 - [ ] Design: FormTrip (autocomplete, noir sur blanc)
 - [ ] Design: CardStep
 - [ ] Design: Timeline ( + before/after, > validate at the end)
-- [ ] Design: Notification
 
-- [ ] Fix: Swipe sur l'avant dernière photo
-- [ ] BONUS: create a takePhoto with camera stream instead of input/clickPhoto
+- [ ] BONUS: uniformize next / back functions across pages (in a HEADER component?)
 - [ ] BONUS: create a swipe bind function to replace onTouchStart/Move/End
-- [ ] BONUS: uniformize next / back functions across pages
 
 Lot 3: Novembre / Décembre > Finitions + Améliorations
 

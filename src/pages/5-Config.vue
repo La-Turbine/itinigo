@@ -76,8 +76,8 @@ const isNotifiable = ref(false)
 const isLocalisable = ref(false)
 const os = /android|iphone/i.exec(navigator.userAgent)?.[0] ?? "?"
 const browser = /chrome|safari/i.exec(navigator.userAgent)?.[0] ?? "?"
-if (browser === "chrome" && os === "iphone") alert("Merci d'utiliser Safari sur iPhone")
-if (browser !== "chrome" && os === "android") alert("Merci d'utiliser Chrome sur Android")
+if (browser === "chrome" && os === "iphone") window.popup("Merci d'utiliser Safari sur iPhone")
+if (browser !== "chrome" && os === "android") window.popup("Merci d'utiliser Chrome sur Android")
 onMounted(async () => {
   isNotifiable.value = (await navigator.permissions.query({ name: "notifications" })).state === "granted"
   isLocalisable.value = (await navigator.permissions.query({ name: "geolocation" })).state === "granted"
@@ -91,8 +91,8 @@ window.addEventListener("beforeinstallprompt", (e) => {
 })
 async function requestInstall() {
   if (isInstalled.value) return
-  if (os === "iphone") return alert(`Pour installer cette application, appuyez sur le bouton "Partager" dans Safari, puis sélectionnez "Ajouter à l'écran d'accueil".`)
-  if (!installPrompt) return alert(`Pour installer cette application, appuyez sur le bouton "Installer" dans Chrome.`)
+  if (os === "iphone") return window.popup(`Pour installer cette application, appuyez sur le bouton "Partager" dans Safari, puis sélectionnez "Ajouter à l'écran d'accueil".`)
+  if (!installPrompt) return window.popup(`Pour installer cette application, appuyez sur le bouton "Installer" dans Chrome.`)
   installPrompt.prompt()
 }
 async function requestNotification() {
@@ -135,7 +135,7 @@ async function onImport() {
   input.click()
 }
 async function reset() {
-  if (!confirm("Êtes-vous sûr de vouloir réinitialiser l'application ?")) return
+  if (!(await window.popup("Êtes-vous sûr de vouloir réinitialiser l'application ?", { ok: "Confirmer", ko: "Annuler" }))) return
   await idb.clear()
   location.href = "/"
 }
