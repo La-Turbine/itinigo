@@ -104,7 +104,7 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
         type: "image",
         x: disc.x,
         y: disc.y,
-        isLocked: false,
+        isLocked: true,
         props: {
           w: disc.w,
           h: disc.h,

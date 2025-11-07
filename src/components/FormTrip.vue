@@ -113,9 +113,9 @@ const nexts = {
       .slice(1, -1)
       .flatMap((text) => JSON.parse(/\[[^;]]*\]/.exec(text)[0]))
     const link = $$("link", new DOMParser().parseFromString(await (await fetch("https://www.itinisere.fr/")).text(), "text/html")).find((el) => el.href.includes("/css/site")).outerHTML
-    const css = `${link.replace(/^\//, "https://static.PPP38v2.cityway.fr/")}
+    const css = `${link.replace("/", "https://static.PPP38v2.cityway.fr/")}
 <style>
-.JourneyPlanner { padding: 10px;height: 140px;overflow:hidden; }
+.JourneyPlanner { padding: 0 10px;height: 140px;overflow:hidden; }
 .JourneyPlanner .trip-solutions .link-detail .type-trip { position: absolute;bottom: 5px; }
 </style>`
     state.choices = $$(".panel-trip", html).map((el) => `${css}<div class="JourneyPlanner"><div class="trip-solutions">${el.outerHTML}</div></div>`)
@@ -170,7 +170,8 @@ const nexts = {
         sequence.push({ transport: `J'attends à l'arrêt n°${num} ${stops[0].text}`, num, type, photos: wait })
         sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, photos: el.innerText.length === 1 ? tram : bus })
       })
-      sequence.push({ transport: `Je marche vers ma destination`, photos: [{ type: 2, text: "Vous êtes arrivé !" }] })
+      const duration = $(".duration span", el.parentElement.parentElement).textContent.trim()
+      sequence.push({ transport: `Je marche vers ma destination`, duration, photos: [{ type: 2, text: "Vous êtes arrivé !" }] })
       return sequence
     })
     window.formTrip = $route.params.id
@@ -179,7 +180,8 @@ const nexts = {
   async 2() {
     const from = { text: state.from.text.split(" - ")[0], lat: state.from.Latitude, lng: state.from.Longitude }
     const to = { text: state.to.text.split(" - ")[0], lat: state.to.Latitude, lng: state.to.Longitude }
-    $state.trips[$route.params.id - 1] = { from, to, sequences: state.sequences[state.choice] }
+    const duration = state.sequences[state.choice].at(-1).duration
+    $state.trips[$route.params.id - 1] = { from, to, duration, sequences: state.sequences[state.choice] }
     $router.push({ query: { step: 3 } })
   },
 }

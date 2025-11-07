@@ -74,13 +74,13 @@ function deletePhoto(sequence, index) {
 }
 // Utils
 function back() {
-  if ($route.query.step === "1") return $router.push("/")
+  if (!$route.query.step || $route.query.step === "1") return $router.push("/")
   if ($route.query.step === "2") return $router.push({ query: { step: 1 } })
   if ($route.query.step === "3" && window.formTrip === $route.params.id) return $router.push({ query: { step: 2 } })
   if ($route.query.step === "3") return $router.push("/")
   if ($route.query.step === "4") return $router.push({ query: { step: 3 } })
   if ($route.query.step === "5") return $router.push({ query: { ...$route.query, step: 4 } })
-  // $router.go(-1)
+  $router.go(-1)
 }
 // Scroll to selected photo
 watch(

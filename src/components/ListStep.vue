@@ -14,6 +14,9 @@
       <div>
         Arrivée à <b>{{ currentTrip.to.text }}</b>
       </div>
+      <div>
+        Durée: <b>{{ currentTrip.duration }}</b>
+      </div>
     </div>
     <div class="py-5 border-b border-black/25"></div>
     <ion-list lines="none" v-for="(sequence, i) in currentTrip.sequences">

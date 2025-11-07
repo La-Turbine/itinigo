@@ -29,20 +29,21 @@
         <img :src="`/img/12.svg`" />
       </div>
     </div>
-    <ion-button class="my-2.5 mx-5" expand="block" @click="$router.push({ query: { ...$route.query, step: 4 } })">Confirmer</ion-button>
+    <ion-button class="my-2.5 mx-5" expand="block" @click="confirmType">Confirmer</ion-button>
     Souhaitez vous renommer l'action ?
     <ion-textarea class="flex-1 m-auto" fill="solid" :auto-grow="true" v-model="currentPhoto.text"></ion-textarea>
-    <ion-button class="my-2.5 mx-5" expand="block" @click="$router.push({ query: { ...$route.query, step: 4 } })">Confirmer</ion-button>
+    <ion-button class="my-2.5 mx-5" expand="block" @click="confirmType">Confirmer</ion-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
+import { ref, computed } from "vue"
 
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 1))
 const currentSequence = computed(() => currentTrip.value.sequences?.[+$route.query.sequence])
 const currentPhoto = computed(() => currentSequence.value?.photos[+$route.query.photo])
+const currentType = ref(-1)
 
 const texts = [
   "Tournez à gauche",
@@ -60,7 +61,13 @@ const texts = [
 ]
 
 function changeType(type: number) {
-  currentPhoto.value.type = type
-  currentPhoto.value.text = texts[type - 1].replace("[tram/bus]", currentSequence.value.type)
+  currentType.value = type
+}
+function confirmType() {
+  if (currentType.value !== -1) {
+    currentPhoto.value.type = currentType.value
+    currentPhoto.value.text = texts[currentType.value - 1].replace("[tram/bus]", currentSequence.value.type)
+  }
+  $router.push({ query: { ...$route.query, step: 4 } })
 }
 </script>
