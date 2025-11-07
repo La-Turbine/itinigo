@@ -11,7 +11,7 @@
       <ion-input label="Date" v-model="state.date" type="datetime-local"></ion-input>
     </ion-item>
     <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'to'">{{ item.text }}</ion-item>
-    <ion-button class="my-2.5 mx-5" expand="block" @click="next(1)">Suivant</ion-button>
+    <ion-button class="my-2.5 mx-5" expand="block" @click="next(1)">Rechercher</ion-button>
   </ion-list>
 
   <div v-if="currentStep === 2">

@@ -23,7 +23,7 @@
     <ion-action-sheet
       :isOpen="$route.query.action"
       @didDismiss="$router.push({ replace: true, query: { ...$route.query, action: undefined, ...(currentStep === 3 && { sequence: undefined, photo: undefined }) } })"
-      :buttons="actions.filter((v) => !$route.query.reorder || v.text !== 'Déplacer')"
+      :buttons="actions.filter((v) => ($route.query.step === '3' && !$route.query.reorder) || v.text !== 'Déplacer')"
     ></ion-action-sheet>
     <ion-content>
       <!-- Step 1 & 2 -->
@@ -79,7 +79,8 @@ function back() {
   if ($route.query.step === "3" && window.formTrip === $route.params.id) return $router.push({ query: { step: 2 } })
   if ($route.query.step === "3") return $router.push("/")
   if ($route.query.step === "4") return $router.push({ query: { step: 3 } })
-  $router.go(-1)
+  if ($route.query.step === "5") return $router.push({ query: { ...$route.query, step: 4 } })
+  // $router.go(-1)
 }
 // Scroll to selected photo
 watch(

@@ -5,17 +5,17 @@
         <button v-if="$state.photos[currentPhoto.id]" class="DoneButton absolute right-0" :class="change && 'bg-[#f87171]!'" @click.stop="clickGallery('change')">
           {{ change ? "Annuler" : "Changer" }}
         </button>
-        <photo-stream v-if="change || !$state.photos[currentPhoto.id]" ref="stream" />
-        <photo-annotator v-else-if="photo" :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" />
-        <img v-else class="max-w-full max-h-full object-cover m-auto select-none" :src="$state.photos[currentPhoto.id]" :style="cardStyle" @click="clickGallery()" />
+        <photo-stream v-if="change || !$state.photos[currentPhoto.id]" :style="cardStyle" ref="stream" />
+        <photo-annotator v-else-if="photo" :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" ref="annotator" />
+        <img v-else :style="cardStyle" class="max-w-full max-h-full object-cover m-auto select-none" :src="$state.photos[currentPhoto.id]" @click="clickGallery()" />
       </div>
-      <div class="fixed bottom-0 w-full z-10 flex h-[20%] p-6 bg-gray-100 border-t border-black/20 overflow-auto" v-if="change || !$state.photos[currentPhoto.id]">
-        <div class="h-10 w-10 bg-gray-600 i-ion/arrow-back my-auto" @click="prevStep"></div>
+      <div class="z-10 absolute bottom-[20%] w-full flex h-[15%]" v-if="change || !$state.photos[currentPhoto.id]">
+        <!-- <div class="h-10 w-10 bg-gray-600 i-ion/arrow-back my-auto" @click="prevStep"></div> -->
         <div class="flex gap-4 m-auto">
           <div class="h-20 w-20 ring-1 ring-gray-300 rounded-full border-6 border-white bg-gray-200 active:scale-95" @click="clickCapture()"></div>
           <div class="h-20 w-20 ring-1 ring-gray-300 rounded-xl bg-gray-200 active:scale-95 flex" @click="input.click()"><div class="m-auto text-2xl bg-gray-600 i-lucide/image"></div></div>
         </div>
-        <div class="h-10 w-10 bg-gray-600 i-ion/arrow-forward my-auto" @click="nextStep"></div>
+        <!-- <div class="h-10 w-10 bg-gray-600 i-ion/arrow-forward my-auto" @click="nextStep"></div> -->
       </div>
       <div class="flex h-[20%] gap-2.5 p-2.5 bg-gray-100 border-t border-black/20 overflow-auto">
         <template v-for="(sequence, i) in currentTrip.sequences">
@@ -39,6 +39,7 @@ const change = ref(false)
 const photo = ref(null)
 const input = ref(null)
 const stream = ref(null)
+const annotator = ref(null)
 
 async function clickCapture() {
   const blob = await stream.value.capturePhoto()
@@ -46,6 +47,7 @@ async function clickCapture() {
 }
 function clickGallery(mode) {
   if (mode === "change") return (change.value = !change.value)
+  if (currentPhoto.value.id.length < 20) return // BUS/TRAM IN/OUT
   window.currentPhoto = currentPhoto.value
   photo.value = currentPhoto.value.id
 }
@@ -122,17 +124,27 @@ function nextStep() {
   return $router.push({ query: { step: 4, sequence: seq, photo: pho } })
 }
 function onTouchStart(e) {
+  if (annotator.value) return
   touchStartX.value = e.touches[0].clientX
 }
 function onTouchMove(e) {
+  if (annotator.value) return
   translateX.value = e.touches[0].clientX - touchStartX.value
   cardStyle.value = { transform: `translateX(${translateX.value}px)` }
 }
 function onTouchEnd(e) {
+  if (annotator.value) return
   cardStyle.value = {}
   const touchEndX = e.changedTouches[0].clientX
   const diffX = touchEndX - touchStartX.value
   if (diffX > 100) return prevStep()
   if (diffX < -100) return nextStep()
 }
+
+// Make sur to close annotator on any click outside it
+addEventListener("pointerdown", (e) => {
+  if (!annotator.value) return
+  if (annotator.value.$el.contains(e.target)) return
+  photo.value = null
+})
 </script>

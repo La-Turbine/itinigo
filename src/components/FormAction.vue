@@ -29,10 +29,10 @@
         <img :src="`/img/12.svg`" />
       </div>
     </div>
-    <ion-button class="my-2.5 mx-5" expand="block" @click="$router.push({ query: { ...$route.query, step: 3 } })">Confirmer</ion-button>
+    <ion-button class="my-2.5 mx-5" expand="block" @click="$router.push({ query: { ...$route.query, step: 4 } })">Confirmer</ion-button>
     Souhaitez vous renommer l'action ?
     <ion-textarea class="flex-1 m-auto" fill="solid" :auto-grow="true" v-model="currentPhoto.text"></ion-textarea>
-    <ion-button class="my-2.5 mx-5" expand="block" @click="$router.push({ query: { ...$route.query, step: 3 } })">Confirmer</ion-button>
+    <ion-button class="my-2.5 mx-5" expand="block" @click="$router.push({ query: { ...$route.query, step: 4 } })">Confirmer</ion-button>
   </div>
 </template>
 
