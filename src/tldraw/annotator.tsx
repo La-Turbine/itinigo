@@ -20,6 +20,7 @@ import {
   DefaultFillStyle,
   DefaultSizeStyle,
   DefaultToolbar,
+  defaultShapeUtils,
   ArrowShapeArrowheadStartStyle,
   ArrowShapeArrowheadEndStyle,
   SelectToolbarItem,
@@ -215,5 +216,15 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     SharePanel: () => <DoneButton onClick={onDone} />,
   }
 
-  return <Tldraw onMount={onMount} onUiEvent={onUiEvent} components={components} forceMobile />
+  const shapeUtils = defaultShapeUtils.map((Util) => {
+    // NOTE: no way to disable all shapes, it crashes on ovals/ellipse
+    if (Util.type !== "arrow") return Util
+    return class extends Util {
+      canEdit(shape: any) {
+        return false
+      }
+    }
+  })
+
+  return <Tldraw onMount={onMount} onUiEvent={onUiEvent} components={components} shapeUtils={shapeUtils} forceMobile />
 }

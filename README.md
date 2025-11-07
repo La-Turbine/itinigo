@@ -125,6 +125,7 @@ Lot 2: Octobre / Novembre > Design
 
 - [ ] BONUS: uniformize next / back functions across pages (in a HEADER component?)
 - [ ] BONUS: create a swipe bind function to replace onTouchStart/Move/End
+- [ ] BONUS: améliorer les montées de version (message + forcé la maj)
 
 Lot 3: Novembre / Décembre > Finitions + Améliorations
 
@@ -145,9 +146,8 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [ ] 1j Analyse API cityway
 - Config > lister la taille actuelle des données
 - Optimisation de la taille des images/trajets (https://www.youtube.com/watch?v=O8uazkirvVo)
-- Utile ? Export PDF
+- Utile ? Export PDF (avec metadata JSON dedans)
 - Utile ? Mode offline amélioré
-- Utile ? ne pas pouvoir mettre du texte dans une flèche
 
 ## 2024
 
