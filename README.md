@@ -123,16 +123,16 @@ Lot 2: Octobre / Novembre > Design
 - [ ] Design: CardStep
 - [ ] Design: Timeline ( + before/after, > validate at the end)
 
-- [ ] BONUS: uniformize next / back functions across pages (in a HEADER component?)
-- [ ] BONUS: create a swipe bind function to replace onTouchStart/Move/End
-- [ ] BONUS: améliorer les montées de version (message + forcé la maj)
-
 Lot 3: Novembre / Décembre > Finitions + Améliorations
 
 - [ ] Design: Feedback + Finishing Touches
 - [ ] Design: Travel - RAS?
 - [ ] Design: Help - RAS?
 - [ ] Design: Config - RAS!
+
+- [ ] BONUS: uniformize next / back functions across pages (in a HEADER component?)
+- [ ] BONUS: create a swipe bind function to replace onTouchStart/Move/End
+- [ ] BONUS: améliorer les montées de version (message + forcé la maj)
 
 ## ICEBOX / BACKLOG
 

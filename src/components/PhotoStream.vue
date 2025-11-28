@@ -15,12 +15,9 @@ let stream: MediaStream | null = null
 const startCamera = async () => {
   if (!videoRef.value) return
   try {
+    // NOTE: specifying width=4096 and height=3072 here will not work on iOS
     stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: "environment",
-        width: { ideal: 4096 },
-        height: { ideal: 3072 },
-      },
+      video: { facingMode: "environment" },
       audio: false,
     })
     videoRef.value.srcObject = stream
@@ -79,13 +76,7 @@ const capturePhoto = (): Promise<Blob | null> => {
     // Draw the cropped portion of the video onto the canvas
     ctx.drawImage(video, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, canvas.width, canvas.height)
 
-    canvas.toBlob(
-      (blob) => {
-        resolve(blob)
-      },
-      "image/jpeg",
-      1.0,
-    )
+    canvas.toBlob((blob) => resolve(blob), "image/jpeg", 1.0)
   })
 }
 

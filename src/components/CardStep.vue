@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-2.5 bg-gray-100 rounded-lg border border-black/15 min-w-[60vw] flex"
+    class="p-2.5 bg-gray-100 rounded-lg border border-black/15 min-w-[60vw] flex overflow-hidden"
     :class="i === +$route.query.sequence! && j === +$route.query.photo! ? '!border-[#3880ff] !bg-[#3880ff22]' : ''"
     :data-sequence="i"
     :data-photo="j"

@@ -19,12 +19,12 @@
           <ion-action-sheet trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
         </ion-buttons>
       </ion-toolbar>
+      <ion-action-sheet
+        :isOpen="$route.query.action"
+        @didDismiss="$router.push({ replace: true, query: { ...$route.query, action: undefined, ...(currentStep === 3 && { sequence: undefined, photo: undefined }) } })"
+        :buttons="actions.filter((v) => ($route.query.step === '3' && !$route.query.reorder) || v.text !== 'Déplacer')"
+      ></ion-action-sheet>
     </ion-header>
-    <ion-action-sheet
-      :isOpen="$route.query.action"
-      @didDismiss="$router.push({ replace: true, query: { ...$route.query, action: undefined, ...(currentStep === 3 && { sequence: undefined, photo: undefined }) } })"
-      :buttons="actions.filter((v) => ($route.query.step === '3' && !$route.query.reorder) || v.text !== 'Déplacer')"
-    ></ion-action-sheet>
     <ion-content>
       <!-- Step 1 & 2 -->
       <form-trip />
@@ -47,7 +47,7 @@ const currentSequence = computed(() => currentTrip.value.sequences?.[+$route.que
 const currentPhoto = computed(() => currentSequence.value?.photos[+$route.query.photo])
 
 const actions = [
-  { text: "Prévisualiser", handler: () => $router.push(`/travel/${$route.params.id}?step=${sumStep(+$route.query.sequence, +$route.query.photo, true) || 1}`) },
+  { text: "Prévisualiser", handler: () => $router.push(`/travel/${$route.params.id}?step=${sumStep(+$route.query.sequence, +$route.query.photo) || 1}`) },
   { text: "Ajouter avant", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo) },
   { text: "Ajouter après", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo + 1) },
   { text: "Éditer l'action", handler: () => $router.push({ query: { ...$route.query, step: 5 } }) },
@@ -57,9 +57,9 @@ const actions = [
   { text: "Annuler", role: "cancel" },
 ]
 // Step 3: List photos
-function sumStep(sequence, photo, travel = false) {
-  if (travel) return currentTrip.value.sequences.slice(0, sequence).reduce((acc, v) => acc + v.photos.length + !!v.stops, 0) + photo + 1
-  return currentTrip.value.sequences.slice(0, sequence).reduce((acc, v) => acc + v.photos.length, 0) + photo
+function sumStep(sequence, photo) {
+  // TODO: filter out empty photos { type: 0, text: "" }
+  return currentTrip.value.sequences.slice(0, sequence).reduce((acc, v) => acc + v.photos.length + !!v.stops, 0) + photo + 1
 }
 function addPhoto(sequenceIndex, photoIndex) {
   const sequence = currentTrip.value.sequences[sequenceIndex]
