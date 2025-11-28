@@ -25,7 +25,7 @@ async function deleteTrip(index: number) {
   $state.trips.splice(index, 1)
 }
 function addTrip() {
-  if (navigator.onLine === false) return window.popup("Vous devez être connecté à internet pour ajouter un trajet")
+  // if (navigator.onLine === false) return window.popup("Vous devez être connecté à internet pour ajouter un trajet")
   $router.push(`/trip/${$state.trips.length + 1}`)
 }
 </script>

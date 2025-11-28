@@ -120,16 +120,15 @@ Lot 2: Octobre / Novembre > Design
 - [x] Design: Notification
 - [ ] Design: ListTrip + CardTrip ( ⋮ delete, reorder)
 - [ ] Design: FormTrip (autocomplete, noir sur blanc)
-- [ ] Design: CardStep
-- [ ] Design: Timeline ( + before/after, > validate at the end)
 
 Lot 3: Novembre / Décembre > Finitions + Améliorations
 
+- [ ] Design: CardStep
+- [ ] Design: Timeline ( + before/after, > validate at the end)
 - [ ] Design: Feedback + Finishing Touches
 - [ ] Design: Travel - RAS?
 - [ ] Design: Help - RAS?
 - [ ] Design: Config - RAS!
-
 - [ ] BONUS: uniformize next / back functions across pages (in a HEADER component?)
 - [ ] BONUS: create a swipe bind function to replace onTouchStart/Move/End
 - [ ] BONUS: améliorer les montées de version (message + forcé la maj)

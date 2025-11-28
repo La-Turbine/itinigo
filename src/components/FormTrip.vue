@@ -1,22 +1,49 @@
 <template>
-  <ion-list v-if="currentStep < 3">
-    <ion-item>
-      <ion-input label="Départ" :value="state.from.text" @ionInput="onSearch" @ionFocus="onFocus('from')" @ionBlur="onBlur('from')" required></ion-input>
+  <ion-list lines="full" v-if="currentStep < 3">
+    <ion-item @click="onClick('from')">
+      <ion-label class="p-2" position="stacked">
+        Départ
+        <ion-label>
+          <h2>{{ state.from.text.split(" - ")[0] }}&nbsp;</h2>
+          <p>{{ state.from.text.split(" - ")[1] }}&nbsp;</p>
+        </ion-label>
+      </ion-label>
     </ion-item>
-    <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'from'">{{ item.text }}</ion-item>
-    <ion-item>
-      <ion-input label="Arrivée" :value="state.to.text" @ionInput="onSearch" @ionFocus="onFocus('to')" @ionBlur="onBlur('to')" required></ion-input>
+    <ion-item @click="onClick('to')">
+      <ion-label class="p-2" position="stacked">
+        Arrivée
+        <ion-label>
+          <h2>{{ state.to.text.split(" - ")[0] }}&nbsp;</h2>
+          <p>{{ state.to.text.split(" - ")[1] }}&nbsp;</p>
+        </ion-label>
+      </ion-label>
     </ion-item>
     <ion-item>
-      <ion-input label="Date" v-model="state.date" type="datetime-local"></ion-input>
+      <ion-label class="p-2" position="stacked" lines="full">
+        Date
+        <ion-input v-model="state.date" type="datetime-local"></ion-input>
+      </ion-label>
     </ion-item>
-    <ion-item button detail="false" @click="onSelect(item)" v-for="item in items" v-if="focused === 'to'">{{ item.text }}</ion-item>
-    <ion-button class="my-2.5 mx-5" expand="block" @click="next(1)">Rechercher</ion-button>
+    <ion-button class="my-2.5 mx-5" expand="block" @click="next(1)" :disabled="!state.from.text || !state.to.text">Rechercher</ion-button>
   </ion-list>
+
+  <ion-modal :is-open="!!focused" @willDismiss="focused = ''" :initial-breakpoint="0.75" :breakpoints="[0.75]" :can-dismiss="true">
+    <ion-content class="ion-padding">
+      <ion-searchbar ref="searchbar" v-model="search" @ionInput="onSearch" :placeholder="`Rechercher ${{ from: 'Départ', to: 'Arrivée' }[focused] ?? ''}`"></ion-searchbar>
+      <ion-list>
+        <ion-item @click="onSelect(item)" v-for="item in items">
+          <ion-label>
+            <h2>{{ item.text.split(" - ")[0] }}</h2>
+            <p>{{ item.text.split(" - ")[1] }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-modal>
 
   <div v-if="currentStep === 2">
     <div class="cursor-pointer" @click.stop.prevent="next(2, (state.choice = i))" v-for="(trip, i) in state.choices">
-      <iframe :srcdoc="trip" class="w-full h-[140px] border-0 pointer-events-none"></iframe>
+      <iframe :srcdoc="trip" class="w-full h-40 m-auto border-0 pointer-events-none"></iframe>
     </div>
   </div>
 </template>
@@ -41,12 +68,13 @@ const state = reactive({
 })
 
 // Search functionality
+const searchbar = ref(null)
+const search = ref("")
 const focused = ref("")
 const items = ref([])
 
 async function onSearch(event) {
-  const query = event.target.value
-  state[focused.value].text = query
+  const query = search.value
   if (!query) return (items.value = [])
   try {
     const response = await fetch(`https://api.ppp38v2.cityway.fr/search/address?keywords=${query}&maxitems=10&pointtypes=&categories=&LocalityIds=&OperatorIds=`)
@@ -62,16 +90,14 @@ async function onSearch(event) {
 
 function onSelect(item) {
   state[focused.value] = item
-  items.value = []
+  search.value = ""
   focused.value = ""
+  items.value = []
 }
 
-function onFocus(direction) {
+function onClick(direction) {
   focused.value = direction
-}
-
-function onBlur(direction) {
-  // Keep focused for item selection
+  setTimeout(() => searchbar.value?.$el.setFocus(), 300)
 }
 
 // Navigation logic
@@ -113,9 +139,11 @@ const nexts = {
       .slice(1, -1)
       .flatMap((text) => JSON.parse(/\[[^;]]*\]/.exec(text)[0]))
     const link = $$("link", new DOMParser().parseFromString(await (await fetch("https://www.itinisere.fr/")).text(), "text/html")).find((el) => el.href.includes("/css/site")).outerHTML
-    const css = `${link.replace("/", "https://static.PPP38v2.cityway.fr/")}
+    const css = `${link.replace(`href="/`, `href="https://static.PPP38v2.cityway.fr/`)}
 <style>
-.JourneyPlanner { padding: 0 10px;height: 140px;overflow:hidden; }
+.JourneyPlanner { margin: auto 20px;height: 160px;display: flex; }
+.JourneyPlanner .trip-solutions { margin: auto; }
+.JourneyPlanner .trip-solutions .link-detail { margin: 0;border: 1px solid #80808033; }
 .JourneyPlanner .trip-solutions .link-detail .type-trip { position: absolute;bottom: 5px; }
 </style>`
     state.choices = $$(".panel-trip", html).map((el) => `${css}<div class="JourneyPlanner"><div class="trip-solutions">${el.outerHTML}</div></div>`)

@@ -17,7 +17,7 @@ const startCamera = async () => {
   try {
     // NOTE: specifying width=4096 and height=3072 here will not work on iOS
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
+      video: { facingMode: "environment", width: { ideal: 3840 }, height: { ideal: 2160 } },
       audio: false,
     })
     videoRef.value.srcObject = stream
