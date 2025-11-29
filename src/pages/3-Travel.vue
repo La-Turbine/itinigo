@@ -57,7 +57,7 @@
             ref="stops"
           >
             <div class="absolute z-10 -m-2 h-[1.4rem] w-[1.4rem] rounded-full bg-blue-600 animate-ping" v-if="i === current.stops.length - 1 && progress.number > i - 2"></div>
-            <div class="min-w-[10rem] min-h-8 -translate-y-full text-center text-balance">{{ stop.text }}</div>
+            <div class="min-w-40 min-h-8 -translate-y-full text-center text-balance">{{ stop.text }}</div>
           </div>
           <div class="absolute left-0 right-0 top-1/2 h-4 -translate-y-1/2 rounded-full bg-gray-300"></div>
           <div class="absolute left-0 right-0 top-1/2 h-4 -translate-y-1/2 rounded-full bg-blue-300" :style="progress"></div>
@@ -73,7 +73,7 @@
 import { ref, computed, watch, onMounted, onUnmounted } from "vue"
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 0))
-const steps = computed(() => currentTrip.value.sequences?.flatMap((v) => (v.stops ? [...v.photos.slice(0, -1), v, v.photos.at(-1)] : v.photos)).filter((v) => v.stops || v.text) ?? [])
+const steps = computed(() => currentTrip.value.sequences?.flatMap((v) => (v.stops ? [...v.photos.slice(0, -1), v, v.photos.at(-1)] : v.photos)) ?? [])
 const current = computed(() => steps.value[currentStep.value - 1])
 const stops = ref([])
 const lat = computed(() => window.$position.value?.coords?.latitude ?? 0)
@@ -195,7 +195,14 @@ function adjustFontSize(el, size = +getComputedStyle(el).fontSize) {
 }
 async function back() {
   if ($state.mode === "helper") {
-    const url = `/trip/${$route.params.id}?step=3`
+    let stepNum = currentStep.value
+    const sequenceLengths = currentTrip.value.sequences.map((v) => v.photos.length + !!v.stops)
+    const sequenceIndex = sequenceLengths.findIndex((v) => {
+      if (stepNum - v <= 0) return true
+      stepNum -= v
+      return false
+    })
+    const url = `/trip/${$route.params.id}?step=4&sequence=${sequenceIndex}&photo=${stepNum - 1}`
     $router.push(`/`)
     return setTimeout(() => $router.push(url), 100)
   }

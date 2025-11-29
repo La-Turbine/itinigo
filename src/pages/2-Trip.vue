@@ -70,7 +70,6 @@ function addPhoto(sequenceIndex, photoIndex) {
 function deletePhoto(sequence, index) {
   idb.del(sequence.photos[index].id)
   sequence.photos.splice(index, 1)
-  prevStep()
 }
 // Utils
 function back() {
