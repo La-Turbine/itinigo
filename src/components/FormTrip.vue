@@ -157,7 +157,7 @@ const nexts = {
         }
         const before = extract($(".details span", el.parentElement.parentElement.previousElementSibling).firstChild.textContent.trim())
         const intermediary = $$("ul li", el.parentElement.parentElement).map((el) => {
-          const { lat, lng } = $("[data-lat]", el).dataset
+          const { lat, lng } = $("[data-lat]", el)?.dataset ?? {}
           return { text: el.firstChild.textContent.trim(), lat: +lat, lng: +lng }
         })
         const after = extract($(".details span", el.parentElement.parentElement.nextElementSibling).firstChild.textContent.trim())

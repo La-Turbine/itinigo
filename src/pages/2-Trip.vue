@@ -5,15 +5,15 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
         </ion-buttons>
-        <ion-button class="m-auto block w-[130px]" size="small" @click.stop="$router.push({ query: { ...$route.query, step: 5 } })" v-if="currentStep === 4 && !currentPhoto.text">Nommer l'action</ion-button>
+        <ion-button class="mx-auto h-10 w-24 block" size="small" @click.stop="$router.push({ query: { ...$route.query, step: 5 } })" v-if="currentStep === 4 && !currentPhoto.text">Nommer l'action</ion-button>
         <div class="text-[80%] font-medium whitespace-pre-line text-center" v-else-if="currentStep > 3">{{ currentPhoto.text }}</div>
         <div class="text-[80%] font-medium whitespace-pre-line text-center" v-else>{{ triptitle(currentTrip) }}</div>
         <ion-buttons slot="end" v-if="currentStep === 3">
           <ion-button @click="$router.push({ query: { ...$route.query, reorder: undefined } })" v-if="$route.query.reorder">OK</ion-button>
-          <div class="i-ion/eye text-xl mr-2" @click="actions[0].handler()" v-if="!$route.query.reorder"></div>
+          <div class="i-lucide/eye text-xl mr-2" @click="actions[0].handler()" v-if="!$route.query.reorder"></div>
         </ion-buttons>
         <ion-buttons slot="end" v-if="currentStep > 3">
-          <div id="actionsTop" class="i-ion/ellipsis-vertical text-xl"></div>
+          <div id="actionsTop" class="i-lucide/ellipsis-vertical text-xl"></div>
           <ion-action-sheet trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
         </ion-buttons>
       </ion-toolbar>
@@ -80,12 +80,9 @@ watch(
   () => [$route.query.sequence, $route.query.photo],
   () => {
     setTimeout(() => {
+      if ($route.query.sequence === "0" && $route.query.photo === "0") return
       const el = $(`[data-sequence="${$route.query.sequence}"][data-photo="${$route.query.photo}"]`)
-      el?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "start",
-      })
+      el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
     }, 0)
   },
   { immediate: true },

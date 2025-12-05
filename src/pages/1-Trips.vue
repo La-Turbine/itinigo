@@ -5,7 +5,7 @@
         <img src="/logo.svg" alt="Logo Itinigo" />
         <ion-buttons slot="end">
           <div class="flex items-center gap-2">
-            <div class="font-medium" @click="changeMode('helper')">Édition</div>
+            <div class="font-medium" :class="$state.mode === 'helper' ? 'text-black' : 'text-gray-500'" @click="changeMode('helper')">Édition</div>
             <div class="group relative inline-flex w-16 shrink-0 rounded-full bg-black p-0.5 inset-ring inset-ring-gray-900/5 outline-offset-2 outline-(--ion-color-primary) transition-colors duration-200 ease-in-out has-checked:bg-(--ion-color-primary) has-focus-visible:outline-2" @click="changeMode">
               <span class="relative size-8 m-1 rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-5">
                 <span class="absolute inset-0 flex size-full items-center justify-center opacity-100 transition-opacity duration-200 ease-in group-has-checked:opacity-0 group-has-checked:duration-100 group-has-checked:ease-out" aria-hidden="true">
@@ -17,7 +17,7 @@
               </span>
               <input type="checkbox" class="absolute inset-0 appearance-none focus:outline-hidden pointer-events-none" aria-label="Use setting" name="setting" :checked="$state.mode === 'user'" />
             </div>
-            <div class="font-medium text-gray-500" @click="changeMode('user')">Trajet</div>
+            <div class="font-medium" :class="$state.mode === 'user' ? 'text-(--ion-color-primary)' : 'text-gray-500'" @click="changeMode('user')">Trajet</div>
           </div>
         </ion-buttons>
       </ion-toolbar>

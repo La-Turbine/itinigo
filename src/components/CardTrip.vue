@@ -12,13 +12,13 @@
           </template>
         </div>
       </div>
-      <div class="i-ion/trash-outline text-xl text-red-400 hover:text-red-500 cursor-pointer transition-colors p-1" v-if="delete" @click.stop="onDelete"></div>
+      <div class="i-lucide/trash-2 text-xl text-red-400 hover:text-red-500 cursor-pointer transition-colors p-1" v-if="delete" @click.stop="onDelete"></div>
     </div>
     <div class="flex gap-4 items-stretch">
       <div class="flex flex-col items-center py-1">
         <div class="size-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-100"></div>
-        <div class="flex-1 w-0.5 bg-linear-to-b from-emerald-400 to-blue-500 my-1.5 rounded-full"></div>
-        <div class="i-ion/arrow-down text-blue-500 text-lg -my-1"></div>
+        <div class="flex-1 w-0.5 bg-linear-to-b from-emerald-400 to-blue-500 rounded-full"></div>
+        <div class="i-lucide/arrow-down text-blue-500 text-[22px] -mt-1.5 -my-1"></div>
       </div>
       <div class="flex flex-col gap-3 flex-1 min-w-0">
         <div class="text-base text-slate-600 truncate">{{ homework(trip.from?.text ?? "") }}</div>

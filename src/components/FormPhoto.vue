@@ -1,7 +1,7 @@
 <template>
   <template v-if="currentStep === 4">
     <div class="flex flex-col h-full overflow-hidden">
-      <div class="relative flex h-[80%]" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
+      <div class="relative flex h-[calc(100%-140px)]" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
         <button v-if="$state.photos[currentPhoto.id]" class="DoneButton absolute right-0" :class="change && 'bg-[#f87171]!'" @click.stop="clickGallery('change')">
           {{ change ? "Annuler" : "Changer" }}
         </button>
@@ -9,7 +9,7 @@
         <photo-annotator v-else-if="photo" :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" ref="annotator" />
         <img v-else :style="cardStyle" class="max-w-full max-h-full object-cover m-auto select-none" :src="$state.photos[currentPhoto.id]" @click="clickGallery()" />
       </div>
-      <div class="z-10 absolute bottom-[20%] w-full flex h-[15%]" v-if="change || !$state.photos[currentPhoto.id]">
+      <div class="z-10 absolute bottom-[140px] w-full flex h-[140px]" v-if="change || !$state.photos[currentPhoto.id]">
         <!-- <div class="h-10 w-10 bg-gray-600 i-ion/arrow-back my-auto" @click="prevStep"></div> -->
         <div class="flex gap-4 m-auto">
           <div class="h-20 w-20 ring-1 ring-gray-300 rounded-full border-6 border-white bg-gray-200 active:scale-95" @click="clickCapture()"></div>
@@ -17,7 +17,7 @@
         </div>
         <!-- <div class="h-10 w-10 bg-gray-600 i-ion/arrow-forward my-auto" @click="nextStep"></div> -->
       </div>
-      <div class="flex h-[20%] gap-2.5 p-2.5 bg-gray-100 border-t border-black/20 overflow-auto">
+      <div class="flex h-[140px] gap-2.5 p-2.5 bg-gray-100 border-t border-black/20 overflow-auto">
         <template v-for="(sequence, i) in currentTrip.sequences">
           <card-step :i="i" :j="j" v-for="(photo, j) in sequence.photos" :key="photo" />
         </template>

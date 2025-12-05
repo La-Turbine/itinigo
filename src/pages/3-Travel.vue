@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
         </ion-buttons>
-        <div class="text-[80%] font-medium whitespace-pre-line text-center">{{ triptitle(currentTrip) }}</div>
+        <div class="text-[calc(100%-80px)] font-medium whitespace-pre-line text-center">{{ triptitle(currentTrip) }}</div>
       </ion-toolbar>
     </ion-header>
     <ion-content forceOverscroll="false">
@@ -30,7 +30,7 @@
         <ion-button class="h-20 text-[1.4rem] font-bold" @click="gogo">C'est Parti !</ion-button>
       </div>
       <div class="flex flex-col h-full overflow-hidden" v-else-if="!current.stops">
-        <div class="relative flex h-[80%]" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
+        <div class="relative flex h-[140px]" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
           <img class="max-w-full max-h-full object-cover m-auto select-none pointer-events-none" :src="$state.photos[current.id]" :style="cardStyle" />
           <img class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-auto" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
         </div>

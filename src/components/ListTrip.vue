@@ -2,12 +2,12 @@
   <ion-list lines="none" inset>
     <ion-label class="text-3xl font-bold">Mes itinéraires</ion-label>
     <card-trip :trip="trip" :delete="$state.mode === 'helper'" @click="$router.push($state.mode === 'helper' ? `/trip/${i + 1}?step=3` : `/travel/${i + 1}`)" v-for="(trip, i) in $state.trips" :key="i" />
-    <ion-button expand="block" @click="addTrip" v-if="$state.mode === 'helper'">
-      <div class="text-2xl i-ion/add mx-1 -my-1"></div>
+    <ion-button class="mx-5" expand="block" @click="addTrip" v-if="$state.mode === 'helper'">
+      <div class="text-2xl i-lucide/plus mx-1 -my-1"></div>
       Créer un itinéraire
     </ion-button>
-    <ion-button expand="block" color="danger" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">
-      <div class="text-xl i-ion/settings-sharp mx-1 -my-1"></div>
+    <ion-button class="mx-5" expand="block" color="warning" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">
+      <div class="text-xl i-lucide/settings mx-1 -my-1"></div>
       Configurer l'application
     </ion-button>
   </ion-list>
