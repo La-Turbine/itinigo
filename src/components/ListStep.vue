@@ -1,6 +1,6 @@
 <template>
   <div v-if="currentStep === 3">
-    <div class="m-5">
+    <div class="m-6">
       <b>Rappel de mon trajet:</b>
       <div>
         Départ de <b>{{ currentTrip.from.text }}</b>
@@ -18,24 +18,26 @@
         Durée: <b>{{ currentTrip.duration }}</b>
       </div>
     </div>
-    <div class="py-5 border-b border-black/25"></div>
-    <ion-list lines="none" v-for="(sequence, i) in currentTrip.sequences">
-      <ion-item class="font-bold m-5">{{ sequence.transport }}</ion-item>
-      <div class="-mt-[15px] mx-5 mb-[15px]" v-if="sequence.stops">
-        <div class="font-bold">{{ sequence.stops.length }} arrêts</div>
-        <div v-for="stop in sequence.stops">{{ stop.text }}</div>
-      </div>
-      <ion-list lines="none">
-        <ion-reorder-group :disabled="!$route.query.reorder" @ionItemReorder="reorderPhoto(sequence, $event)">
-          <ion-item v-for="(photo, j) in sequence.photos" :key="photo">
-            <card-step class="w-full my-1" :i="i" :j="j" />
-            <ion-reorder slot="end"></ion-reorder>
-          </ion-item>
-        </ion-reorder-group>
+    <div class="border-b border-black/25"></div>
+    <template v-for="(sequence, i) in currentTrip.sequences">
+      <ion-list lines="none" inset>
+        <ion-item class="font-bold">{{ sequence.transport }}</ion-item>
+        <div class="-mt-[15px] mx-5 mb-[15px]" v-if="sequence.stops">
+          <div class="font-bold">{{ sequence.stops.length }} arrêts</div>
+          <div v-for="stop in sequence.stops">{{ stop.text }}</div>
+        </div>
+        <ion-list lines="none">
+          <ion-reorder-group :disabled="!$route.query.reorder" @ionItemReorder="reorderPhoto(sequence, $event)">
+            <ion-item v-for="(photo, j) in sequence.photos" :key="photo">
+              <card-step class="w-full my-1" :i="i" :j="j" />
+              <ion-reorder slot="end"></ion-reorder>
+            </ion-item>
+          </ion-reorder-group>
+        </ion-list>
+        <ion-button class="my-2.5 mx-5" expand="block" @click="addPhoto(i, sequence.photos.length)">Ajouter une étape</ion-button>
       </ion-list>
-      <ion-button class="my-2.5 mx-5" expand="block" @click="addPhoto(i, sequence.photos.length)">Ajouter une étape</ion-button>
       <div class="py-5 border-b border-black/25" v-if="i !== currentTrip.sequences.length - 1"></div>
-    </ion-list>
+    </template>
   </div>
 </template>
 

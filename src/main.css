@@ -40,3 +40,16 @@ ion-button {
   --padding-bottom: 20px;
   font-weight: 700;
 }
+ion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+ion-list.list-ios.list-inset {
+  -webkit-margin-start: 20px;
+  margin-inline-start: 20px;
+  -webkit-margin-end: 20px;
+  margin-inline-end: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
