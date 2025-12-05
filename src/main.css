@@ -53,3 +53,13 @@ ion-list.list-ios.list-inset {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+ion-item {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --inner-padding-top: 0;
+  --inner-padding-bottom: 0;
+}

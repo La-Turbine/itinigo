@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 w-full p-5 bg-white rounded-2xl border border-black/10 shadow-sm hover:shadow-md transition-shadow" v-if="trip">
+  <div class="flex flex-col gap-4 w-full p-5 bg-white rounded-3xl border border-black/10 overflow-hidden" v-if="trip">
     <div class="flex items-center justify-between w-full">
       <div class="flex items-center gap-2 px-3.5 py-2 bg-linear-to-r from-slate-50 to-slate-100 rounded-full border border-slate-200/50">
         <span class="text-lg font-semibold text-slate-700">{{ trip.duration }}</span>

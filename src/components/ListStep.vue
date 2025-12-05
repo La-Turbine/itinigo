@@ -1,27 +1,15 @@
 <template>
   <div v-if="currentStep === 3">
-    <div class="m-6">
-      <b>Rappel de mon trajet:</b>
-      <div>
-        Départ de <b>{{ currentTrip.from.text }}</b>
-      </div>
-      <div>
-        Transports en
-        <span v-for="transport in currentTrip.sequences.filter((v) => v.stops)">
-          <b>{{ transport.type }}</b> ({{ transport.stops.length }} arrêts)
-        </span>
-      </div>
-      <div>
-        Arrivée à <b>{{ currentTrip.to.text }}</b>
-      </div>
-      <div>
-        Durée: <b>{{ currentTrip.duration }}</b>
-      </div>
-    </div>
-    <div class="border-b border-black/25"></div>
+    <ion-list lines="none" inset>
+      <ion-label class="text-xs font-bold uppercase">Rappel du trajet</ion-label>
+      <card-trip :trip="currentTrip" />
+    </ion-list>
+    <ion-label class="m-5 text-xs font-bold uppercase">Détails du trajet</ion-label>
     <template v-for="(sequence, i) in currentTrip.sequences">
       <ion-list lines="none" inset>
-        <ion-item class="font-bold">{{ sequence.transport }}</ion-item>
+        <ion-list-header>
+          <ion-label class="text-3xl font-bold">{{ sequence.transport }}</ion-label>
+        </ion-list-header>
         <div class="-mt-[15px] mx-5 mb-[15px]" v-if="sequence.stops">
           <div class="font-bold">{{ sequence.stops.length }} arrêts</div>
           <div v-for="stop in sequence.stops">{{ stop.text }}</div>
@@ -36,7 +24,6 @@
         </ion-list>
         <ion-button class="my-2.5 mx-5" expand="block" @click="addPhoto(i, sequence.photos.length)">Ajouter une étape</ion-button>
       </ion-list>
-      <div class="py-5 border-b border-black/25" v-if="i !== currentTrip.sequences.length - 1"></div>
     </template>
   </div>
 </template>
