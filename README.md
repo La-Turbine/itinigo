@@ -118,11 +118,14 @@ Lot 2: Octobre / Novembre > Design
 - [x] Feat: Recadrage d'une photo
 - [x] Feat: Flux Appareil Photo
 - [x] Design: Notification
-- [ ] Design: ListTrip + CardTrip ( ⋮ delete, reorder)
-- [ ] Design: FormTrip (autocomplete, noir sur blanc)
+- [x] Design: FormTrip (autocomplete, noir sur blanc)
 
 Lot 3: Novembre / Décembre > Finitions + Améliorations
 
+- [ ] Design: Page 1 - Header (+ theme black/blue)
+- [ ] Design: Page 1 - ListTrip (+ buttons)
+- [ ] Design: Page 1 - CardTrip
+- [ ] Design: Page 2.1 - FormTrip
 - [ ] Design: CardStep
 - [ ] Design: Timeline ( + before/after, > validate at the end)
 - [ ] Design: Feedback + Finishing Touches

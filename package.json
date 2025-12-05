@@ -1,7 +1,7 @@
 {
   "name": "itinigo",
   "private": true,
-  "version": "135.0.0-8734819",
+  "version": "136.0.0-50bf8bd",
   "type": "module",
   "scripts": {
     "dev": "ionic serve --external",
@@ -36,7 +36,7 @@
     "vue-tsc": "3.1.2"
   },
   "prettier": {
-    "printWidth": 200,
+    "printWidth": 1000,
     "semi": false
   }
 }

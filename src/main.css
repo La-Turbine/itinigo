@@ -20,6 +20,7 @@
 :root {
   --ion-toolbar-background: #f6f7f7;
   --ion-statusbar-background: #f6f7f7;
+  --ion-background-color: #f8f8f8;
 }
 .header-md {
   box-shadow: none !important;
@@ -27,4 +28,15 @@
 }
 .alert-cancel {
   color: #ef4444 !important;
+}
+ion-toolbar {
+  height: 74px;
+  display: flex;
+  padding: 0 20px;
+}
+ion-button {
+  --border-radius: 30px;
+  --padding-top: 20px;
+  --padding-bottom: 20px;
+  font-weight: 700;
 }

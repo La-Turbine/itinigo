@@ -76,27 +76,14 @@ const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 1))
 const currentSequence = computed(() => currentTrip.value.sequences?.[+$route.query.sequence])
 const currentPhoto = computed(() => currentSequence.value?.photos[+$route.query.photo])
-const currentType = ref(currentPhoto.value.type || -1)
-const currentText = ref(currentPhoto.value.text || "")
+const currentType = ref(currentPhoto.value?.type || -1)
+const currentText = ref(currentPhoto.value?.text || "")
 
 watch(currentType, () => {
   currentText.value = texts[currentType.value - 1].replace("[tram/bus]", currentSequence.value.type)
 })
 
-const texts = [
-  "Tournez à gauche",
-  "Allez tout droit",
-  "Tournez à droite",
-  "Quand le feu piéton est vert, traversez le passage piéton",
-  "Passage piéton sans feu, attention avant de traverser",
-  "Vérifiez le nom de l'arrêt",
-  "Vérifiez la direction",
-  "Validez votre ticket",
-  "Attendez à l'arrêt",
-  "Quand le [tram/bus] arrive, vérifiez la direction",
-  "Montez dans le [tram/bus]",
-  "Descendez du [tram/bus]",
-]
+const texts = ["Tournez à gauche", "Allez tout droit", "Tournez à droite", "Quand le feu piéton est vert, traversez le passage piéton", "Passage piéton sans feu, attention avant de traverser", "Vérifiez le nom de l'arrêt", "Vérifiez la direction", "Validez votre ticket", "Attendez à l'arrêt", "Quand le [tram/bus] arrive, vérifiez la direction", "Montez dans le [tram/bus]", "Descendez du [tram/bus]"]
 
 function confirmType() {
   if (currentType.value !== -1) {

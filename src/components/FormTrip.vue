@@ -149,20 +149,7 @@ const nexts = {
     state.choices = $$(".panel-trip", html).map((el) => `${css}<div class="JourneyPlanner"><div class="trip-solutions">${el.outerHTML}</div></div>`)
     state.sequences = $$(".detail-trip", html).map((el) => {
       const sequence = []
-      const texts = [
-        "Tournez à gauche",
-        "Allez tout droit",
-        "Tournez à droite",
-        "Quand le feu piéton est vert, traversez le passage piéton",
-        "Passage piéton sans feu, attention avant de traverser",
-        "Vérifiez le nom de l'arrêt",
-        "Vérifiez la direction",
-        "Validez votre ticket",
-        "Attendez à l'arrêt",
-        "Quand le [tram/bus] arrive, vérifiez la direction",
-        "Montez dans le [tram/bus]",
-        "Descendez du [tram/bus]",
-      ]
+      const texts = ["Tournez à gauche", "Allez tout droit", "Tournez à droite", "Quand le feu piéton est vert, traversez le passage piéton", "Passage piéton sans feu, attention avant de traverser", "Vérifiez le nom de l'arrêt", "Vérifiez la direction", "Validez votre ticket", "Attendez à l'arrêt", "Quand le [tram/bus] arrive, vérifiez la direction", "Montez dans le [tram/bus]", "Descendez du [tram/bus]"]
       $$("td:nth-child(1) > .item-line", el).forEach((el, i) => {
         function extract(text) {
           const node = nodes.find((node) => node.Name === text)

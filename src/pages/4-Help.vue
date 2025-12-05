@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
@@ -8,7 +8,7 @@
         <ion-title>{{ $route.query.mode === "card" ? "Ma carte d'aide" : "Mes Aides" }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
+    <ion-content forceOverscroll="false">
       <div class="flex flex-col gap-5 p-5">
         <template v-if="$route.query.mode === 'card'">
           <div class="text-[2rem] text-center text-balance">Bonjour 👋,</div>

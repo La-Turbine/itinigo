@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-back-button default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
@@ -8,7 +8,7 @@
         <div class="text-[80%] font-medium whitespace-pre-line text-center">{{ triptitle(currentTrip) }}</div>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
+    <ion-content forceOverscroll="false">
       <div class="flex flex-col justify-around p-5 h-full overflow-hidden" v-if="!current">
         <div>
           <div class="text-[2rem] font-bold text-center mb-5">Mon itinéraire</div>
@@ -50,12 +50,7 @@
       <!-- https://play.tailwindcss.com/90GckuhEBW -->
       <div class="h-full w-screen overflow-x-auto overflow-y-hidden" v-else>
         <div class="relative top-20 flex min-w-fit items-center justify-between m-16">
-          <div
-            class="z-10 mx-16 h-4 w-4 flex items-center justify-center rounded-full"
-            :class="[i === 0 && 'ml-0', i === current.stops.length - 1 && 'mr-0', i <= progress.number ? 'bg-blue-600' : 'bg-white border-2 border-black']"
-            v-for="(stop, i) in current.stops"
-            ref="stops"
-          >
+          <div class="z-10 mx-16 h-4 w-4 flex items-center justify-center rounded-full" :class="[i === 0 && 'ml-0', i === current.stops.length - 1 && 'mr-0', i <= progress.number ? 'bg-blue-600' : 'bg-white border-2 border-black']" v-for="(stop, i) in current.stops" ref="stops">
             <div class="absolute z-10 -m-2 h-[1.4rem] w-[1.4rem] rounded-full bg-blue-600 animate-ping" v-if="i === current.stops.length - 1 && progress.number > i - 2"></div>
             <div class="min-w-40 min-h-8 -translate-y-full text-center text-balance">{{ stop.text }}</div>
           </div>
@@ -149,12 +144,7 @@ function progressBetweenStops(currentPos, stops) {
     return R * c // Distance in meters
   }
   try {
-    if (
-      haversineDistance(currentPos, stops[0]) < 1000 &&
-      haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1]) &&
-      haversineDistance(currentPos, stops[2]) > haversineDistance(stops[1], stops[2])
-    )
-      return { number: 0, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
+    if (haversineDistance(currentPos, stops[0]) < 1000 && haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1]) && haversineDistance(currentPos, stops[2]) > haversineDistance(stops[1], stops[2])) return { number: 0, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
     for (let i = 0; i < stops.length - 1; i++) {
       const totalDist = haversineDistance(stops[i], stops[i + 1])
       const distFromStart = haversineDistance(stops[i], currentPos)

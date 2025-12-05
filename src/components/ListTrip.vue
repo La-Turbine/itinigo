@@ -8,8 +8,14 @@
         <!-- <div class="i-ion/ellipsis-vertical" @pointerdown="console.log('actions')" v-show="!reorder"></div> -->
       </ion-item>
     </ion-reorder-group>
-    <ion-button class="my-2.5 mx-5" expand="block" @click="addTrip" v-if="$state.mode === 'helper'">Ajouter un trajet</ion-button>
-    <ion-button class="my-2.5 mx-5" expand="block" color="danger" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">Configurer l'application</ion-button>
+    <ion-button class="my-2.5 mx-5" expand="block" @click="addTrip" v-if="$state.mode === 'helper'">
+      <div class="text-2xl i-ion/add mx-1 -my-1"></div>
+      Créer un itinéraire
+    </ion-button>
+    <ion-button class="my-2.5 mx-5" expand="block" color="danger" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">
+      <div class="text-xl i-ion/settings-sharp mx-1 -my-1"></div>
+      Configurer l'application
+    </ion-button>
   </ion-list>
 </template>
 

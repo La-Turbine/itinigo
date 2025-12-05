@@ -1,13 +1,11 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-back-button default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
         </ion-buttons>
-        <ion-button class="m-auto block w-[130px]" size="small" @click.stop="$router.push({ query: { ...$route.query, step: 5 } })" v-if="currentStep === 4 && !currentPhoto.text"
-          >Nommer l'action</ion-button
-        >
+        <ion-button class="m-auto block w-[130px]" size="small" @click.stop="$router.push({ query: { ...$route.query, step: 5 } })" v-if="currentStep === 4 && !currentPhoto.text">Nommer l'action</ion-button>
         <div class="text-[80%] font-medium whitespace-pre-line text-center" v-else-if="currentStep > 3">{{ currentPhoto.text }}</div>
         <div class="text-[80%] font-medium whitespace-pre-line text-center" v-else>{{ triptitle(currentTrip) }}</div>
         <ion-buttons slot="end" v-if="currentStep === 3">
@@ -19,13 +17,9 @@
           <ion-action-sheet trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
         </ion-buttons>
       </ion-toolbar>
-      <ion-action-sheet
-        :isOpen="$route.query.action"
-        @didDismiss="$router.push({ replace: true, query: { ...$route.query, action: undefined, ...(currentStep === 3 && { sequence: undefined, photo: undefined }) } })"
-        :buttons="actions.filter((v) => ($route.query.step === '3' && !$route.query.reorder) || v.text !== 'Déplacer')"
-      ></ion-action-sheet>
+      <ion-action-sheet :isOpen="$route.query.action" @didDismiss="$router.push({ replace: true, query: { ...$route.query, action: undefined, ...(currentStep === 3 && { sequence: undefined, photo: undefined }) } })" :buttons="actions.filter((v) => ($route.query.step === '3' && !$route.query.reorder) || v.text !== 'Déplacer')"></ion-action-sheet>
     </ion-header>
-    <ion-content>
+    <ion-content forceOverscroll="false">
       <!-- Step 1 & 2 -->
       <form-trip />
       <!-- Step 3 -->

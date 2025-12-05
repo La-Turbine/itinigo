@@ -54,6 +54,11 @@ async function initApp() {
   $state.photos.TRAMIN = "/img/TRAMIN.png"
   $state.photos.TRAMOUT = "/img/TRAMOUT.png"
   watch($state, (next) => idb.set("$state", JSON.stringify({ ...next, photos: {} })), { flush: "pre", deep: true })
+  watch(
+    () => $state.mode,
+    (mode) => document.documentElement.style.setProperty("--ion-color-primary", mode === "helper" ? "#000000" : "#0054e9"),
+    { immediate: true },
+  )
   await router.isReady()
   // GLOBAL HELPERS
   window.$ = (selector: string, context = document as any) => context.querySelector(selector)
