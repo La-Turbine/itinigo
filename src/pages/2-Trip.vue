@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { computed, watch } from "vue"
+import { computed, watch, provide } from "vue"
 
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 1))
@@ -87,4 +87,7 @@ watch(
   },
   { immediate: true },
 )
+// Provide addPhoto, deletePhoto to other components
+provide("addPhoto", addPhoto)
+provide("deletePhoto", deletePhoto)
 </script>

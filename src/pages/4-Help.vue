@@ -36,11 +36,11 @@
           </div>
         </template>
         <template v-if="!$route.query.mode">
-          <div class="flex max-w-[28rem] p-5 bg-white rounded-lg border border-black/15 gap-5" @click="help">
+          <div class="flex max-w-md p-5 bg-white rounded-lg border border-black/15 gap-5" @click="help">
             <div class="text-[50px]">✋</div>
             <div class="my-auto font-medium text-balance">J'affiche ma carte d'aide pour la montrer à quelqu'un autour de moi</div>
           </div>
-          <div class="flex max-w-[28rem] p-5 bg-white rounded-lg border border-black/15 gap-5" @click="map">
+          <div class="flex max-w-md p-5 bg-white rounded-lg border border-black/15 gap-5" @click="map">
             <div class="w-[85px]">
               <!-- prettier-ignore -->
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 150 150">
@@ -53,7 +53,7 @@
             </div>
             <div class="my-auto font-medium text-balance">Je continue mon trajet à pied avec Google maps.</div>
           </div>
-          <div class="flex max-w-[28rem] p-5 bg-white rounded-lg border border-black/15 gap-5" @click="call" v-if="$state.phone">
+          <div class="flex max-w-md p-5 bg-white rounded-lg border border-black/15 gap-5" @click="call" v-if="$state.phone">
             <div class="text-[50px]">📞</div>
             <div class="my-auto font-medium text-balance">J'appelle un proche</div>
           </div>

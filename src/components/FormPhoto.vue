@@ -1,13 +1,13 @@
 <template>
   <template v-if="currentStep === 4">
     <div class="flex flex-col h-full overflow-hidden">
-      <div class="relative flex h-[calc(100%-140px)]" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-        <button v-if="$state.photos[currentPhoto.id]" class="DoneButton absolute right-0" :class="change && 'bg-[#f87171]!'" @click.stop="clickGallery('change')">
-          {{ change ? "Annuler" : "Changer" }}
-        </button>
-        <photo-stream v-if="change || !$state.photos[currentPhoto.id]" :style="cardStyle" ref="stream" />
-        <photo-annotator v-else-if="photo" :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" ref="annotator" />
-        <img v-else :style="cardStyle" class="max-w-full max-h-full object-cover m-auto select-none" :src="$state.photos[currentPhoto.id]" @click="clickGallery()" />
+      <div class="relative flex h-[calc(100%-140px)] p-5" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
+        <button v-if="$state.photos[currentPhoto.id]" class="DoneButton absolute right-6 top-6" :class="change && 'bg-[#f87171]!'" @click.stop="clickGallery('change')">{{ change ? "Annuler" : "Changer" }}</button>
+        <div class="flex flex-1 rounded-4xl overflow-hidden">
+          <photo-stream v-if="change || !$state.photos[currentPhoto.id]" :style="cardStyle" ref="stream" />
+          <photo-annotator v-else-if="photo" :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" ref="annotator" />
+          <img v-else :style="cardStyle" class="object-cover select-none" :src="$state.photos[currentPhoto.id]" @click="clickGallery()" />
+        </div>
       </div>
       <div class="z-10 absolute bottom-[140px] w-full flex h-[140px]" v-if="change || !$state.photos[currentPhoto.id]">
         <!-- <div class="h-10 w-10 bg-gray-600 i-ion/arrow-back my-auto" @click="prevStep"></div> -->
@@ -19,7 +19,12 @@
       </div>
       <div class="flex h-[140px] gap-2.5 p-2.5 bg-gray-100 border-t border-black/20 overflow-auto">
         <template v-for="(sequence, i) in currentTrip.sequences">
-          <card-step :i="i" :j="j" v-for="(photo, j) in sequence.photos" :key="photo" />
+          <template v-for="(photo, j) in sequence.photos">
+            <card-step :i="i" :j="j" />
+            <div class="m-auto min-w-10 h-10 bg-black text-white rounded-full flex items-center justify-center last:hidden" @click="addPhoto(i, j + 1)">
+              <div class="i-lucide/plus size-5"></div>
+            </div>
+          </template>
         </template>
       </div>
     </div>
@@ -28,7 +33,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, inject } from "vue"
+
+const addPhoto = inject("addPhoto")
+const deletePhoto = inject("deletePhoto")
 
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 1))

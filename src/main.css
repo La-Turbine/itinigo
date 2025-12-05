@@ -41,7 +41,6 @@ ion-button {
   font-weight: 700;
 }
 ion-list {
-  min-height: 0; /* attempt to fix flex gap on chrome android */
   display: flex;
   flex-direction: column;
   gap: 10px;

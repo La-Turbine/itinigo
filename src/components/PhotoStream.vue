@@ -13,6 +13,9 @@ const canvasRef = ref<HTMLCanvasElement | null>(null)
 let stream: MediaStream | null = null
 
 const startCamera = async () => {
+  const result = await navigator.permissions.query({ name: "camera" })
+  if (result.state === "denied") return console.warn("Camera access denied by user")
+
   if (!videoRef.value) return
   try {
     // NOTE: specifying width=4096 and height=3072 here will not work on iOS

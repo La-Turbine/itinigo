@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4 w-full p-5 bg-white rounded-3xl border border-black/10 overflow-hidden" v-if="trip">
     <div class="flex items-center justify-between w-full">
-      <div class="flex items-center gap-2 px-3.5 py-2 bg-linear-to-r from-slate-50 to-slate-100 rounded-full border border-slate-200/50">
+      <div class="flex items-center gap-2 px-3.5 py-2 bg-linear-to-r from-slate-50 to-slate-100 rounded-full border border-slate-200/50 overflow-hidden">
         <span class="text-lg font-semibold text-slate-700">{{ trip.duration }}</span>
         <span class="text-slate-300">|</span>
         <div class="flex items-center gap-1.5">
@@ -12,7 +12,7 @@
           </template>
         </div>
       </div>
-      <div class="i-lucide/trash-2 text-xl text-red-400 hover:text-red-500 cursor-pointer transition-colors p-1" v-if="delete" @click.stop="onDelete"></div>
+      <div class="i-lucide/trash-2 text-xl text-red-400 hover:text-red-500 cursor-pointer transition-colors p-1 shrink-0" v-if="delete" @click.stop="onDelete"></div>
     </div>
     <div class="flex gap-4 items-stretch">
       <div class="flex flex-col items-center py-1">
