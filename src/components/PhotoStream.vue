@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-full">
-    <video ref="videoRef" autoplay playsinline muted class="w-full h-full object-cover"></video>
+  <div class="h-full w-full">
+    <video ref="videoRef" autoplay playsinline muted class="h-full w-full object-cover"></video>
     <canvas ref="canvasRef" class="hidden"></canvas>
   </div>
 </template>

@@ -1,49 +1,55 @@
 <template>
-  <ion-list lines="full" v-if="currentStep < 3">
-    <ion-item @click="onClick('from')">
-      <ion-label class="p-2" position="stacked">
-        Départ
-        <ion-label>
-          <h2>{{ state.from.text.split(" - ")[0] }}&nbsp;</h2>
-          <p>{{ state.from.text.split(" - ")[1] }}&nbsp;</p>
-        </ion-label>
-      </ion-label>
-    </ion-item>
-    <ion-item @click="onClick('to')">
-      <ion-label class="p-2" position="stacked">
-        Arrivée
-        <ion-label>
-          <h2>{{ state.to.text.split(" - ")[0] }}&nbsp;</h2>
-          <p>{{ state.to.text.split(" - ")[1] }}&nbsp;</p>
-        </ion-label>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label class="p-2" position="stacked" lines="full">
-        Date
-        <ion-input v-model="state.date" type="datetime-local"></ion-input>
-      </ion-label>
-    </ion-item>
-    <ion-button class="my-2.5 mx-5" expand="block" @click="next(1)" :disabled="!state.from.text || !state.to.text">Rechercher</ion-button>
-  </ion-list>
-
-  <ion-modal :is-open="!!focused" @willDismiss="focused = ''" :initial-breakpoint="0.75" :breakpoints="[0.75]" :can-dismiss="true">
-    <ion-content class="ion-padding">
-      <ion-searchbar ref="searchbar" v-model="search" @ionInput="onSearch" :placeholder="`Rechercher ${{ from: 'Départ', to: 'Arrivée' }[focused] ?? ''}`"></ion-searchbar>
-      <ion-list>
-        <ion-item @click="onSelect(item)" v-for="item in items">
-          <ion-label>
-            <h2>{{ item.text.split(" - ")[0] }}</h2>
-            <p>{{ item.text.split(" - ")[1] }}</p>
+  <div class="flex min-h-full flex-col">
+    <ion-list lines="none" inset v-if="currentStep < 3">
+      <ion-item @click="onClick('from')">
+        <ion-label position="stacked">
+          <div class="p-2 text-xs font-bold uppercase">Départ</div>
+          <ion-label class="rounded-2xl border border-gray-300 bg-white p-3">
+            <h2>{{ state.from.text.split(" - ")[0] }}&nbsp;</h2>
+            <p>{{ state.from.text.split(" - ")[1] }}&nbsp;</p>
           </ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-modal>
+        </ion-label>
+      </ion-item>
+      <ion-item @click="onClick('to')">
+        <ion-label position="stacked">
+          <div class="p-2 text-xs font-bold uppercase">Arrivée</div>
+          <ion-label class="rounded-2xl border border-gray-300 bg-white p-3">
+            <h2>{{ state.to.text.split(" - ")[0] }}&nbsp;</h2>
+            <p>{{ state.to.text.split(" - ")[1] }}&nbsp;</p>
+          </ion-label>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked" lines="none">
+          <div class="p-2 text-xs font-bold uppercase">Date</div>
+          <ion-input v-model="state.date" type="datetime-local"></ion-input>
+        </ion-label>
+      </ion-item>
+      <ion-button class="mx-5 my-2.5" expand="block" @click="next(1)" :disabled="!state.from.text || !state.to.text">
+        <div class="i-lucide/search mr-2 size-5"></div>
+        <div>Trouver un itinéraire</div>
+      </ion-button>
+    </ion-list>
 
-  <div v-if="currentStep === 2">
-    <div class="cursor-pointer" @click.stop.prevent="next(2, (state.choice = i))" v-for="(trip, i) in state.choices">
-      <iframe :srcdoc="trip" class="w-full h-40 m-auto border-0 pointer-events-none"></iframe>
+    <ion-modal :is-open="!!focused" @willDismiss="focused = ''" :initial-breakpoint="0.75" :breakpoints="[0.75]" :can-dismiss="true">
+      <ion-content class="ion-padding">
+        <ion-searchbar ref="searchbar" v-model="search" @ionInput="onSearch" :placeholder="`Rechercher ${{ from: 'Départ', to: 'Arrivée' }[focused] ?? ''}`"></ion-searchbar>
+        <ion-list>
+          <ion-item @click="onSelect(item)" v-for="item in items">
+            <ion-label>
+              <h2>{{ item.text.split(" - ")[0] }}</h2>
+              <p>{{ item.text.split(" - ")[1] }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-modal>
+
+    <div class="flex-1 rounded-t-3xl bg-white p-6 text-center text-balance text-gray-400" v-if="currentStep <= 2">
+      <div v-if="currentStep === 1">Les résultats de la recherche apparaîtront ici sous forme de liste.</div>
+      <div v-else class="cursor-pointer" @click.stop.prevent="next(2, (state.choice = i))" v-for="(trip, i) in state.choices">
+        <iframe :srcdoc="trip" class="pointer-events-none m-auto h-40 w-full border-0"></iframe>
+      </div>
     </div>
   </div>
 </template>

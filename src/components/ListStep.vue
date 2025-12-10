@@ -11,30 +11,30 @@
           <ion-label class="text-xl font-bold">{{ sequence.transport }}</ion-label>
         </ion-list-header>
         <div v-if="sequence.stops">
-          <div class="flex gap-4 items-stretch">
+          <div class="flex items-stretch gap-4">
             <div class="flex flex-col items-center py-1">
               <div class="size-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-100"></div>
-              <div class="flex-1 w-0.5 bg-linear-to-b from-emerald-400 to-blue-500 rounded-full"></div>
-              <div class="i-lucide/arrow-down text-blue-500 text-[22px] -mt-1.5 -my-1"></div>
+              <div class="w-0.5 flex-1 rounded-full bg-linear-to-b from-emerald-400 to-blue-500"></div>
+              <div class="i-lucide/arrow-down -my-1 -mt-1.5 text-[22px] text-blue-500"></div>
             </div>
-            <div class="flex flex-col flex-1 min-w-0">
-              <div class="text-base text-slate-600 truncate">{{ sequence.stops[0].text }}</div>
-              <div class="text-base text-slate-600 truncate" v-if="sequence.stops.length === 3">{{ sequence.stops[1].text }}</div>
-              <div class="text-base text-slate-600 truncate" v-if="sequence.stops.length > 3">+ {{ sequence.stops.length - 2 }} arrêt{{ sequence.stops.length - 2 > 1 ? "s" : "" }}</div>
-              <div class="text-lg font-semibold text-slate-800 truncate">{{ sequence.stops.at(-1).text }}</div>
+            <div class="flex min-w-0 flex-1 flex-col">
+              <div class="truncate text-base text-slate-600">{{ sequence.stops[0].text }}</div>
+              <div class="truncate text-base text-slate-600" v-if="sequence.stops.length === 3">{{ sequence.stops[1].text }}</div>
+              <div class="truncate text-base text-slate-600" v-if="sequence.stops.length > 3">+ {{ sequence.stops.length - 2 }} arrêt{{ sequence.stops.length - 2 > 1 ? "s" : "" }}</div>
+              <div class="truncate text-lg font-semibold text-slate-800">{{ sequence.stops.at(-1).text }}</div>
             </div>
           </div>
         </div>
         <ion-list lines="none">
           <ion-reorder-group :disabled="!$route.query.reorder" @ionItemReorder="reorderPhoto(sequence, $event)">
             <ion-item v-for="(photo, j) in sequence.photos" :key="photo">
-              <card-step class="w-full my-1" :i="i" :j="j" />
+              <card-step class="my-1 w-full" :i="i" :j="j" />
               <ion-reorder slot="end"></ion-reorder>
             </ion-item>
           </ion-reorder-group>
         </ion-list>
-        <ion-button class="my-2.5 mx-5" expand="block" @click="addPhoto(i, sequence.photos.length)">
-          <div class="text-2xl i-lucide/plus mx-1 -my-1"></div>
+        <ion-button class="mx-5 my-2.5" expand="block" @click="addPhoto(i, sequence.photos.length)">
+          <div class="i-lucide/plus mx-1 -my-1 text-2xl"></div>
           Ajouter une étape
         </ion-button>
       </ion-list>

@@ -1,27 +1,30 @@
 <template>
   <template v-if="currentStep === 4">
-    <div class="flex flex-col h-full overflow-hidden">
+    <div class="flex h-full flex-col overflow-hidden">
       <div class="relative flex h-[calc(100%-140px)] p-5" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-        <button v-if="$state.photos[currentPhoto.id]" class="DoneButton absolute right-6 top-6" :class="change && 'bg-[#f87171]!'" @click.stop="clickGallery('change')">{{ change ? "Annuler" : "Changer" }}</button>
-        <div class="flex flex-1 rounded-4xl overflow-hidden">
+        <button v-if="$state.photos[currentPhoto.id]" class="DoneButton absolute top-6 right-6" :class="change && 'bg-[#f87171]!'" @click.stop="clickGallery('change')">{{ change ? "Annuler" : "Changer" }}</button>
+        <div class="flex flex-1 overflow-hidden rounded-4xl">
           <photo-stream v-if="change || !$state.photos[currentPhoto.id]" :style="cardStyle" ref="stream" />
           <photo-annotator v-else-if="photo" :url="$state.photos[`${photo}:snapshot`] || $state.photos[photo]" @done="annotatePhoto" ref="annotator" />
           <img v-else :style="cardStyle" class="object-cover select-none" :src="$state.photos[currentPhoto.id]" @click="clickGallery()" />
         </div>
       </div>
-      <div class="z-10 absolute bottom-[140px] w-full flex h-[140px]" v-if="change || !$state.photos[currentPhoto.id]">
+      <div class="absolute bottom-[140px] z-10 flex h-[140px] w-full" v-if="change || !$state.photos[currentPhoto.id]">
         <!-- <div class="h-10 w-10 bg-gray-600 i-ion/arrow-back my-auto" @click="prevStep"></div> -->
-        <div class="flex gap-4 m-auto">
-          <div class="h-20 w-20 ring-1 ring-gray-300 rounded-full border-6 border-white bg-gray-200 active:scale-95" @click="clickCapture()"></div>
-          <div class="h-20 w-20 ring-1 ring-gray-300 rounded-xl bg-gray-200 active:scale-95 flex" @click="input.click()"><div class="m-auto text-2xl bg-gray-600 i-lucide/image"></div></div>
+        <div class="m-auto flex gap-4">
+          <div class="h-20 w-20 rounded-full border-6 border-white bg-gray-200 ring-1 ring-gray-300 active:scale-95" @click="clickCapture()"></div>
+          <div class="flex h-20 w-20 rounded-xl bg-gray-200 ring-1 ring-gray-300 active:scale-95" @click="input.click()"><div class="i-lucide/image m-auto bg-gray-600 text-2xl"></div></div>
         </div>
         <!-- <div class="h-10 w-10 bg-gray-600 i-ion/arrow-forward my-auto" @click="nextStep"></div> -->
       </div>
-      <div class="flex h-[140px] gap-2.5 p-2.5 bg-gray-100 border-t border-black/20 overflow-auto">
+      <div class="flex h-[140px] gap-2.5 overflow-auto border-t border-black/20 bg-gray-100 p-2.5">
         <template v-for="(sequence, i) in currentTrip.sequences">
           <template v-for="(photo, j) in sequence.photos">
             <card-step :i="i" :j="j" />
-            <div class="m-auto min-w-10 h-10 bg-black text-white rounded-full flex items-center justify-center last:hidden" @click="addPhoto(i, j + 1)">
+            <div class="m-auto flex h-10 min-w-10 items-center justify-center rounded-full bg-black text-white" @click="$router.push('/')" v-if="i === currentTrip.sequences.length - 1 && j === currentTrip.sequences.at(-1).photos.length - 1">
+              <div class="i-lucide/check-check size-5"></div>
+            </div>
+            <div class="m-auto flex h-10 min-w-10 items-center justify-center rounded-full bg-black text-white" @click="addPhoto(i, j + 1)" v-else>
               <div class="i-lucide/plus size-5"></div>
             </div>
           </template>

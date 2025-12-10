@@ -63,3 +63,14 @@ ion-item {
   --inner-padding-top: 0;
   --inner-padding-bottom: 0;
 }
+ion-input,
+ion-textarea {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+}
+.sc-ion-input-ios,
+ion-textarea {
+  padding: 8px;
+  padding-inline-start: 16px;
+}

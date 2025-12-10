@@ -122,18 +122,18 @@ Lot 2: Octobre / Novembre > Design
 
 Lot 3: Novembre / Décembre > Finitions + Améliorations
 
-- [ ] Design: Page 1 - Header (+ theme black/blue)
-- [ ] Design: Page 1 - ListTrip (+ buttons)
-- [ ] Design: Page 1 - CardTrip
-- [ ] Design: Page 2.1 - FormTrip
-- [ ] Design: CardStep
-- [ ] Design: Timeline ( + before/after, > validate at the end)
+- [x] Design: Page 1 - Header (+ theme black/blue)
+- [x] Design: Page 1 - ListTrip (+ buttons)
+- [x] Design: Page 1 - CardTrip
+- [x] Design: Page 2.1 - FormTrip
+- [x] Design: Page 2.3 - CardStep
+- [x] Design: Page 2.4 - Timeline ( + before/after, > validate at the end)
+- [x] Design: Page 2.5 - FormAction
+- [ ] Design: Page 2.3 - PhotoAnnotator
 - [ ] Design: Feedback + Finishing Touches
 - [ ] Design: Travel - RAS?
 - [ ] Design: Help - RAS?
 - [ ] Design: Config - RAS!
-- [ ] BONUS: uniformize next / back functions across pages (in a HEADER component?)
-- [ ] BONUS: create a swipe bind function to replace onTouchStart/Move/End
 - [ ] BONUS: améliorer les montées de version (message + forcé la maj)
 
 ## ICEBOX / BACKLOG

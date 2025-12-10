@@ -1,28 +1,28 @@
 <template>
-  <div class="flex flex-col gap-4 w-full p-5 bg-white rounded-3xl border border-black/10 overflow-hidden" v-if="trip">
-    <div class="flex items-center justify-between w-full">
-      <div class="flex items-center gap-2 px-3.5 py-2 bg-linear-to-r from-slate-50 to-slate-100 rounded-full border border-slate-200/50 overflow-hidden">
+  <div class="flex w-full flex-col gap-4 overflow-hidden rounded-3xl border border-black/10 bg-white p-5" v-if="trip">
+    <div class="flex w-full items-center justify-between">
+      <div class="flex items-center gap-2 overflow-hidden rounded-full border border-slate-200/50 bg-linear-to-r from-slate-50 to-slate-100 px-3.5 py-2">
         <span class="text-lg font-semibold text-slate-700">{{ trip.duration }}</span>
         <span class="text-slate-300">|</span>
         <div class="flex items-center gap-1.5">
           <template v-for="(t, i) in transports" :key="i">
-            <span class="text-slate-300 text-sm" v-if="i > 0">•</span>
-            <div :class="[icons[t.type], colors[t.type]]" class="text-white rounded-lg p-1.5 size-7 flex items-center justify-center text-sm"></div>
+            <span class="text-sm text-slate-300" v-if="i > 0">•</span>
+            <div :class="[icons[t.type], colors[t.type]]" class="flex size-7 items-center justify-center rounded-lg p-1.5 text-sm text-white"></div>
             <span class="text-sm font-medium text-slate-600" v-if="t.line">{{ t.line }}</span>
           </template>
         </div>
       </div>
-      <div class="i-lucide/trash-2 text-xl text-red-400 hover:text-red-500 cursor-pointer transition-colors p-1 shrink-0" v-if="delete" @click.stop="onDelete"></div>
+      <div class="i-lucide/trash-2 shrink-0 cursor-pointer p-1 text-xl text-red-400 transition-colors hover:text-red-500" v-if="delete" @click.stop="onDelete"></div>
     </div>
-    <div class="flex gap-4 items-stretch">
+    <div class="flex items-stretch gap-4">
       <div class="flex flex-col items-center py-1">
         <div class="size-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-100"></div>
-        <div class="flex-1 w-0.5 bg-linear-to-b from-emerald-400 to-blue-500 rounded-full"></div>
-        <div class="i-lucide/arrow-down text-blue-500 text-[22px] -mt-1.5 -my-1"></div>
+        <div class="w-0.5 flex-1 rounded-full bg-linear-to-b from-emerald-400 to-blue-500"></div>
+        <div class="i-lucide/arrow-down -my-1 -mt-1.5 text-[22px] text-blue-500"></div>
       </div>
-      <div class="flex flex-col gap-3 flex-1 min-w-0">
-        <div class="text-base text-slate-600 truncate">{{ homework(trip.from?.text ?? "") }}</div>
-        <div class="text-lg font-semibold text-slate-800 truncate">{{ homework(trip.to?.text ?? "") }}</div>
+      <div class="flex min-w-0 flex-1 flex-col gap-3">
+        <div class="truncate text-base text-slate-600">{{ homework(trip.from?.text ?? "") }}</div>
+        <div class="truncate text-lg font-semibold text-slate-800">{{ homework(trip.to?.text ?? "") }}</div>
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 {
   "name": "itinigo",
   "private": true,
-  "version": "139.0.0-f1d0402",
+  "version": "141.0.0-97264a5",
   "type": "module",
   "scripts": {
     "dev": "ionic serve --external",
@@ -14,13 +14,13 @@
     "icons": "npx @vite-pwa/assets-generator  --preset minimal-2023 public/favicon.svg"
   },
   "dependencies": {
-    "@ionic/vue-router": "8.7.8",
     "@ionic/vue": "8.7.8",
+    "@ionic/vue-router": "8.7.8",
     "@r2wc/react-to-web-component": "2.1.0",
     "@vueuse/core": "14.0.0",
     "tldraw": "3",
-    "vue-router": "4.6.3",
-    "vue": "3.5.22"
+    "vue": "3.5.22",
+    "vue-router": "4.6.3"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.397",
@@ -28,14 +28,18 @@
     "@tailwindcss/vite": "4.1.16",
     "@vitejs/plugin-legacy": "7.2.1",
     "@vitejs/plugin-vue": "6.0.1",
-    "prettier": "3.6.2",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "4.1.16",
     "typescript": "5.9.3",
-    "vite-plugin-pwa": "1.1.0",
     "vite": "7.1.12",
+    "vite-plugin-pwa": "1.1.0",
     "vue-tsc": "3.1.2"
   },
   "prettier": {
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ],
     "printWidth": 1000,
     "semi": false
   }
