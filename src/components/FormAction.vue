@@ -81,7 +81,7 @@ const texts = ["Tournez à gauche", "Allez tout droit", "Tournez à droite", "Qu
 const icons = ["i-lucide/arrow-left", "i-lucide/arrow-up", "i-lucide/arrow-right", "i-lucide/footprints", "i-lucide/triangle-alert", "i-lucide/map-pin", "i-lucide/signpost", "i-lucide/ticket", "i-lucide/clock", "i-lucide/bus-front", "i-lucide/log-in", "i-lucide/log-out"]
 
 function confirmType() {
-  if (currentType.value !== -1) {
+  if (currentText.value) {
     currentPhoto.value.type = currentType.value
     currentPhoto.value.text = currentText.value
   }

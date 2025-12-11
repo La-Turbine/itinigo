@@ -12,7 +12,7 @@
         <div class="text-center text-lg font-bold" v-if="currentStep === 6">Prendre une photo</div>
         <ion-buttons slot="end">
           <template v-if="currentStep === 3">
-            <ion-button @click="$router.push({ query: { ...$route.query, reorder: undefined } })" v-if="$route.query.reorder">OK</ion-button>
+            <ion-button class="ml-auto" @click="$router.push({ query: { ...$route.query, reorder: undefined } })" v-if="$route.query.reorder">OK</ion-button>
             <div class="i-lucide/eye mr-2 text-2xl" @click="actions[0].handler()" v-if="!$route.query.reorder"></div>
           </template>
           <template v-if="currentStep > 3">
@@ -51,7 +51,7 @@ const actions = [
   { text: "Ajouter avant", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo) },
   { text: "Ajouter après", handler: () => addPhoto(+$route.query.sequence, +$route.query.photo + 1) },
   { text: "Éditer l'action", handler: () => $router.push({ query: { ...$route.query, step: 5 } }) },
-  { text: "Éditer la photo", handler: () => $router.push({ query: { ...$route.query, step: 4 } }) },
+  { text: "Éditer la photo", handler: () => $router.push({ query: { ...$route.query, step: 6 } }) },
   { text: "Déplacer", handler: () => $router.push({ query: { ...$route.query, reorder: 1 } }) },
   { text: "Supprimer", role: "destructive", handler: () => deletePhoto(currentSequence.value, +$route.query.photo) },
   { text: "Annuler", role: "cancel" },
@@ -82,17 +82,15 @@ function back() {
   $router.go(-1)
 }
 // Scroll to selected photo
-watch(
-  () => [$route.query.sequence, $route.query.photo],
-  () => {
-    setTimeout(() => {
-      if ($route.query.sequence === "0" && $route.query.photo === "0") return
-      const el = $(`[data-sequence="${$route.query.sequence}"][data-photo="${$route.query.photo}"]`)
-      el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
-    }, 0)
-  },
-  { immediate: true },
-)
+function scroll(event) {
+  setTimeout(() => {
+    if ($route.query.sequence === "0" && $route.query.photo === "0") return
+    const el = $(`[data-sequence="${$route.query.sequence}"][data-photo="${$route.query.photo}"]`)
+    el?.scrollIntoView({ behavior: event ? "smooth" : "instant", block: "nearest", inline: "start" })
+  }, 0)
+}
+watch(() => [$route.query.sequence, $route.query.photo], scroll)
+scroll()
 // Provide addPhoto, deletePhoto to other components
 provide("addPhoto", addPhoto)
 provide("deletePhoto", deletePhoto)

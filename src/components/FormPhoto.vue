@@ -24,9 +24,8 @@ import { ref, computed } from "vue"
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 1))
 const currentSequence = computed(() => currentTrip.value.sequences?.[+$route.query.sequence])
-const currentPhoto = computed(() => currentSequence.value?.photos[+$route.query.photo])
+const currentPhoto = computed(() => (window.currentPhoto = currentSequence.value?.photos[+$route.query.photo]))
 
-const change = ref(false)
 const photo = ref(null)
 const input = ref(null)
 const stream = ref(null)
@@ -37,7 +36,6 @@ async function clickCapture() {
   savePhoto(blob)
 }
 function clickGallery(mode) {
-  if (mode === "change") return (change.value = !change.value)
   if (currentPhoto.value.id.length < 20) return // BUS/TRAM IN/OUT
   window.currentPhoto = currentPhoto.value
   photo.value = currentPhoto.value.id
@@ -47,7 +45,6 @@ function inputPhoto(event) {
   savePhoto(file)
 }
 function savePhoto(blob) {
-  change.value = false
   const reader = new FileReader()
   reader.onload = async () => {
     function generateULID() {
@@ -82,11 +79,4 @@ function annotatePhoto({ blob, snapshot }) {
     $router.push({ query: { step: 4, sequence: $route.query.sequence, photo: $route.query.photo } })
   }
 }
-
-// Make sur to close annotator on any click outside it
-addEventListener("pointerdown", (e) => {
-  if (!annotator.value) return
-  if (annotator.value.$el.contains(e.target)) return
-  photo.value = null
-})
 </script>

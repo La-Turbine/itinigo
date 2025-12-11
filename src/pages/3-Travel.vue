@@ -172,7 +172,7 @@ function onTouchEnd(e) {
   cardStyle.value = {}
   const touchEndX = e.changedTouches[0].clientX
   const diffX = touchEndX - touchStartX.value
-  if (diffX > 100) return $router.push({ query: { step: currentStep.value - 1 } })
+  if (diffX > 100 && currentStep.value > 1) return $router.push({ query: { step: currentStep.value - 1 } })
   if (diffX < -100 && currentStep.value === steps.length) return $router.push("/")
   if (diffX < -100) return $router.push({ query: { step: currentStep.value + 1 } })
 }

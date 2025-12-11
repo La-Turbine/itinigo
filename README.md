@@ -131,8 +131,8 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [x] Design: Page 2.5 - FormAction
 - [x] Design: Page 5 - Config
 - [x] Design: Page 3 - Travel
-- [ ] Design: Page 2.3 - PhotoAnnotator
 - [ ] Design: Feedback + Finishing Touches
+- [ ] Design: Page 2.3 - PhotoAnnotator
 - [ ] Bug suppression photo (ajouter 2 photos au début, supprimer la 2ème créé.)
 - [ ] BONUS: Design: Page 4 - Help
 - [ ] BONUS: améliorer les montées de version (message + forcé la maj)

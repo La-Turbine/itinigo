@@ -2,8 +2,8 @@
   <template v-if="currentStep === 4">
     <div class="flex h-full flex-col overflow-hidden">
       <div class="relative flex h-[calc(100%-140px)] p-5" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-        <div class="flex flex-1 overflow-hidden rounded-4xl" :style="cardStyle">
-          <div v-if="!$state.photos[currentPhoto.id]" class="flex w-full flex-col justify-end gap-5 bg-gray-200 p-10">
+        <div class="relative flex flex-1 overflow-hidden rounded-4xl bg-gray-200" :style="cardStyle">
+          <div class="absolute inset-0 flex w-full flex-col justify-end gap-5 p-10">
             <ion-button expand="block" @click="$router.push({ query: { ...$route.query, step: 5 } })">
               <div class="i-lucide/type mx-2 -my-1 text-2xl"></div>
               Décrire l'action
@@ -13,7 +13,7 @@
               Ajouter une photo
             </ion-button>
           </div>
-          <img v-else class="object-cover select-none" :src="$state.photos[currentPhoto.id]" />
+          <img class="object-cover select-none" :src="$state.photos[currentPhoto.id]" />
         </div>
       </div>
       <div class="flex h-[140px] gap-2.5 overflow-auto border-t border-black/20 bg-gray-100 p-2.5">
