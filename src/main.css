@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "./**/*.{vue,ts,js,html}";
 @config "../tailwind.config.ts";
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/vue/css/core.css";
@@ -31,7 +32,7 @@
 }
 ion-toolbar {
   height: 74px;
-  display: flex;
+  display: flex!important;
   padding: 0 20px;
 }
 ion-button {
