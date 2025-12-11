@@ -74,3 +74,11 @@ ion-textarea {
   padding: 8px;
   padding-inline-start: 16px;
 }
+textarea,
+.native-wrapper.sc-ion-textarea-ios::after {
+  padding: 2px !important;
+}
+.alert-message.sc-ion-alert-ios {
+  white-space: pre-line;
+  text-wrap: balance;
+}

@@ -9,54 +9,50 @@
       </ion-toolbar>
     </ion-header>
     <ion-content forceOverscroll="false">
-      <ion-item button @click="downloadManual">
-        <ion-label>MODE D'EMPLOI</ion-label>
-      </ion-item>
-      <div class="h-10"></div>
-      <ion-item>
+      <ion-list lines="none" inset class="**:[.label-text-wrapper]:min-w-28 **:[.label-text-wrapper]:p-1!">
+        <ion-button class="mx-5" expand="block" @click="downloadManual">
+          <div class="i-lucide/download mx-1 -my-1 text-xl"></div>
+          Télécharger le mode d'emploi
+        </ion-button>
         <ion-input v-model="$state.name" label="👋 Prénom" placeholder="Bruno"></ion-input>
-      </ion-item>
-      <ion-item>
         <ion-input v-model="$state.phone" label="📞 N° Aide" placeholder="0612121212"></ion-input>
-      </ion-item>
-      <ion-item>
         <ion-textarea class="text-[80%]" rows="3" :auto-grow="true" v-model="$state.instruction" label="📋 Instruction" placeholder="Je comprends tout ce que vous dites si vous me parlez lentement."></ion-textarea>
-      </ion-item>
-      <ion-item>
         <ion-input v-model="$state.home" label="🏠 Maison" placeholder="40 Rue du Drac"></ion-input>
-      </ion-item>
-      <ion-item>
         <ion-input v-model="$state.work" label="🏢 Travail" placeholder="40 Rue du Drac"></ion-input>
-      </ion-item>
-      <ion-item button @click="requestInstall" :disabled="isInstalled">
-        <ion-label>INSTALLATION - {{ isInstalled ? "ON" : "OFF" }}</ion-label>
-      </ion-item>
-      <ion-item button @click="requestNotification">
-        <ion-label>NOTIFICATION - {{ isNotifiable ? "ON" : "OFF" }}</ion-label>
-      </ion-item>
-      <ion-item button @click="requestLocalisation">
-        <ion-label>LOCALISATION - {{ isLocalisable ? "ON" : "OFF" }}</ion-label>
-      </ion-item>
-      <div class="h-10"></div>
-      <ion-item button @click="window.location.reload()">
-        <ion-label>
-          VERSION:
-          <b class="text-[125%]">{{ version.split(".")[0] }}</b>
-          // {{ os }} // {{ browser }}
-        </ion-label>
-      </ion-item>
-      <ion-item button @click="$state.fake = !$state.fake">
-        <ion-label>FAKE TIMER - {{ $state.fake ? "ON" : "OFF" }}</ion-label>
-      </ion-item>
-      <ion-item button @click="onExport">
-        <ion-label>EXPORT</ion-label>
-      </ion-item>
-      <ion-item button @click="onImport">
-        <ion-label>IMPORT</ion-label>
-      </ion-item>
-      <ion-item button color="danger" @click="reset">
-        <ion-label>RESET</ion-label>
-      </ion-item>
+        <ion-toggle class="mx-5" :enable-on-off-labels="true" :checked="isInstalled" :disabled="isInstalled" @pointerdown="requestInstall">Application installée</ion-toggle>
+        <ion-toggle class="mx-5" :enable-on-off-labels="true" :checked="isNotifiable" :disabled="isNotifiable" @pointerdown="requestNotification">Notifications activées</ion-toggle>
+        <ion-toggle class="mx-5" :enable-on-off-labels="true" :checked="isLocalisable" :disabled="isLocalisable" @pointerdown="requestLocalisation">Localisation activée</ion-toggle>
+        <ion-toggle class="mx-5" :enable-on-off-labels="true" v-model="$state.fake">Fake Timer</ion-toggle>
+        <ion-button class="mx-5" expand="block" @pointerdown="window.location.reload()">
+          <div class="i-lucide/refresh-ccw mx-1 -my-1 text-xl"></div>
+          Version N° {{ version.split(".")[0] }}
+        </ion-button>
+        <ion-button class="mx-5" @click="onExport">
+          <div class="i-lucide/save mx-1 -my-1 text-xl"></div>
+          Exporter les données
+        </ion-button>
+        <ion-button class="mx-5" @click="onImport">
+          <div class="i-lucide/archive-restore mx-1 -my-1 text-xl"></div>
+          Importer les données
+        </ion-button>
+        <ion-button class="mx-5" color="danger" @click="reset">
+          <div class="i-lucide/timer-reset mx-1 -my-1 text-xl"></div>
+          Réinitialiser l'application
+        </ion-button>
+      </ion-list>
+      <!-- <ion-item button @click="$state.fake = !$state.fake">
+          <ion-label>FAKE TIMER - {{ $state.fake ? "ON" : "OFF" }}</ion-label>
+        </ion-item>
+        <ion-item button @click="onExport">
+          <ion-label>EXPORT</ion-label>
+        </ion-item>
+        <ion-item button @click="onImport">
+          <ion-label>IMPORT</ion-label>
+        </ion-item>
+        <ion-item button color="danger" @click="reset">
+          <ion-label>RESET</ion-label>
+        </ion-item>
+      </ion-list> -->
     </ion-content>
   </ion-page>
 </template>
@@ -88,13 +84,15 @@ async function requestInstall() {
   if (!installPrompt) return window.popup(`Pour installer cette application, appuyez sur le bouton "Installer" dans Chrome.`)
   installPrompt.prompt()
 }
-async function requestNotification() {
+async function requestNotification(event) {
+  if (event) event.target.checked = !isNotifiable.value
   const registration = await navigator.serviceWorker.ready
   if ("sync" in registration) registration.sync.register("notify")
   if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
   return notify("Préparez-vous à recevoir des notifications")
 }
-async function requestLocalisation() {
+async function requestLocalisation(event) {
+  if (event) event.target.checked = !isLocalisable.value
   if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))
   navigator.geolocation.getCurrentPosition(
     (position) => console.log(position),
@@ -128,7 +126,7 @@ async function onImport() {
   input.click()
 }
 async function reset() {
-  if (!(await window.popup("Êtes-vous sûr de vouloir réinitialiser l'application ?", { ok: "Confirmer", ko: "Annuler" }))) return
+  if (!(await window.popup("Êtes-vous sûr de vouloir réinitialiser l'application ?\n\nCela supprimera toutes les données, il est conseillé de faire une sauvegarde au préalable.", { ok: "Confirmer", ko: "Annuler" }))) return
   await idb.clear()
   location.href = "/"
 }

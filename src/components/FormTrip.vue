@@ -1,6 +1,6 @@
 <template>
-  <div class="flex min-h-full flex-col">
-    <ion-list lines="none" inset v-if="currentStep < 3">
+  <div class="flex min-h-full flex-col" v-if="currentStep < 3">
+    <ion-list lines="none" inset>
       <ion-item @click="onClick('from')">
         <ion-label position="stacked">
           <div class="p-2 text-xs font-bold uppercase">Départ</div>
@@ -45,7 +45,7 @@
       </ion-content>
     </ion-modal>
 
-    <div class="flex-1 rounded-t-3xl bg-white p-6 text-center text-balance text-gray-400" v-if="currentStep <= 2">
+    <div class="flex-1 rounded-t-3xl bg-white p-6 text-center text-balance text-gray-400">
       <div v-if="currentStep === 1">Les résultats de la recherche apparaîtront ici sous forme de liste.</div>
       <div v-else class="cursor-pointer" @click.stop.prevent="next(2, (state.choice = i))" v-for="(trip, i) in state.choices">
         <iframe :srcdoc="trip" class="pointer-events-none m-auto h-40 w-full border-0"></iframe>

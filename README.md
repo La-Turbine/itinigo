@@ -133,7 +133,7 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [ ] Design: Feedback + Finishing Touches
 - [ ] Design: Travel - RAS?
 - [ ] Design: Help - RAS?
-- [ ] Design: Config - RAS!
+- [x] Design: Page 5 - Config
 - [ ] BONUS: améliorer les montées de version (message + forcé la maj)
 
 ## ICEBOX / BACKLOG
