@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
+          <ion-back-button text="Retour" default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
         </ion-buttons>
         <div class="text-center text-[calc(100%-80px)] font-medium whitespace-pre-line">{{ triptitle(currentTrip) }}</div>
       </ion-toolbar>

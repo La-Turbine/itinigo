@@ -129,10 +129,10 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [x] Design: Page 2.3 - CardStep
 - [x] Design: Page 2.4 - Timeline ( + before/after, > validate at the end)
 - [x] Design: Page 2.5 - FormAction
-- [ ] Design: Page 2.3 - PhotoAnnotator
-- [ ] Design: Feedback + Finishing Touches
 - [ ] Design: Travel - RAS?
 - [ ] Design: Help - RAS?
+- [ ] Design: Page 2.3 - PhotoAnnotator
+- [ ] Design: Feedback + Finishing Touches
 - [x] Design: Page 5 - Config
 - [ ] BONUS: améliorer les montées de version (message + forcé la maj)
 

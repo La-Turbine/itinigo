@@ -7,18 +7,18 @@
         <div class="flex items-center gap-1.5">
           <template v-for="(t, i) in transports" :key="i">
             <span class="text-sm text-slate-300" v-if="i > 0">•</span>
-            <div :class="[icons[t.type], colors[t.type]]" class="flex size-7 items-center justify-center rounded-lg p-1.5 text-sm text-white"></div>
+            <div :class="[icons[t.type]]" class="flex size-7 items-center justify-center rounded-lg bg-neutral-500 p-1.5 text-sm text-white"></div>
             <span class="text-sm font-medium text-slate-600" v-if="t.line">{{ t.line }}</span>
           </template>
         </div>
       </div>
-      <div class="i-lucide/trash-2 shrink-0 cursor-pointer p-1 text-xl text-red-400 transition-colors hover:text-red-500" v-if="delete" @click.stop="onDelete"></div>
+      <div class="i-lucide/trash-2 ml-3 shrink-0 cursor-pointer p-1 text-xl text-red-500" v-if="delete" @click.stop="onDelete"></div>
     </div>
     <div class="flex items-stretch gap-4">
       <div class="flex flex-col items-center py-1">
-        <div class="size-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-100"></div>
-        <div class="w-0.5 flex-1 rounded-full bg-linear-to-b from-emerald-400 to-blue-500"></div>
-        <div class="i-lucide/arrow-down -my-1 -mt-1.5 text-[22px] text-blue-500"></div>
+        <div class="size-2.5 rounded-full bg-(--ion-color-primary) ring-2 ring-(--ion-color-primary)/20"></div>
+        <div class="w-0.5 flex-1 rounded-full bg-(--ion-color-primary)"></div>
+        <div class="i-lucide/arrow-down -my-1 -mt-1.5 text-[22px] text-(--ion-color-primary)"></div>
       </div>
       <div class="flex min-w-0 flex-1 flex-col gap-3">
         <div class="truncate text-base text-slate-600">{{ homework(trip.from?.text ?? "") }}</div>

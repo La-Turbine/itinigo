@@ -3,18 +3,21 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
+          <ion-back-button text="Retour" default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
         </ion-buttons>
-        <ion-button class="mx-auto block h-10 w-24" size="small" @click.stop="$router.push({ query: { ...$route.query, step: 5 } })" v-if="currentStep === 4 && !currentPhoto.text">Nommer l'action</ion-button>
-        <div class="text-center text-[80%] font-medium whitespace-pre-line" v-else-if="currentStep > 3">{{ currentPhoto.text }}</div>
-        <div class="text-center text-[80%] font-medium whitespace-pre-line" v-else>{{ triptitle(currentTrip) }}</div>
-        <ion-buttons slot="end" v-if="currentStep === 3">
-          <ion-button @click="$router.push({ query: { ...$route.query, reorder: undefined } })" v-if="$route.query.reorder">OK</ion-button>
-          <div class="i-lucide/eye mr-2 text-xl" @click="actions[0].handler()" v-if="!$route.query.reorder"></div>
-        </ion-buttons>
-        <ion-buttons slot="end" v-if="currentStep > 3">
-          <div id="actionsTop" class="i-lucide/ellipsis-vertical text-xl"></div>
-          <ion-action-sheet trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
+        <div class="text-center text-lg font-bold" v-if="currentStep < 3">Nouvel Itinéraire</div>
+        <div class="text-center text-lg font-bold" v-if="currentStep === 3">Détail du trajet</div>
+        <div class="text-center text-lg font-bold" v-if="currentStep === 4">Détail de l'étape</div>
+        <div class="text-center text-lg font-bold" v-if="currentStep === 5">Décrire l'action</div>
+        <ion-buttons slot="end">
+          <template v-if="currentStep === 3">
+            <ion-button @click="$router.push({ query: { ...$route.query, reorder: undefined } })" v-if="$route.query.reorder">OK</ion-button>
+            <div class="i-lucide/eye mr-2 text-2xl" @click="actions[0].handler()" v-if="!$route.query.reorder"></div>
+          </template>
+          <template v-if="currentStep > 3">
+            <div id="actionsTop" class="i-lucide/ellipsis-vertical text-2xl"></div>
+            <ion-action-sheet trigger="actionsTop" :buttons="actions.filter((v) => v.text !== 'Déplacer')"></ion-action-sheet>
+          </template>
         </ion-buttons>
       </ion-toolbar>
       <ion-action-sheet :isOpen="$route.query.action" @didDismiss="$router.push({ replace: true, query: { ...$route.query, action: undefined, ...(currentStep === 3 && { sequence: undefined, photo: undefined }) } })" :buttons="actions.filter((v) => ($route.query.step === '3' && !$route.query.reorder) || v.text !== 'Déplacer')"></ion-action-sheet>

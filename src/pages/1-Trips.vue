@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar class="px-5!">
         <img src="/logo.svg" alt="Logo Itinigo" />
         <ion-buttons slot="end">
           <div class="flex items-center gap-2">

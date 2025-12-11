@@ -8,20 +8,20 @@
     <template v-for="(sequence, i) in currentTrip.sequences">
       <ion-list lines="none" inset>
         <ion-list-header>
-          <ion-label class="text-xl font-bold">{{ sequence.transport }}</ion-label>
+          <ion-label class="text-2xl font-bold whitespace-pre-line">{{ sequence.transport }}</ion-label>
         </ion-list-header>
         <div v-if="sequence.stops">
           <div class="flex items-stretch gap-4">
             <div class="flex flex-col items-center py-1">
-              <div class="size-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-100"></div>
-              <div class="w-0.5 flex-1 rounded-full bg-linear-to-b from-emerald-400 to-blue-500"></div>
-              <div class="i-lucide/arrow-down -my-1 -mt-1.5 text-[22px] text-blue-500"></div>
+              <div class="size-2.5 rounded-full bg-(--ion-color-primary) ring-2 ring-(--ion-color-primary)/20"></div>
+              <div class="w-0.5 flex-1 rounded-full bg-(--ion-color-primary)"></div>
+              <div class="i-lucide/arrow-down -my-1 -mt-1.5 text-[22px] text-(--ion-color-primary)"></div>
             </div>
             <div class="flex min-w-0 flex-1 flex-col">
-              <div class="truncate text-base text-slate-600">{{ sequence.stops[0].text }}</div>
-              <div class="truncate text-base text-slate-600" v-if="sequence.stops.length === 3">{{ sequence.stops[1].text }}</div>
-              <div class="truncate text-base text-slate-600" v-if="sequence.stops.length > 3">+ {{ sequence.stops.length - 2 }} arrêt{{ sequence.stops.length - 2 > 1 ? "s" : "" }}</div>
-              <div class="truncate text-lg font-semibold text-slate-800">{{ sequence.stops.at(-1).text }}</div>
+              <div class="truncate text-base leading-[22px] text-slate-600">{{ sequence.stops[0].text }}</div>
+              <div class="truncate text-base leading-[22px] text-slate-600" v-if="sequence.stops.length === 3">{{ sequence.stops[1].text }}</div>
+              <div class="truncate text-base leading-[22px] text-slate-600" v-if="sequence.stops.length > 3">+ {{ sequence.stops.length - 2 }} arrêt{{ sequence.stops.length - 2 > 1 ? "s" : "" }}</div>
+              <div class="truncate text-lg leading-[22px] font-semibold text-slate-800">{{ sequence.stops.at(-1).text }}</div>
             </div>
           </div>
         </div>

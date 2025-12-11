@@ -187,8 +187,8 @@ const nexts = {
           { type: 12, text: `Descendez du ${type}`, id: "BUSOUT" },
         ]
         const num = i + 1
-        sequence.push({ transport: `Je marche vers l'arrêt n°${num} ${stops[0].text}`, num, type, photos: [] })
-        sequence.push({ transport: `J'attends à l'arrêt n°${num} ${stops[0].text}`, num, type, photos: wait })
+        sequence.push({ transport: `Je marche vers l'arrêt:\n${stops[0].text}`, num, type, photos: [] })
+        sequence.push({ transport: `J'attends à l'arrêt:\n${stops[0].text}`, num, type, photos: wait })
         sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, photos: el.innerText.length === 1 ? tram : bus })
       })
       const duration = $(".duration span", el.parentElement.parentElement).textContent.trim()

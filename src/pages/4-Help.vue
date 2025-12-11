@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/"></ion-back-button>
+          <ion-back-button text="Retour" default-href="/"></ion-back-button>
         </ion-buttons>
         <ion-title>{{ $route.query.mode === "card" ? "Ma carte d'aide" : "Mes Aides" }}</ion-title>
       </ion-toolbar>
