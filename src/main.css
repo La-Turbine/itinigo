@@ -32,7 +32,7 @@
 }
 ion-toolbar {
   height: 74px;
-  display: flex!important;
+  display: flex;
   padding: 0 20px;
 }
 ion-button {
@@ -42,7 +42,7 @@ ion-button {
   font-weight: 700;
 }
 ion-list {
-  display: flex;
+  display: flex!important;
   flex-direction: column;
   gap: 10px;
 }
