@@ -47,6 +47,11 @@ ion-button {
   --padding-bottom: 20px;
   font-weight: 700;
 }
+ion-button[color="light"] {
+  --border-color: var(--ion-color-primary, #0054e9);
+  --border-style: solid;
+  --border-width: 1px;
+}
 ion-list {
   display: flex !important;
   flex-direction: column;

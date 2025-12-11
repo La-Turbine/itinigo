@@ -34,7 +34,7 @@
           </ion-reorder-group>
         </ion-list>
         <ion-button class="mx-5 my-2.5" expand="block" @click="addPhoto(i, sequence.photos.length)">
-          <div class="i-lucide/plus mx-1 -my-1 text-2xl"></div>
+          <div class="i-lucide/plus mx-2 -my-1 text-2xl"></div>
           Ajouter une étape
         </ion-button>
       </ion-list>

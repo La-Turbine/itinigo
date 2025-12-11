@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-back-button text="Retour" default-href="/" @pointerdown.stop="back" @click.stop></ion-back-button>
         </ion-buttons>
-        <div class="text-center text-[calc(100%-80px)] font-medium whitespace-pre-line">{{ triptitle(currentTrip) }}</div>
+        <div class="text-center text-[80%] font-medium whitespace-pre-line">{{ triptitle(currentTrip) }}</div>
       </ion-toolbar>
     </ion-header>
     <ion-content forceOverscroll="false">
@@ -30,15 +30,17 @@
         <ion-button class="h-20 text-[1.4rem] font-bold" @click="gogo">C'est Parti !</ion-button>
       </div>
       <div class="flex h-full flex-col overflow-hidden" v-else-if="!current.stops">
-        <div class="relative flex h-[140px]" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
-          <img class="pointer-events-none m-auto max-h-full max-w-full object-cover select-none" :src="$state.photos[current.id]" :style="cardStyle" />
-          <img class="absolute top-1/2 left-1/2 m-auto -translate-x-1/2 -translate-y-1/2" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
+        <div class="relative flex h-[calc(100%-140px)] p-5" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
+          <div class="flex flex-1 overflow-hidden rounded-4xl">
+            <img class="pointer-events-none object-cover select-none" :src="$state.photos[current.id]" :style="cardStyle" />
+            <img class="absolute top-1/2 left-1/2 m-auto -translate-x-1/2 -translate-y-1/2" src="/img/success.svg" @load="confetti" v-if="currentStep === steps.length" />
+          </div>
         </div>
-        <div class="flex h-[20%] gap-2.5 border-t border-black/20 bg-[#f6f7f7] p-2.5">
-          <h2 class="m-auto max-h-full text-center text-balance whitespace-pre-line" :ref="adjust">{{ current?.text }}</h2>
-          <ion-button class="absolute top-0 left-0 rounded" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
-          <ion-button class="text-[125%]" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
-          <ion-button class="text-[125%]" @click="$router.push('/')" v-if="currentStep === steps.length">
+        <div class="flex h-[140px] border-t border-black/20 bg-[#f6f7f7] p-4">
+          <div class="m-auto max-h-full text-center leading-tight font-medium text-balance whitespace-pre-line" :ref="adjust">{{ current?.text }}</div>
+          <ion-button class="absolute top-2 left-2" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+          <ion-button class="m-2 text-[125%]" @click="$router.push({ query: { step: currentStep + 1 } })" v-if="currentStep < steps.length">SUIVANT</ion-button>
+          <ion-button class="m-2 text-[125%]" @click="$router.push('/')" v-if="currentStep === steps.length">
             RETOUR
             <br />
             AUX
@@ -57,8 +59,8 @@
           <div class="absolute top-1/2 right-0 left-0 h-4 -translate-y-1/2 rounded-full bg-gray-300"></div>
           <div class="absolute top-1/2 right-0 left-0 h-4 -translate-y-1/2 rounded-full bg-blue-300" :style="progress"></div>
         </div>
-        <ion-button class="absolute top-0 rounded" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
-        <ion-button class="absolute top-0 right-0 rounded" color="light" @click="$router.push({ query: { step: currentStep + 1 } })">SUIVANT</ion-button>
+        <ion-button class="absolute top-2 left-2" color="light" @click="$router.push(`/help?travel=${$route.params.id}`)">✋ AIDE</ion-button>
+        <ion-button class="absolute top-2 right-2" color="light" @click="$router.push({ query: { step: currentStep + 1 } })">SUIVANT</ion-button>
       </div>
     </ion-content>
   </ion-page>

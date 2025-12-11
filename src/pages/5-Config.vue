@@ -11,7 +11,7 @@
     <ion-content forceOverscroll="false">
       <ion-list lines="none" inset class="**:[.label-text-wrapper]:min-w-28 **:[.label-text-wrapper]:p-1!">
         <ion-button class="mx-5" expand="block" @click="downloadManual">
-          <div class="i-lucide/download mx-1 -my-1 text-xl"></div>
+          <div class="i-lucide/download mx-2 -my-1 text-xl"></div>
           Télécharger le mode d'emploi
         </ion-button>
         <ion-input v-model="$state.name" label="👋 Prénom" placeholder="Bruno"></ion-input>
@@ -24,19 +24,19 @@
         <ion-toggle class="mx-5" :enable-on-off-labels="true" :checked="isLocalisable" :disabled="isLocalisable" @pointerdown="requestLocalisation">Localisation activée</ion-toggle>
         <ion-toggle class="mx-5" :enable-on-off-labels="true" v-model="$state.fake">Fake Timer</ion-toggle>
         <ion-button class="mx-5" expand="block" @pointerdown="window.location.reload()">
-          <div class="i-lucide/refresh-ccw mx-1 -my-1 text-xl"></div>
+          <div class="i-lucide/refresh-ccw mx-2 -my-1 text-xl"></div>
           Version N° {{ version.split(".")[0] }}
         </ion-button>
         <ion-button class="mx-5" @click="onExport">
-          <div class="i-lucide/save mx-1 -my-1 text-xl"></div>
+          <div class="i-lucide/save mx-2 -my-1 text-xl"></div>
           Exporter les données
         </ion-button>
         <ion-button class="mx-5" @click="onImport">
-          <div class="i-lucide/archive-restore mx-1 -my-1 text-xl"></div>
+          <div class="i-lucide/archive-restore mx-2 -my-1 text-xl"></div>
           Importer les données
         </ion-button>
         <ion-button class="mx-5" color="danger" @click="reset">
-          <div class="i-lucide/timer-reset mx-1 -my-1 text-xl"></div>
+          <div class="i-lucide/timer-reset mx-2 -my-1 text-xl"></div>
           Réinitialiser l'application
         </ion-button>
       </ion-list>

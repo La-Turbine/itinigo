@@ -2,7 +2,7 @@
   <div class="flex min-w-[70vw] overflow-hidden rounded-3xl border border-black/10 bg-white p-5" :class="i === +$route.query.sequence! && j === +$route.query.photo! ? '!border-[#3880ff] !bg-[#3880ff22]' : ''" :data-sequence="i" :data-photo="j" @click.stop="$router.push({ query: { step: 4, sequence: i, photo: j } })">
     <div class="-m-5 mr-5 flex h-30 w-20 items-center justify-center overflow-hidden rounded-3xl rounded-r-none bg-black/1 ring ring-black/10">
       <div class="i-lucide/image-plus size-10 text-gray-500" v-if="!$state.photos[photo.id]"></div>
-      <ion-img :src="$state.photos[photo.id]" v-else />
+      <ion-img class="aspect-2/3 object-cover" :src="$state.photos[photo.id]" v-else />
     </div>
     <div class="flex-1">
       <div v-if="photo.text">{{ photo.text }}</div>

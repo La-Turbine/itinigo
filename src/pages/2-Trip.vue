@@ -9,6 +9,7 @@
         <div class="text-center text-lg font-bold" v-if="currentStep === 3">Détail du trajet</div>
         <div class="text-center text-lg font-bold" v-if="currentStep === 4">Détail de l'étape</div>
         <div class="text-center text-lg font-bold" v-if="currentStep === 5">Décrire l'action</div>
+        <div class="text-center text-lg font-bold" v-if="currentStep === 6">Prendre une photo</div>
         <ion-buttons slot="end">
           <template v-if="currentStep === 3">
             <ion-button @click="$router.push({ query: { ...$route.query, reorder: undefined } })" v-if="$route.query.reorder">OK</ion-button>
@@ -28,9 +29,11 @@
       <!-- Step 3 -->
       <list-step />
       <!-- Step 4 -->
-      <form-photo />
+      <list-photo />
       <!-- Step 5 -->
       <form-action />
+      <!-- Step 6 -->
+      <form-photo />
     </ion-content>
   </ion-page>
 </template>

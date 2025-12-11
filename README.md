@@ -129,11 +129,12 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [x] Design: Page 2.3 - CardStep
 - [x] Design: Page 2.4 - Timeline ( + before/after, > validate at the end)
 - [x] Design: Page 2.5 - FormAction
-- [ ] Design: Travel - RAS?
-- [ ] Design: Help - RAS?
+- [x] Design: Page 5 - Config
+- [x] Design: Page 3 - Travel
 - [ ] Design: Page 2.3 - PhotoAnnotator
 - [ ] Design: Feedback + Finishing Touches
-- [x] Design: Page 5 - Config
+- [ ] Bug suppression photo (ajouter 2 photos au début, supprimer la 2ème créé.)
+- [ ] BONUS: Design: Page 4 - Help
 - [ ] BONUS: améliorer les montées de version (message + forcé la maj)
 
 ## ICEBOX / BACKLOG

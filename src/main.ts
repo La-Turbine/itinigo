@@ -7,28 +7,30 @@ import * as Ion from "@ionic/vue"
 import { reactive, watch } from "vue"
 // @ts-ignore
 import { idb } from "./idb"
+import CardStep from "./components/CardStep.vue"
+import CardTrip from "./components/CardTrip.vue"
+import FormAction from "./components/FormAction.vue"
+import FormPhoto from "./components/FormPhoto.vue"
+import FormTrip from "./components/FormTrip.vue"
+import ListPhoto from "./components/ListPhoto.vue"
+import ListStep from "./components/ListStep.vue"
+import ListTrip from "./components/ListTrip.vue"
 import "./tldraw"
 import PhotoAnnotator from "./tldraw/annotator.vue"
 import PhotoStream from "./components/PhotoStream.vue"
-import ListTrip from "./components/ListTrip.vue"
-import ListStep from "./components/ListStep.vue"
-import CardTrip from "./components/CardTrip.vue"
-import CardStep from "./components/CardStep.vue"
-import FormTrip from "./components/FormTrip.vue"
-import FormPhoto from "./components/FormPhoto.vue"
-import FormAction from "./components/FormAction.vue"
 async function initApp() {
   window.Ionic = { config: { mode: "ios" } }
   const app = createApp(App).use(IonicVue).use(router)
+  app.component("CardStep", CardStep)
+  app.component("CardTrip", CardTrip)
+  app.component("FormAction", FormAction)
+  app.component("FormPhoto", FormPhoto)
+  app.component("FormTrip", FormTrip)
+  app.component("ListPhoto", ListPhoto)
+  app.component("ListStep", ListStep)
+  app.component("ListTrip", ListTrip)
   app.component("PhotoAnnotator", PhotoAnnotator)
   app.component("PhotoStream", PhotoStream)
-  app.component("ListTrip", ListTrip)
-  app.component("ListStep", ListStep)
-  app.component("CardTrip", CardTrip)
-  app.component("CardStep", CardStep)
-  app.component("FormTrip", FormTrip)
-  app.component("FormPhoto", FormPhoto)
-  app.component("FormAction", FormAction)
   Object.entries(Ion).forEach(([key, value]) => {
     if (!key.startsWith("Ion")) return
     app.component(key, value)
