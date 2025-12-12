@@ -3,17 +3,21 @@
     <div class="flex h-full flex-col overflow-hidden">
       <div class="relative flex h-[calc(100%-140px)] p-5" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
         <div class="relative flex flex-1 overflow-hidden rounded-4xl bg-gray-200" :style="cardStyle">
-          <div class="absolute inset-0 flex w-full flex-col justify-end gap-5 p-10">
-            <ion-button expand="block" @click="$router.push({ query: { ...$route.query, step: 5 } })">
-              <div class="i-lucide/type mx-2 -my-1 text-2xl"></div>
-              Décrire l'action
+          <div class="absolute inset-0 flex w-full flex-col justify-end gap-4 p-7">
+            <ion-button :class="currentPhoto?.text || currentPhoto?.id ? 'ml-auto size-[50px]' : ''" @click="$router.push(`/travel/${$route.params.id}?step=${sumStep() || 1}`)">
+              <div class="i-lucide/eye mx-2 -my-2 min-h-6 min-w-6"></div>
+              <div :class="currentPhoto?.text ? 'hidden' : ''">Prévisualiser le trajet</div>
             </ion-button>
-            <ion-button expand="block" @click="$router.push({ query: { ...$route.query, step: 6 } })">
-              <div class="i-lucide/image-plus mx-2 -my-1 text-2xl"></div>
-              Ajouter une photo
+            <ion-button :class="currentPhoto?.text ? 'ml-auto size-[50px]' : ''" @click="$router.push({ query: { ...$route.query, step: 5 } })">
+              <div class="i-lucide/type mx-2 -my-2 min-h-6 min-w-6"></div>
+              <div :class="currentPhoto?.text ? 'hidden' : ''">Décrire l'action</div>
+            </ion-button>
+            <ion-button :class="currentPhoto?.id ? 'ml-auto size-[50px]' : ''" @click="$router.push({ query: { ...$route.query, step: 6 } })">
+              <div class="i-lucide/image-plus mx-2 -my-2 min-h-6 min-w-6"></div>
+              <div :class="currentPhoto?.id ? 'hidden' : ''">Ajouter une photo</div>
             </ion-button>
           </div>
-          <img class="object-cover select-none" :src="$state.photos[currentPhoto.id]" />
+          <img class="w-full object-cover select-none" :src="$state.photos[currentPhoto.id]" />
         </div>
       </div>
       <div class="flex h-[140px] gap-2.5 overflow-auto border-t border-black/20 bg-gray-100 p-2.5">
@@ -43,6 +47,24 @@ const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 1))
 const currentSequence = computed(() => currentTrip.value.sequences?.[+$route.query.sequence])
 const currentPhoto = computed(() => currentSequence.value?.photos[+$route.query.photo])
+
+function sumStep(sequence = +$route.query.sequence, photo = +$route.query.photo) {
+  return currentTrip.value.sequences.slice(0, sequence).reduce((acc, v) => acc + v.photos.length + !!v.stops, 0) + photo + 1
+}
+async function popupPhoto() {
+  const alert = await Ion.alertController.create({
+    header: "",
+    message: "",
+    buttons: [
+      { text: "Remplacer", role: "replace", cssClass: "alert-ok" },
+      { text: "Ré-annoter", role: "annotate", cssClass: "alert-ok" },
+      { text: "Annuler", role: "cancel", cssClass: "alert-cancel" },
+    ],
+  })
+  await alert.present()
+  const { role } = await alert.onDidDismiss()
+  return role === "ok"
+}
 
 // Swipe to change photo
 const touchStartX = ref(0)

@@ -15,8 +15,9 @@ Page 2 - Trip: Création d'un trajet
   - Step 1 - Départ / Arrivée / Date / Heure
   - Step 2 - Choix d'un itiniraire (itinisere)
   - Step 3 - Liste des étapes (liste)
-  - Step 4 - Edition d'une étape (photo + timeline)
+  - Step 4 - Liste des étapes (timeline)
   - Step 5 - Edition d'une étape (action)
+  - Step 6 - Edition d'une étape (photo)
 Page 3 - Travel: Visualisation d'un trajet
 Page 4 - Help
 Page 5 - Config
@@ -24,10 +25,11 @@ Page 5 - Config
 # Composants:
 - ListTrip (Page 1)
 - ListStep (Step 3)
+- ListPhoto (Step 3)
 - CardTrip (Page 1)
 - CardStep (Step 3+4)
 - FormTrip (Step 1+2)
-- FormPhoto (Step 4) = PhotoStream OU PhotoAnnotator + Timeline
+- FormPhoto (Step 6) = PhotoStream OU PhotoAnnotator
 - FormAction (Step 5)
 - PhotoStream (Step 4)
 - PhotoAnnotator (Step 4) #HARDCHANGE

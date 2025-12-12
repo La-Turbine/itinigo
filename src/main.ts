@@ -19,6 +19,7 @@ import "./tldraw"
 import PhotoAnnotator from "./tldraw/annotator.vue"
 import PhotoStream from "./components/PhotoStream.vue"
 async function initApp() {
+  window.Ion = Ion
   window.Ionic = { config: { mode: "ios" } }
   const app = createApp(App).use(IonicVue).use(router)
   app.component("CardStep", CardStep)
@@ -174,6 +175,7 @@ declare module "vue" {
 }
 declare global {
   interface Window {
+    Ion: typeof Ion
     Ionic: { config: { mode: string } }
     $: (selector: string, context?: HTMLElement | Document) => HTMLElement | null
     $$: (selector: string, context?: HTMLElement | Document) => HTMLElement[]
