@@ -3,12 +3,12 @@
     <div class="flex h-full flex-col overflow-hidden">
       <div class="relative flex h-[calc(100%-140px)] p-5">
         <div class="flex flex-1 overflow-hidden rounded-4xl">
-          <photo-stream v-if="!currentPhoto || $route.query.change" ref="stream" />
+          <photo-stream v-if="!currentPhoto.id || $route.query.change" ref="stream" />
           <photo-annotator v-else :url="$state.photos[`${currentPhoto.id}:snapshot`] || $state.photos[currentPhoto.id]" @done="annotatePhoto" ref="annotator" />
         </div>
       </div>
       <div class="flex h-[140px] gap-2.5 overflow-auto border-t border-black/20 bg-gray-100 p-2.5">
-        <div class="m-auto flex gap-4" v-if="!currentPhoto || $route.query.change">
+        <div class="m-auto flex gap-4" v-if="!currentPhoto.id || $route.query.change">
           <div class="h-20 w-20 rounded-full border-6 border-white bg-gray-200 ring-1 ring-gray-300 active:scale-95" @click="clickCapture()"></div>
           <div class="flex h-20 w-20 rounded-xl bg-gray-200 ring-1 ring-gray-300 active:scale-95" @click="input.click()"><div class="i-lucide/image m-auto bg-gray-600 text-2xl"></div></div>
         </div>
@@ -65,7 +65,7 @@ function savePhoto(blob) {
   reader.readAsDataURL(blob)
 }
 function annotatePhoto({ blob, snapshot }) {
-  if (!blob) return setTimeout(() => (photo.value = null), 0)
+  if (!blob) return $router.push({ query: { step: 4, sequence: $route.query.sequence, photo: $route.query.photo } })
   const reader = new FileReader()
   reader.readAsDataURL(blob)
   reader.onload = async () => {

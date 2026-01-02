@@ -6,7 +6,7 @@
       <div class="i-lucide/plus mx-2 -my-1 text-2xl"></div>
       Créer un itinéraire
     </ion-button>
-    <ion-button class="mx-5" expand="block" color="warning" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">
+    <ion-button class="mx-5" expand="block" color="medium" @click="$router.push(`/config`)" v-if="$state.mode === 'helper'">
       <div class="i-lucide/settings mx-2 -my-1 text-xl"></div>
       Configurer l'application
     </ion-button>

@@ -198,6 +198,7 @@ async function back() {
     $router.push(`/`)
     return setTimeout(() => $router.push(url), 100)
   }
+  if (!$route.query.step) return $router.push("/")
   if (!(await window.popup("Êtes-vous sûr de vouloir quitter le guidage ?", { ok: "Oui", ko: "Non" }))) return
   $router.push("/")
 }

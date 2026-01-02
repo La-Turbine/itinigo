@@ -10,19 +10,19 @@
         <ion-list-header>
           <ion-label class="text-2xl font-bold whitespace-pre-line">{{ sequence.transport }}</ion-label>
         </ion-list-header>
-        <div v-if="sequence.stops">
-          <div class="flex items-stretch gap-4">
-            <div class="flex flex-col items-center py-1">
-              <div class="size-2.5 rounded-full bg-(--ion-color-primary) ring-2 ring-(--ion-color-primary)/20"></div>
-              <div class="w-0.5 flex-1 rounded-full bg-(--ion-color-primary)"></div>
-              <div class="i-lucide/arrow-down -my-1 -mt-1.5 text-[22px] text-(--ion-color-primary)"></div>
+        <div v-if="sequence.stops" class="flex items-stretch gap-4">
+          <div class="flex flex-col items-center py-1">
+            <div class="size-2.5 rounded-full bg-(--ion-color-primary) ring-2 ring-(--ion-color-primary)/20"></div>
+            <div class="w-0.5 flex-1 rounded-full bg-(--ion-color-primary)"></div>
+            <div class="i-lucide/arrow-down -my-1 -mt-1.5 text-[22px] text-(--ion-color-primary)"></div>
+          </div>
+          <div class="flex min-w-0 flex-1 flex-col">
+            <div class="truncate text-base leading-[22px] text-slate-600" v-for="stop in $route.query[`expand${i}`] ? sequence.stops.slice(0, -1) : [sequence.stops[0], ...(sequence.stops.length === 3 ? [sequence.stops[1]] : [])]">{{ stop.text }}</div>
+            <div class="inline-flex cursor-pointer items-center gap-1 self-start rounded-full bg-slate-100 px-2 py-0.5 text-sm leading-[22px] text-slate-600 transition-colors hover:bg-slate-200" v-if="sequence.stops.length > 3" @click="$router.replace({ query: { ...$route.query, [`expand${i}`]: $route.query[`expand${i}`] ? undefined : 1 } })">
+              {{ $route.query[`expand${i}`] ? "Masquer" : `+ ${sequence.stops.length - 2} arrêt${sequence.stops.length - 2 > 1 ? "s" : ""}` }}
+              <div :class="$route.query[`expand${i}`] ? 'i-lucide/chevron-up' : 'i-lucide/chevron-down'" class="-my-1 text-base text-slate-500"></div>
             </div>
-            <div class="flex min-w-0 flex-1 flex-col">
-              <div class="truncate text-base leading-[22px] text-slate-600">{{ sequence.stops[0].text }}</div>
-              <div class="truncate text-base leading-[22px] text-slate-600" v-if="sequence.stops.length === 3">{{ sequence.stops[1].text }}</div>
-              <div class="truncate text-base leading-[22px] text-slate-600" v-if="sequence.stops.length > 3">+ {{ sequence.stops.length - 2 }} arrêt{{ sequence.stops.length - 2 > 1 ? "s" : "" }}</div>
-              <div class="truncate text-lg leading-[22px] font-semibold text-slate-800">{{ sequence.stops.at(-1).text }}</div>
-            </div>
+            <div class="truncate text-lg leading-[22px] font-semibold text-slate-800">{{ sequence.stops.at(-1).text }}</div>
           </div>
         </div>
         <ion-list lines="none">
@@ -52,6 +52,7 @@ function reorderPhoto(sequence, event) {
 function addPhoto(sequenceIndex, photoIndex) {
   const sequence = currentTrip.value.sequences[sequenceIndex]
   const photo = { type: 0, text: "" }
+  if (sequenceIndex === currentTrip.value.sequences.length - 1 && photoIndex === sequence.photos.length) photoIndex -= 1
   sequence.photos.splice(photoIndex, 0, photo)
   $router.push({ query: { step: 4, sequence: sequenceIndex, photo: photoIndex } })
 }

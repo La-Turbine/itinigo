@@ -4,9 +4,9 @@
       <div class="relative flex h-[calc(100%-140px)] p-5" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
         <div class="relative flex flex-1 overflow-hidden rounded-4xl bg-gray-200" :style="cardStyle">
           <div class="absolute inset-0 flex w-full flex-col justify-end gap-4 p-7">
-            <ion-button :class="currentPhoto?.text || currentPhoto?.id ? 'ml-auto size-[50px]' : ''" @click="$router.push(`/travel/${$route.params.id}?step=${sumStep() || 1}`)">
+            <ion-button :class="currentPhoto?.text || currentPhoto?.id ? 'ml-auto size-[50px]' : ''" :disabled="!currentPhoto?.id" @click="$router.push(`/travel/${$route.params.id}?step=${sumStep() || 1}`)">
               <div class="i-lucide/eye mx-2 -my-2 min-h-6 min-w-6"></div>
-              <div :class="currentPhoto?.text ? 'hidden' : ''">Prévisualiser le trajet</div>
+              <div :class="currentPhoto?.text || currentPhoto?.id ? 'hidden' : ''">Prévisualiser le trajet</div>
             </ion-button>
             <ion-button :class="currentPhoto?.text ? 'ml-auto size-[50px]' : ''" @click="$router.push({ query: { ...$route.query, step: 5 } })">
               <div class="i-lucide/type mx-2 -my-2 min-h-6 min-w-6"></div>

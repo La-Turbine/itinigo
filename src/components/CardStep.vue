@@ -6,7 +6,7 @@
     </div>
     <div class="flex-1">
       <div v-if="photo.text">{{ photo.text }}</div>
-      <ion-button size="small" class="mx-0 -mt-2 h-10 w-24" @click.stop="$router.push({ query: { step: 5, sequence: i, photo: j } })" v-else>Décrire l'action</ion-button>
+      <ion-button size="small" color="medium" class="mx-0 -mt-2 h-10 w-24" @click.stop="$router.push({ query: { step: 5, sequence: i, photo: j } })" v-else>Décrire l'action</ion-button>
     </div>
     <div class="i-lucide/ellipsis-vertical my-1 -mr-1 size-5" @click.stop="$router.push({ replace: true, query: { ...$route.query, sequence: i, photo: j, action: 1 } })"></div>
   </div>
