@@ -19,10 +19,10 @@
         <ion-textarea class="text-[80%]" rows="3" :auto-grow="true" v-model="$state.instruction" label="📋 Instruction" placeholder="Je comprends tout ce que vous dites si vous me parlez lentement."></ion-textarea>
         <ion-input v-model="$state.home" label="🏠 Maison" placeholder="40 Rue du Drac"></ion-input>
         <ion-input v-model="$state.work" label="🏢 Travail" placeholder="40 Rue du Drac"></ion-input>
-        <ion-toggle class="mx-5" :enable-on-off-labels="true" :checked="isInstalled" :disabled="isInstalled" @pointerdown="requestInstall">Application installée</ion-toggle>
-        <ion-toggle class="mx-5" :enable-on-off-labels="true" :checked="isNotifiable" :disabled="isNotifiable" @pointerdown="requestNotification">Notifications activées</ion-toggle>
-        <ion-toggle class="mx-5" :enable-on-off-labels="true" :checked="isLocalisable" :disabled="isLocalisable" @pointerdown="requestLocalisation">Localisation activée</ion-toggle>
-        <ion-toggle class="mx-5" :enable-on-off-labels="true" v-model="$state.fake">Fake Timer</ion-toggle>
+        <div class="flex" @pointerdown="requestInstall"><ion-toggle class="pointer-events-none mx-5 w-full" :checked="isInstalled">Application installée</ion-toggle></div>
+        <div class="flex" @pointerdown="requestNotification"><ion-toggle class="pointer-events-none mx-5 w-full" :checked="isNotifiable">Notifications activées</ion-toggle></div>
+        <div class="flex" @pointerdown="requestLocalisation"><ion-toggle class="pointer-events-none mx-5 w-full" :checked="isLocalisable">Localisation activée</ion-toggle></div>
+        <ion-toggle class="mx-5" v-model="$state.fake">Fake Timer</ion-toggle>
         <ion-button class="mx-5" expand="block" @pointerdown="window.location.reload()">
           <div class="i-lucide/refresh-ccw mx-2 -my-1 text-xl"></div>
           Version N° {{ version.split(".")[0] }}
@@ -63,10 +63,10 @@ import { ref, onMounted } from "vue"
 const isInstalled = ref(window.matchMedia("(display-mode: standalone)").matches || !!window.navigator.standalone)
 const isNotifiable = ref(false)
 const isLocalisable = ref(false)
-const os = /android|iphone/i.exec(navigator.userAgent)?.[0] ?? "?"
-const browser = /chrome|safari/i.exec(navigator.userAgent)?.[0] ?? "?"
-if (browser === "chrome" && os === "iphone") window.popup("Merci d'utiliser Safari sur iPhone")
-if (browser !== "chrome" && os === "android") window.popup("Merci d'utiliser Chrome sur Android")
+const os = /android|iphone/i.exec(navigator.userAgent)?.[0].toLowerCase() ?? "desktop"
+const browser = /Version\/[\d.]+.*Safari/i.test(navigator.userAgent) ? "safari" : "chrome"
+if (os === "iphone" && browser !== "safari") popup("Merci d'utiliser Safari sur iPhone")
+if (os === "android" && browser !== "chrome") popup("Merci d'utiliser Chrome sur Android")
 onMounted(async () => {
   isNotifiable.value = (await navigator.permissions.query({ name: "notifications" })).state === "granted"
   isLocalisable.value = (await navigator.permissions.query({ name: "geolocation" })).state === "granted"
@@ -80,23 +80,28 @@ window.addEventListener("beforeinstallprompt", (e) => {
 })
 async function requestInstall() {
   if (isInstalled.value) return
-  if (os === "iphone") return window.popup(`Pour installer cette application, appuyez sur le bouton "Partager" dans Safari, puis sélectionnez "Ajouter à l'écran d'accueil".`)
-  if (!installPrompt) return window.popup(`Pour installer cette application, appuyez sur le bouton "Installer" dans Chrome.`)
+  if (os === "iphone") return popup(`Pour installer cette application, appuyez sur le bouton "Partager" dans Safari, puis sélectionnez "Ajouter à l'écran d'accueil".`)
+  if (!installPrompt) return popup(`Pour installer cette application, appuyez sur le bouton "Installer" dans Chrome.`)
   installPrompt.prompt()
 }
 async function requestNotification(event) {
-  if (event) event.target.checked = !isNotifiable.value
-  const registration = await navigator.serviceWorker.ready
-  if ("sync" in registration) registration.sync.register("notify")
-  if (!isNotifiable.value) return Notification.requestPermission().then((permission) => (isNotifiable.value = permission === "granted"))
-  return notify("Préparez-vous à recevoir des notifications")
+  const registration = await navigator.serviceWorker.getRegistration()
+  if (registration?.showNotification) return event && notify("Notification push activées.", "Notification")
+  if ("Notification" in window) {
+    const permission = await Notification.requestPermission()
+    if (permission === "granted") return event && notify("Notification native activées.", "Notification")
+  }
+  event && popup("Notification native refusées, installez l'application et vérifiez les permissions.")
 }
 async function requestLocalisation(event) {
-  if (event) event.target.checked = !isLocalisable.value
-  if (!isLocalisable.value) return navigator.geolocation.getCurrentPosition((position) => (isLocalisable.value = true))
-  navigator.geolocation.getCurrentPosition(
-    (position) => console.log(position),
-    (err) => console.log(err),
+  return navigator.geolocation.getCurrentPosition(
+    (position) => {
+      isLocalisable.value = true
+      event && popup(`${position.coords.latitude.toFixed(5)}x${position.coords.longitude.toFixed(5)} (±${+position.coords.accuracy.toFixed(1)}m)`)
+    },
+    (err) => {
+      event && popup(`Erreur de localisation : ${err.message}`)
+    },
   )
 }
 async function onExport() {

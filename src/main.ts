@@ -59,7 +59,11 @@ async function initApp() {
   watch($state, (next) => idb.set("$state", JSON.stringify({ ...next, photos: {} })), { flush: "pre", deep: true })
   watch(
     () => $state.mode,
-    (mode) => document.documentElement.style.setProperty("--ion-color-primary", mode === "helper" ? "#000000" : "#0054e9"),
+    (mode) => {
+      document.documentElement.style.setProperty("--ion-color-primary", mode === "helper" ? "#000000" : "#0054e9")
+      document.documentElement.style.setProperty("--ion-color-primary-shade", mode === "helper" ? "#222222" : "#004acd")
+      document.documentElement.style.setProperty("--ion-color-primary-tint", mode === "helper" ? "#444444" : "#1a65eb")
+    },
     { immediate: true },
   )
   await router.isReady()
@@ -78,9 +82,8 @@ async function initApp() {
     return role === "ok"
   }
   window.notify = async function (message, title) {
-    try {
-      await window.push(message, title)
-    } catch (e) {}
+    new Audio("/notification.mp3").play() // .catch((e) => e)
+    await window.push(message, title)
     await window.popup(message, { title })
   }
   window.push = async (message: string, title?: string) => {
@@ -93,7 +96,7 @@ async function initApp() {
     }
     const registration = await navigator.serviceWorker.getRegistration()
     if (registration?.showNotification) return registration.showNotification(title, notification)
-    return new Notification(title, notification)
+    if ("Notification" in window) return new Notification(title, notification)
   }
   window.sms = async (message: string, number: string) => {
     if (!number) return window.popup("Please enter a valid phone number")

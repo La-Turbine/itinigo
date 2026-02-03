@@ -56,7 +56,8 @@ Page 5 - Config
 - `triptitle(trip)` - Returns formatted trip title with from/to locations
 - `retryPosition()` - Retries position watching with interval
 - `watchPosition()` - Watches user's geolocation
-- `notify(message, title?)` - Shows notification
+- `notify(message, title?)` - Shows notification (native + popup + sound)
+- `popup(message, title?)` - Shows popup alert
 - `push(message, title)` - Sends push notification via service worker
 - `sms(message, number)` - Sends SMS via Twilio API
 - swipe
@@ -133,26 +134,24 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [x] Design: Page 2.5 - FormAction
 - [x] Design: Page 5 - Config
 - [x] Design: Page 3 - Travel
-- [ ] Design: Feedback + Finishing Touches
-- [ ] Design: Page 2.3 - PhotoAnnotator
-- [ ] Bug suppression photo (ajouter 2 photos au début, supprimer la 2ème créé.)
-- [ ] BONUS: Design: Page 4 - Help
-- [ ] BONUS: améliorer les montées de version (message + forcé la maj)
+- [x] Design: Feedback + Finishing Touches
+- [x] Design: Page 2.3 - PhotoAnnotator
 
 ## ICEBOX / BACKLOG
 
 - [x] 5j Reorganiser (merger 4 pages en 2, rajouter 3 pages, créer 5 composants)
 - [x] 3j Ré-annoter / Recadrer / Changer
-- [ ] 5j Feedback / Design
+- [x] 5j Feedback / Design
 - [x] 1j Passation du Code / Hébergement / Domain / Open Source
 - [ ] 1j Correspondance multiple (ajouter une étape)
 - [ ] 1j Notification si application en background (notification sonore, à définir)
 - [ ] 2j Geolocalisation des photos, notification si l'utilisateur s'éloigne
 - [ ] 1j Analyse API cityway
-- Config > lister la taille actuelle des données
-- Optimisation de la taille des images/trajets (https://www.youtube.com/watch?v=O8uazkirvVo)
-- Utile ? Export PDF (avec metadata JSON dedans)
-- Utile ? Mode offline amélioré
+- [ ] BONUS: améliorer les montées de version (message + forcé la maj + autodetection numéro de commit)
+- [ ] Config > lister la taille actuelle des données
+- [ ] Optimisation de la taille des images/trajets (https://www.youtube.com/watch?v=O8uazkirvVo)
+- [ ] Utile ? Export PDF (avec metadata JSON dedans)
+- [ ] Utile ? Mode offline amélioré
 
 ## 2024
 

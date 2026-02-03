@@ -69,6 +69,7 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts: [".trycloudflare.com"],
     proxy: {
       "/itinisere": {
         target: "https://www.itinisere.fr",

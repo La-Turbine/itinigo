@@ -117,8 +117,8 @@ watch(
     watch(
       () => progress.value.percentage < 0.15,
       () => {
-        if (current.value.type.startsWith("Bus")) return notify("Appuyez sur le bouton pour demander l'arrêt.\nPréparez-vous à descendre au prochain arrêt", "Appuyez sur le bouton")
-        return notify("Préparez-vous à descendre quand les portes s'ouvriront.", "Préparez-vous à descendre")
+        if (current.value.type.startsWith("Bus")) return window.notify("Appuyez sur le bouton pour demander l'arrêt.\nPréparez-vous à descendre au prochain arrêt", "Appuyez sur le bouton")
+        return window.notify("Préparez-vous à descendre quand les portes s'ouvriront.", "Préparez-vous à descendre")
       },
       { once: true },
     )

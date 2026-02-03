@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-full flex-col" v-if="currentStep < 3">
+  <div class="flex h-full flex-col" v-if="currentStep < 3">
     <ion-list lines="none" inset>
       <ion-item @click="onClick('from')">
         <ion-label position="stacked">
@@ -45,7 +45,7 @@
       </ion-content>
     </ion-modal>
 
-    <div class="flex-1 rounded-t-3xl bg-white p-6 text-center text-balance text-gray-400">
+    <div class="flex-1 overflow-auto rounded-t-3xl bg-white p-6 text-center text-balance text-gray-400">
       <div v-if="currentStep === 1">Les résultats de la recherche apparaîtront ici sous forme de liste.</div>
       <div v-else class="cursor-pointer" @click.stop.prevent="next(2, (state.choice = i))" v-for="(trip, i) in state.choices">
         <iframe :srcdoc="trip" class="pointer-events-none m-auto h-40 w-full border-0"></iframe>
@@ -187,12 +187,12 @@ const nexts = {
           { type: 12, text: `Descendez du ${type}`, id: "BUSOUT" },
         ]
         const num = i + 1
-        sequence.push({ transport: `Je marche vers l'arrêt:\n${stops[0].text}`, num, type, photos: [] })
-        sequence.push({ transport: `J'attends à l'arrêt:\n${stops[0].text}`, num, type, photos: wait })
+        sequence.push({ transport: `Je marche vers l’arrêt :\n${stops[0].text}`, num, type, photos: [] })
+        sequence.push({ transport: `J'attends à l’arrêt :\n${stops[0].text}`, num, type, photos: wait })
         sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, photos: el.innerText.length === 1 ? tram : bus })
       })
       const duration = $(".duration span", el.parentElement.parentElement).textContent.trim()
-      sequence.push({ transport: `Je marche vers ma destination`, duration, photos: [{ type: 2, text: "Vous êtes arrivé !" }] })
+      sequence.push({ transport: `Je marche vers ma destination`, duration, photos: [{ type: -1, text: "Vous êtes arrivé !" }] })
       return sequence
     })
     window.formTrip = $route.params.id
