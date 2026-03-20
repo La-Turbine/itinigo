@@ -13,8 +13,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue"
 const { i, j } = defineProps(["i", "j"])
-const trip = $state.trips[$route.params.id - 1] || {}
-const sequence = trip.sequences[i]
-const photo = sequence.photos[j]
+const trip = computed(() => $state.trips[$route.params.id - 1] || {})
+const sequence = computed(() => trip.value.sequences[i])
+const photo = computed(() => sequence.value.photos[j])
 </script>

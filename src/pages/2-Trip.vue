@@ -69,6 +69,20 @@ function addPhoto(sequenceIndex, photoIndex) {
 function deletePhoto(sequence, index) {
   idb.del(sequence.photos[index].id)
   sequence.photos.splice(index, 1)
+  if ($route.query.step === "3") return
+  // Navigate to closest existing photo, or back to step 3
+  const seq = +$route.query.sequence
+  const seqs = currentTrip.value.sequences
+  if (sequence.photos.length > 0) {
+    const photo = Math.min(index, sequence.photos.length - 1)
+    return $router.push({ query: { step: 4, sequence: seq, photo } })
+  }
+  // Current sequence empty — find closest non-empty sequence
+  for (let d = 1; d < seqs.length; d++) {
+    if (seq + d < seqs.length && seqs[seq + d].photos.length > 0) return $router.push({ query: { step: 4, sequence: seq + d, photo: 0 } })
+    if (seq - d >= 0 && seqs[seq - d].photos.length > 0) return $router.push({ query: { step: 4, sequence: seq - d, photo: seqs[seq - d].photos.length - 1 } })
+  }
+  $router.push({ query: { step: 3 } })
 }
 // Utils
 function back() {

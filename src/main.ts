@@ -87,16 +87,19 @@ async function initApp() {
     await window.popup(message, { title })
   }
   window.push = async (message: string, title?: string) => {
-    title = title || message
-    const notification = {
-      body: message,
-      icon: "/pwa-192x192.png",
-      badge: "/pwa-192x192.png",
-      data: { url: location.href },
-    }
-    const registration = await navigator.serviceWorker.getRegistration()
-    if (registration?.showNotification) return registration.showNotification(title, notification)
-    if ("Notification" in window) return new Notification(title, notification)
+    try {
+      title = title || message
+      if ("Notification" in window && Notification.permission === "default") await Notification.requestPermission()
+      const notification = {
+        body: message,
+        icon: "/pwa-192x192.png",
+        badge: "/pwa-192x192.png",
+        data: { url: location.href },
+      }
+      const registration = await navigator.serviceWorker.getRegistration()
+      if (registration?.showNotification) return registration.showNotification(title, notification)
+      if ("Notification" in window) return new Notification(title, notification)
+    } catch {}
   }
   window.sms = async (message: string, number: string) => {
     if (!number) return window.popup("Please enter a valid phone number")

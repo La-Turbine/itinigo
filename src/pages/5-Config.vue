@@ -40,19 +40,6 @@
           Réinitialiser l'application
         </ion-button>
       </ion-list>
-      <!-- <ion-item button @click="$state.fake = !$state.fake">
-          <ion-label>FAKE TIMER - {{ $state.fake ? "ON" : "OFF" }}</ion-label>
-        </ion-item>
-        <ion-item button @click="onExport">
-          <ion-label>EXPORT</ion-label>
-        </ion-item>
-        <ion-item button @click="onImport">
-          <ion-label>IMPORT</ion-label>
-        </ion-item>
-        <ion-item button color="danger" @click="reset">
-          <ion-label>RESET</ion-label>
-        </ion-item>
-      </ion-list> -->
     </ion-content>
   </ion-page>
 </template>
@@ -81,7 +68,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
 async function requestInstall() {
   if (isInstalled.value) return
   if (os === "iphone") return popup(`Pour installer cette application, appuyez sur le bouton "Partager" dans Safari, puis sélectionnez "Ajouter à l'écran d'accueil".`)
-  if (!installPrompt) return popup(`Pour installer cette application, appuyez sur le bouton "Installer" dans Chrome.`)
+  if (!installPrompt) return popup(`Pour installer cette application, appuyez sur le bouton "..." > "Ajouter à l'écran d'accueil" dans Chrome, puis sélectionnez "Installer".`)
   installPrompt.prompt()
 }
 async function requestNotification(event) {

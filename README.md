@@ -147,6 +147,7 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [ ] 1j Notification si application en background (notification sonore, à définir)
 - [ ] 2j Geolocalisation des photos, notification si l'utilisateur s'éloigne
 - [ ] 1j Analyse API cityway
+- [ ] BONUS: tags SEO pour https://itinigo.fr/
 - [ ] BONUS: améliorer les montées de version (message + forcé la maj + autodetection numéro de commit)
 - [ ] Config > lister la taille actuelle des données
 - [ ] Optimisation de la taille des images/trajets (https://www.youtube.com/watch?v=O8uazkirvVo)

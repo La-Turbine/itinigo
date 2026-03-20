@@ -17,7 +17,7 @@
               <div :class="currentPhoto?.id ? 'hidden' : ''">Ajouter une photo</div>
             </ion-button>
           </div>
-          <img class="w-full object-cover select-none" :src="$state.photos[currentPhoto.id]" />
+          <img class="w-full object-cover select-none" :src="$state.photos[currentPhoto?.id]" />
         </div>
       </div>
       <div class="flex h-[140px] gap-2.5 overflow-auto border-t border-black/20 bg-gray-100 p-2.5">
