@@ -149,8 +149,8 @@ Lot 3: Novembre / Décembre > Finitions + Améliorations
 - [ ] 1j Analyse API cityway
 - [ ] BONUS: tags SEO pour https://itinigo.fr/
 - [ ] BONUS: améliorer les montées de version (message + forcé la maj + autodetection numéro de commit)
-- [ ] Config > lister la taille actuelle des données
-- [ ] Optimisation de la taille des images/trajets (https://www.youtube.com/watch?v=O8uazkirvVo)
+- [ ] BONUS: Config > lister la taille actuelle des données
+- [ ] BONUS: Optimisation de la taille des images/trajets (https://www.youtube.com/watch?v=O8uazkirvVo)
 - [ ] Utile ? Export PDF (avec metadata JSON dedans)
 - [ ] Utile ? Mode offline amélioré
 

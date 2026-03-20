@@ -165,20 +165,23 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
   DefaultSizeStyle.setDefaultValue("xl")
   function Toolbar() {
     return (
-      <DefaultToolbar>
-        <SelectToolbarItem />
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(sharedPhoto.type) && <ArrowToolbarItem />}
-        {/* {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(sharedPhoto.type) && <EllipseToolbarItem />} */}
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(sharedPhoto.type) && <OvalToolbarItem />}
-        {[0, 4, 5].includes(sharedPhoto.type) && <TriangleToolbarItem />}
-      </DefaultToolbar>
+      <>
+        <DefaultToolbar>
+          <SelectToolbarItem />
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(sharedPhoto.type) && <ArrowToolbarItem />}
+          {/* {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(sharedPhoto.type) && <EllipseToolbarItem />} */}
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(sharedPhoto.type) && <OvalToolbarItem />}
+          {[0, 4, 5].includes(sharedPhoto.type) && <TriangleToolbarItem />}
+        </DefaultToolbar>
+        <DoneButton onClick={onDone} />
+      </>
     )
   }
   function DoneButton({ onClick }: { onClick(result: Blob): void }) {
     return (
       <>
         <button
-          className="DoneButton"
+          className="DoneButton DoneButton--confirm"
           onClick={async () => {
             const bounds = editor.getZoomLevel() > 1.05 && editor.getViewportPageBounds()
             const blob = await exportToBlob({ editor, format: "jpeg", opts: { bounds, padding: 0 } })
@@ -186,16 +189,20 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
             onClick({ blob, snapshot })
           }}
         >
-          Terminer
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
         </button>
         <button
-          className="DoneButton"
-          style={{ backgroundColor: "#f87171" }}
+          className="DoneButton DoneButton--cancel"
           onClick={async () => {
             onClick({})
           }}
         >
-          Annuler
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
         </button>
       </>
     )
@@ -213,7 +220,7 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     StylePanel: null,
     Toolbar: Toolbar,
     ZoomMenu: null,
-    SharePanel: () => <DoneButton onClick={onDone} />,
+    SharePanel: null,
   }
 
   const shapeUtils = defaultShapeUtils.map((Util) => {

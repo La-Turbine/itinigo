@@ -13,7 +13,7 @@
               <div :class="currentPhoto?.text ? 'hidden' : ''">Décrire l'action</div>
             </ion-button>
             <ion-button :class="currentPhoto?.id ? 'ml-auto size-[50px]' : ''" @click="$router.push({ query: { ...$route.query, step: 6 } })">
-              <div class="i-lucide/image-plus mx-2 -my-2 min-h-6 min-w-6"></div>
+              <div class="i-lucide/pen-line mx-2 -my-2 min-h-6 min-w-6"></div>
               <div :class="currentPhoto?.id ? 'hidden' : ''">Ajouter une photo</div>
             </ion-button>
           </div>

@@ -91,29 +91,40 @@ async function requestLocalisation(event) {
     },
   )
 }
+function toJsonl(state) {
+  const { photos, ...rest } = state
+  const lines = [JSON.stringify(rest)]
+  for (const [key, value] of Object.entries(photos)) lines.push(JSON.stringify({ key, value }))
+  return lines.join("\n")
+}
+function fromJsonl(text) {
+  const [first, ...rest] = text.split("\n").filter(Boolean)
+  const state = JSON.parse(first)
+  state.photos = {}
+  for (const line of rest) {
+    const { key, value } = JSON.parse(line)
+    state.photos[key] = value
+  }
+  return state
+}
 async function onExport() {
-  const blob = new Blob([JSON.stringify($state)], { type: "application/json" })
+  const blob = new Blob([toJsonl($state)], { type: "application/jsonl" })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
   a.href = url
-  a.download = `itinigo-${new Date().toISOString().slice(0, 10)}.json`
+  a.download = `itinigo-${new Date().toISOString().slice(0, 10)}.jsonl`
   a.click()
+  URL.revokeObjectURL(url)
 }
 async function onImport() {
   const input = document.createElement("input")
   input.type = "file"
-  input.accept = ".json"
+  input.accept = ".jsonl"
   input.onchange = async () => {
     const file = input.files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      Object.entries(JSON.parse(reader.result)).forEach(([key, value]) => {
-        if (key === "photos") idb.clear().then(() => Object.entries(value).forEach(([key, value]) => idb.set(key, value)))
-        $state[key] = value
-      })
-    }
-    reader.readAsText(file)
+    const state = fromJsonl(await file.text())
+    Object.assign($state, state)
   }
   input.click()
 }

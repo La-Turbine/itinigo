@@ -1,23 +1,78 @@
 .DoneButton {
-  font: inherit;
-  font-size: 1rem;
-  font-weight: 500;
-  background: #3182ed;
-  border: none;
-  color: white;
-  margin: 6px;
-  padding: 0.5rem 1rem;
-  border: 2px solid white;
-  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 3px solid white;
+  border-radius: 50%;
   z-index: 300;
   pointer-events: all;
   cursor: pointer;
+  margin: 6px;
 }
 .DoneButton:hover {
   filter: brightness(1.1);
+}
+.DoneButton--confirm {
+  background: #059669;
+}
+.DoneButton--cancel {
+  background: #c5000f;
 }
 
 /* <button type="button" draggable="false" title="Toggle tool lock" data-testid="tool-lock" class="tlui-button tlui-button__normal tlui-toolbar__lock-button tlui-toolbar__lock-button__mobile"><div class="tlui-icon tlui-icon__small tlui-button__icon" style="mask: url(&quot;https://cdn.tldraw.com/3.4.0/icons/icon/0_merged.svg#unlock&quot;) center 100% / 100% no-repeat;"></div></button> */
 [data-testid="tool-lock"] {
   display: none;
+}
+
+/* Toolbar: top-right, vertical */
+.tlui-layout__bottom__main {
+  position: absolute !important;
+  inset: 4px 4px auto auto !important;
+  width: max-content !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  z-index: 300;
+}
+.tlui-toolbar,
+.tlui-toolbar__inner,
+.tlui-toolbar__left,
+.tlui-toolbar__extras,
+.tlui-toolbar-container.tlui-toolbar__extras__controls,
+.tlui-toolbar-container.tlui-toolbar__tools__mobile,
+.tlui-toolbar__tools__list {
+  display: flex !important;
+  flex-direction: column !important;
+  height: auto !important;
+  width: auto !important;
+  gap: 0 !important;
+}
+.tlui-toolbar__left {
+  align-items: flex-end !important;
+}
+.tlui-toolbar__extras__controls {
+  border-bottom-left-radius: var(--radius-4);
+  border-bottom-right-radius: var(--radius-4);
+  right: 4px;
+  top: 4px;
+}
+.tlui-toolbar-container.tlui-toolbar__tools__mobile {
+  right: 6px;
+  top: 18px;
+  margin-bottom: 14px;
+}
+
+/* Make tool & undo/redo buttons bigger (match 56px DoneButton) */
+.tlui-toolbar .tlui-button,
+.tlui-toolbar__extras .tlui-button {
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  margin: 0 !important;
+}
+.tlui-toolbar .tlui-icon,
+.tlui-toolbar__extras .tlui-icon {
+  width: 28px !important;
+  height: 28px !important;
 }

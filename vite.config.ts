@@ -2,6 +2,7 @@
 
 import legacy from "@vitejs/plugin-legacy"
 import vue from "@vitejs/plugin-vue"
+import react from "@vitejs/plugin-react"
 import { VitePWA } from "vite-plugin-pwa"
 import path from "path"
 import { defineConfig } from "vite"
@@ -20,6 +21,7 @@ if (VERSION !== version) execSync(`npm version ${VERSION} --no-git-tag-version`)
 export default defineConfig({
   plugins: [
     tailwindcss(),
+    react({ include: /\.tsx$/ }),
     vue({
       template: {
         compilerOptions: {
