@@ -2,8 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border: 3px solid white;
   border-radius: 50%;
   z-index: 300;
@@ -63,16 +63,36 @@
   margin-bottom: 14px;
 }
 
-/* Make tool & undo/redo buttons bigger (match 56px DoneButton) */
+/* Make tool & undo/redo buttons match 48px DoneButton */
 .tlui-toolbar .tlui-button,
 .tlui-toolbar__extras .tlui-button {
-  width: 56px !important;
-  height: 56px !important;
-  min-width: 56px !important;
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
   margin: 0 !important;
 }
 .tlui-toolbar .tlui-icon,
 .tlui-toolbar__extras .tlui-icon {
-  width: 28px !important;
-  height: 28px !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+/* Fix touch: icon inside button intercepts touch, make it pass-through */
+.tlui-toolbar .tlui-icon,
+.tlui-toolbar__extras .tlui-icon {
+  pointer-events: none !important;
+}
+/* Extend hit area with ::after overlay */
+.tlui-toolbar .tlui-button,
+.tlui-toolbar__extras .tlui-button {
+  position: relative !important;
+}
+.tlui-toolbar .tlui-button::after,
+.tlui-toolbar__extras .tlui-button::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -1px !important;
+}
+/* Fix click areas: toolbar containers clip enlarged buttons */
+.tlui-toolbar-container {
+  overflow: visible !important;
 }
