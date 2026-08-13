@@ -68,6 +68,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from "vue"
+import { createProgressTracker } from "../geo.js"
 const currentTrip = computed(() => $state.trips[$route.params.id - 1] || {})
 const currentStep = computed(() => +($route.query.step || 0))
 const steps = computed(() => currentTrip.value.sequences?.flatMap((v) => (v.stops ? [...v.photos.slice(0, -1), v, v.photos.at(-1)] : v.photos)) ?? [])
@@ -96,6 +97,9 @@ watch(() => current.value, () => (timer.value = 0)) // prettier-ignore
 //   if (wakeLock !== null && document.visibilityState === "visible") requestWakeLock()
 // })
 // requestWakeLock()
+// Tracker à état (progression monotone le long du tracé), recréé à chaque changement d'étape
+let tracker = null
+let trackerStep = null
 const progress = computed(() => {
   // HACK
   if ($state.fake) {
@@ -104,7 +108,8 @@ const progress = computed(() => {
     return { number, percentage, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
   }
   if (!current.value?.stops || !lat.value || !lng.value) return { number: 0, percentage: 0, distance: 0, width: "0", maxWidth: "100%" }
-  let { number, percentage, distance } = progressBetweenStops({ lat: lat.value, lng: lng.value }, current.value.stops)
+  if (trackerStep !== current.value) [trackerStep, tracker] = [current.value, createProgressTracker(current.value.stops, current.value.shape)]
+  let { number, percentage, distance } = tracker({ lat: lat.value, lng: lng.value })
   percentage = percentage < 0.15 ? 0 : percentage > 0.85 ? 1 : percentage
   return { number, percentage, distance, width: `${9 * number + 9 * percentage + 1}rem`, maxWidth: "100%" }
 })
@@ -132,31 +137,6 @@ watch(
 async function confetti() {
   const confetti = await import("https://esm.sh/canvas-confetti")
   confetti.default({ particleCount: 500, spread: 100, origin: { y: 0.5 } })
-}
-function progressBetweenStops(currentPos, stops) {
-  function haversineDistance(point1, point2) {
-    const R = 6371e3 // Earth radius in meters
-    const toRad = (x) => (x * Math.PI) / 180
-    const dLat = toRad(point2.lat - point1.lat)
-    const dLon = toRad(point2.lng - point1.lng)
-    const lat1 = toRad(point1.lat)
-    const lat2 = toRad(point2.lat)
-    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    return R * c // Distance in meters
-  }
-  try {
-    if (haversineDistance(currentPos, stops[0]) < 1000 && haversineDistance(currentPos, stops[1]) > haversineDistance(stops[0], stops[1]) && haversineDistance(currentPos, stops[2]) > haversineDistance(stops[1], stops[2])) return { number: 0, percentage: 0, distance: -haversineDistance(currentPos, stops[0]).toFixed(2) } // Negative distance
-    for (let i = 0; i < stops.length - 1; i++) {
-      const totalDist = haversineDistance(stops[i], stops[i + 1])
-      const distFromStart = haversineDistance(stops[i], currentPos)
-      const progress = Math.min((distFromStart / totalDist) * 100, 100)
-      if (progress < 100) return { number: i, percentage: progress.toFixed(2) / 100, distance: totalDist - distFromStart }
-    }
-    return { number: stops.length - 2, percentage: 1, distance: 0 }
-  } catch (e) {
-    return { number: 0, percentage: 0, distance: 0 }
-  }
 }
 const touchStartX = ref(0)
 const translateX = ref(0)

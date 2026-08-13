@@ -127,6 +127,7 @@ const PLAN_QUERY = `query Plan($from: InputCoordinates!, $to: InputCoordinates!,
         from { name lat lon }
         to { name lat lon }
         intermediateStops { name lat lon }
+        legGeometry { points }
       }
     }
   }
@@ -163,7 +164,7 @@ function toSequence(itinerary) {
     ]
     sequence.push({ transport: `Je marche vers l’arrêt :\n${stops[0].text}`, num, type, photos: [] })
     sequence.push({ transport: `J'attends à l’arrêt :\n${stops[0].text}`, num, type, photos: wait })
-    sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, photos: isTram ? tram : bus })
+    sequence.push({ transport: `Je monte dans le ${type}`, num, type, stops, shape: leg.legGeometry?.points, photos: isTram ? tram : bus })
   })
   const duration = `${Math.round(itinerary.duration / 60)} min`
   sequence.push({ transport: `Je marche vers ma destination`, duration, photos: [{ type: -1, text: "Vous êtes arrivé !" }] })
