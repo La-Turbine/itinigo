@@ -133,6 +133,7 @@ async function initApp() {
   window.homework = app.config.globalProperties.homework = homework
   window.triptitle = app.config.globalProperties.triptitle = triptitle
   // GEOLOCATION
+  let watchId: number | null = null
   retryPosition()
   function retryPosition() {
     watchPosition()
@@ -140,13 +141,15 @@ async function initApp() {
   }
   function watchPosition() {
     if ($position.value && "timestamp" in $position.value) return
-    navigator.geolocation.watchPosition(
+    if (watchId !== null) navigator.geolocation.clearWatch(watchId)
+    watchId = navigator.geolocation.watchPosition(
       (position) => ($position.value = position),
-      (error) => ($position.value = {}),
+      // Un timeout/erreur transitoire ne doit pas effacer la dernière position connue
+      (error) => ($position.value = $position.value && "timestamp" in $position.value ? $position.value : {}),
       {
         enableHighAccuracy: true, // Use GPS if available
-        timeout: 1000, // Maximum time to wait for a response (in ms)
-        maximumAge: 0, // Don't use cached position
+        timeout: 15000, // Maximum time to wait for a response (in ms)
+        maximumAge: 3000, // Accept a recent cached position
       },
     )
   }
