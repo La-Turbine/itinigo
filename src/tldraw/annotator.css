@@ -21,6 +21,21 @@
   background: #c5000f;
 }
 
+.DoneButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.DoneButtons--docked {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  z-index: 400;
+  flex-direction: row;
+  align-items: center;
+  pointer-events: all;
+}
+
 /* <button type="button" draggable="false" title="Toggle tool lock" data-testid="tool-lock" class="tlui-button tlui-button__normal tlui-toolbar__lock-button tlui-toolbar__lock-button__mobile"><div class="tlui-icon tlui-icon__small tlui-button__icon" style="mask: url(&quot;https://cdn.tldraw.com/3.4.0/icons/icon/0_merged.svg#unlock&quot;) center 100% / 100% no-repeat;"></div></button> */
 [data-testid="tool-lock"] {
   display: none;
@@ -34,6 +49,9 @@
   flex-direction: column !important;
   align-items: flex-end !important;
   z-index: 300;
+}
+.tl-container {
+  position: relative;
 }
 .tlui-toolbar,
 .tlui-toolbar__inner,

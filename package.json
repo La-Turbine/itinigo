@@ -1,7 +1,7 @@
 {
   "name": "itinigo",
   "private": true,
-  "version": "158.0.0-022f5dc",
+  "version": "159.0.0-98e3933",
   "type": "module",
   "scripts": {
     "dev": "ionic serve --external",

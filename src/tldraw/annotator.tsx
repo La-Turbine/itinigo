@@ -5,6 +5,7 @@
 // https://examples.tldraw.com/shape-with-geometry
 import "./annotator.css"
 import React from "react"
+import { createPortal } from "react-dom"
 import {
   Tldraw,
   Editor,
@@ -178,7 +179,36 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
     )
   }
   function DoneButton({ onClick }: { onClick(result: Blob): void }) {
-    return (
+    const wrapRef = React.useRef(null)
+    const [docked, setDocked] = React.useState(false)
+    const [host, setHost] = React.useState(null)
+    React.useLayoutEffect(() => {
+      const wrap = wrapRef.current
+      if (!wrap) return
+      const container = wrap.closest(".tl-container")
+      const main = wrap.closest(".tlui-layout__bottom__main")
+      if (!container || !main) return
+      setHost(container)
+      const measure = () => {
+        const tools = main.querySelector(".tlui-toolbar")
+        const toolsBottom = (tools || main).getBoundingClientRect().bottom
+        const cr = container.getBoundingClientRect()
+        // Two 48px buttons + 6px margins (120px) as they sit in the vertical stack
+        setDocked(toolsBottom + 120 > cr.bottom - 4)
+      }
+      measure()
+      const ro = new ResizeObserver(measure)
+      ro.observe(container)
+      ro.observe(main)
+      window.addEventListener("resize", measure)
+      window.visualViewport?.addEventListener("resize", measure)
+      return () => {
+        ro.disconnect()
+        window.removeEventListener("resize", measure)
+        window.visualViewport?.removeEventListener("resize", measure)
+      }
+    }, [])
+    const buttons = (
       <>
         <button
           className="DoneButton DoneButton--confirm"
@@ -204,6 +234,14 @@ export function ImageAnnotationEditor({ image, onDone }: { image: AnnotatorImage
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
+      </>
+    )
+    return (
+      <>
+        <div ref={wrapRef} className="DoneButtons" hidden={docked}>
+          {!docked && buttons}
+        </div>
+        {docked && host && createPortal(<div className="DoneButtons DoneButtons--docked">{buttons}</div>, host)}
       </>
     )
   }
