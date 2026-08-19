@@ -9,8 +9,17 @@
       </div>
       <div class="flex h-[140px] gap-2.5 overflow-auto border-t border-black/20 bg-gray-100 p-2.5">
         <div class="m-auto flex gap-4" v-if="!currentPhoto.id || $route.query.change">
-          <div class="h-20 w-20 rounded-full border-6 border-white bg-gray-200 ring-1 ring-gray-300 active:scale-95" @click="clickCapture()"></div>
-          <div class="flex h-20 w-20 rounded-xl bg-gray-200 ring-1 ring-gray-300 active:scale-95" @click="input.click()"><div class="i-lucide/image m-auto bg-gray-600 text-2xl"></div></div>
+          <template v-if="stream?.gallery">
+            <ion-button class="my-2.5" color="medium" @click="stream.cancelGallery()">Annuler</ion-button>
+            <ion-button class="my-2.5" @click="clickCapture()">
+              <div class="i-lucide/check mr-2 size-5"></div>
+              Valider
+            </ion-button>
+          </template>
+          <template v-else>
+            <div class="h-20 w-20 rounded-full border-6 border-white bg-gray-200 ring-1 ring-gray-300 active:scale-95" @click="clickCapture()"></div>
+            <div class="flex h-20 w-20 rounded-xl bg-gray-200 ring-1 ring-gray-300 active:scale-95" @click="input.click()"><div class="i-lucide/image m-auto bg-gray-600 text-2xl"></div></div>
+          </template>
         </div>
         <div class="m-auto flex gap-4" v-else>
           <ion-button class="mx-5 my-2.5" color="danger" @click="$router.push({ query: { ...$route.query, change: 1 } })">
@@ -40,9 +49,11 @@ async function clickCapture() {
   const blob = await stream.value.capturePhoto()
   savePhoto(blob)
 }
-function inputPhoto(event) {
+async function inputPhoto(event) {
   const file = event.target.files[0]
-  savePhoto(file)
+  event.target.value = ""
+  if (!file) return
+  await stream.value.loadGallery(file)
 }
 function savePhoto(blob) {
   const reader = new FileReader()
