@@ -9,27 +9,35 @@
       </ion-toolbar>
     </ion-header>
     <ion-content forceOverscroll="false">
-      <div class="flex h-full flex-col justify-around overflow-hidden p-5" v-if="!current">
-        <div>
-          <div class="mb-5 text-center text-[2rem] font-bold">Mon itinéraire</div>
-          <card-trip class="m-0" :trip="currentTrip" />
-        </div>
-        <div>
-          <div class="mb-5 text-center text-[2rem] font-bold">Je vérifie</div>
-          <div class="flex gap-2.5">
-            <div class="flex-1">
-              <img class="h-[110px] p-[30px]" src="/img/battery.svg" />
-              <div class="text-center text-[1.4rem] font-medium text-balance">La batterie de mon téléphone</div>
+      <div class="flex h-full flex-col overflow-hidden p-5" v-if="!current">
+        <div class="min-h-0 flex-1 overflow-y-auto">
+          <div>
+            <div class="mb-5 text-center text-[2rem] font-bold">Mon itinéraire</div>
+            <card-trip class="m-0" :trip="currentTrip" />
+          </div>
+          <div class="mt-6">
+            <div class="mb-5 text-center text-[2rem] font-bold">Je vérifie</div>
+            <div class="flex gap-2.5">
+              <div class="flex-1">
+                <img class="h-[110px] p-[30px]" src="/img/battery.svg" />
+                <div class="text-center text-[1.4rem] font-medium text-balance">La batterie de mon téléphone</div>
+              </div>
+              <div class="flex-1">
+                <img class="h-[110px] object-cover" src="/img/card.png" />
+                <div class="text-center text-[1.4rem] font-medium text-balance">Mon ticket de transport</div>
+              </div>
             </div>
-            <div class="flex-1">
-              <img class="h-[110px] object-cover" src="/img/card.png" />
-              <div class="text-center text-[1.4rem] font-medium text-balance">Mon ticket de transport</div>
+            <div class="mt-5 flex flex-col gap-3" v-if="warnings.length">
+              <div class="text-center" v-for="w in warnings" :key="w.id">
+                <div class="mb-2 text-[1.2rem] font-medium text-balance text-red-600">{{ w.text }}</div>
+                <ion-button class="h-12 text-[1.1rem] font-bold" color="danger" fill="outline" @click="w.fix()" v-if="w.action">{{ w.action }}</ion-button>
+              </div>
             </div>
           </div>
         </div>
-        <ion-button class="h-20 text-[1.4rem] font-bold" @click="gogo">C'est Parti !</ion-button>
+        <ion-button class="mt-4 h-20 shrink-0 text-[1.4rem] font-bold" @click="gogo">C'est Parti !</ion-button>
       </div>
-      <div class="flex h-full flex-col overflow-hidden" v-else-if="!current.stops">
+      <div class="flex h-full flex-col overflow-hidden" v-else-if="current && !current.stops">
         <div class="relative flex h-[calc(100%-140px)] p-5" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
           <div class="flex flex-1 overflow-hidden rounded-4xl">
             <img class="pointer-events-none object-cover select-none" :src="$state.photos[current.id]" :style="cardStyle" />
@@ -50,7 +58,7 @@
         </div>
       </div>
       <!-- https://play.tailwindcss.com/90GckuhEBW -->
-      <div class="h-full w-screen overflow-x-auto overflow-y-hidden" v-else>
+      <div class="h-full w-screen overflow-x-auto overflow-y-hidden" v-else-if="current?.stops">
         <div class="relative top-20 m-16 flex min-w-fit items-center justify-between">
           <div class="z-10 mx-16 flex h-4 w-4 items-center justify-center rounded-full" :class="[i === 0 && 'ml-0', i === current.stops.length - 1 && 'mr-0', i <= progress.number ? 'bg-blue-600' : 'border-2 border-black bg-white']" v-for="(stop, i) in current.stops" ref="stops">
             <div class="absolute z-10 -m-2 h-[1.4rem] w-[1.4rem] animate-ping rounded-full bg-blue-600" v-if="i === current.stops.length - 1 && progress.number > i - 2"></div>
@@ -77,6 +85,61 @@ const stops = ref([])
 const lat = computed(() => window.$position.value?.coords?.latitude ?? 0)
 const lng = computed(() => window.$position.value?.coords?.longitude ?? 0)
 if ("Notification" in window) Notification.requestPermission()
+const warnings = ref([])
+async function permissionState(name) {
+  try {
+    return (await navigator.permissions.query({ name })).state
+  } catch {
+    if (name === "notifications" && "Notification" in window) return Notification.permission === "denied" ? "denied" : Notification.permission === "granted" ? "granted" : "prompt"
+    return "unknown"
+  }
+}
+async function checkReady() {
+  const next = []
+  try {
+    const res = await fetch("/version.json", { cache: "no-store" })
+    if (res.ok) {
+      const remote = (await res.json()).version || ""
+      if (+remote.split(".")[0] > +__VERSION__.split(".")[0]) next.push({ id: "version", text: "Cette version de l'application n'est plus à jour.", action: "Mettre à jour", fix: () => location.reload() })
+    }
+  } catch {}
+  const geo = await permissionState("geolocation")
+  if (geo === "denied") next.push({ id: "geo", text: "La localisation a été refusée. Activez-la dans les réglages du téléphone.", action: "Réessayer", fix: retryLocalisation })
+  else if (!$position.value?.timestamp) next.push({ id: "geo", text: "La localisation n'est pas activée.", action: "Activer", fix: retryLocalisation })
+  if ((await permissionState("notifications")) === "denied") next.push({ id: "notif", text: "Les notifications ont été refusées. Activez-les dans les réglages du téléphone.", action: "Réessayer", fix: retryNotification })
+  try {
+    const bat = navigator.getBattery && (await navigator.getBattery())
+    if (bat && !bat.charging && bat.level < 0.2) next.push({ id: "battery", text: `La batterie est faible (${Math.round(bat.level * 100)} %). Rechargez avant de partir.` })
+  } catch {}
+  warnings.value = next
+}
+async function retryLocalisation() {
+  if ((await permissionState("geolocation")) === "denied") return popup("La localisation est bloquée. Activez-la dans les réglages du téléphone, puis revenez ici.")
+  navigator.geolocation.getCurrentPosition(() => checkReady(), () => checkReady())
+}
+async function retryNotification() {
+  if ((await permissionState("notifications")) === "denied") return popup("Les notifications sont bloquées. Activez-les dans les réglages du téléphone, puis revenez ici.")
+  if ("Notification" in window) await Notification.requestPermission()
+  checkReady()
+}
+function onVisible() {
+  if (!document.hidden) checkReady()
+}
+onMounted(() => {
+  checkReady()
+  document.addEventListener("visibilitychange", onVisible)
+  navigator.getBattery?.().then((bat) => {
+    bat.addEventListener("levelchange", checkReady)
+    bat.addEventListener("chargingchange", checkReady)
+  }).catch(() => {})
+})
+watch(
+  () => $route.fullPath,
+  () => {
+    if (!currentStep.value) checkReady()
+  },
+)
+onUnmounted(() => document.removeEventListener("visibilitychange", onVisible))
 // HACK
 const timer = ref(0)
 setInterval(() => timer.value++, 20)
@@ -182,8 +245,7 @@ async function back() {
   if (!(await window.popup("Êtes-vous sûr de vouloir quitter le guidage ?", { ok: "Oui", ko: "Non" }))) return
   $router.push("/")
 }
-async function gogo() {
-  if (!$position.value?.timestamp && !(await window.popup("La geolocation n'est pas activé, voulez-vous commencer le guidage malgré tout ?", { ok: "Oui", ko: "Non" }))) return
+function gogo() {
   $router.push({ query: { step: 1 } })
 }
 </script>

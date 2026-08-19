@@ -17,9 +17,28 @@ const vhash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7)
 const VERSION = vhash ? `${version.split("-")[0]}-${vhash}` : `${count}.0.0-${hash}`
 if (VERSION !== version) execSync(`npm version ${VERSION} --no-git-tag-version`)
 
+function versionJsonPlugin() {
+  const body = JSON.stringify({ version: VERSION })
+  return {
+    name: "version-json",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url?.split("?")[0] !== "/version.json") return next()
+        res.setHeader("Content-Type", "application/json")
+        res.setHeader("Cache-Control", "no-store")
+        res.end(body)
+      })
+    },
+    generateBundle() {
+      this.emitFile({ type: "asset", fileName: "version.json", source: body })
+    },
+  }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    versionJsonPlugin(),
     tailwindcss(),
     react({ include: /\.tsx$/ }),
     vue({
@@ -34,6 +53,8 @@ export default defineConfig({
       workbox: {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         importScripts: ["service-worker.js"],
+        globIgnores: ["**/version.json"],
+        runtimeCaching: [{ urlPattern: /\/version\.json$/, handler: "NetworkOnly" }],
       },
       manifest: {
         orientation: "portrait",
@@ -69,6 +90,9 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  define: {
+    __VERSION__: JSON.stringify(VERSION),
   },
   server: {
     allowedHosts: [".trycloudflare.com"],
